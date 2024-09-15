@@ -1,0 +1,9 @@
+
+<script src="<?= ROOT ?>/assets/bootstrap.min.js"></script>
+<script src="<?= ROOT ?>/assets/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+
+</body>
+</html>
