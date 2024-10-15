@@ -32,7 +32,7 @@
 }
 
 </style>
-<div class="container-fluid p-4 shadow mx-auto" style="max-width: 1000px; margin-top: 30px;">
+<div class="dashboard-container-fluid p-4 shadow mx-auto" style="max-width: 1700px;">
 
     <?php if ($row): ?>
         <div class="row mb-4">

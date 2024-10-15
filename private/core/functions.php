@@ -74,4 +74,61 @@ function random_string($length)
     }
   }
 
+  function formatOffense($offenseCount) {
+    if ($offenseCount == 1) {
+        return "1st Offense";
+    } elseif ($offenseCount == 2) {
+        return "2nd Offense";
+    } elseif ($offenseCount == 3) {
+        return "3rd Offense";
+    } else {
+        return $offenseCount . "th Offense";
+    }
+}
+
+function formatYearLevel($yearLevel) {
+  switch ($yearLevel) {
+      case 1:
+          return '1st';
+      case 2:
+          return '2nd';
+      case 3:
+          return '3rd';
+      case 4:
+          return '4th';
+      default:
+          return ''; // Return empty for invalid year levels
+  }
+}
+
+function log_activity($activity_name)
+{
+    $db = new Database();
+    
+    $data['activity_name'] = $activity_name;
+    $data['date'] = date('Y-m-d H:i:s');
+    
+    $query = "INSERT INTO activity_logs (activity_name, date) VALUES (:activity_name, :date)";
+    
+    $db->query($query, $data);
+}
+
+function log_certificate($log_name)
+{
+    $db = new Database();
+    
+    $data['log_name'] = $log_name;
+    $data['date'] = date('Y-m-d');
+    
+    
+    $query = "INSERT INTO good_moral_logs (log_name, date) VALUES (:log_name, :date)";
+    
+    $db->query($query, $data);
+}
+
+
+
+
+
+
   

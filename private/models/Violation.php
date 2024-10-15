@@ -8,8 +8,9 @@ class Violation extends Model
         'violation',
         'description',
         'date',
-        'shb_article',
-        'compensation'
+        'category',
+        'compensation',
+        'level',
     ];
 
     protected $beforeInsert = [
@@ -26,9 +27,9 @@ class Violation extends Model
     {
         $this->errors = array();
 
-        if (empty($DATA['violation']) || !preg_match('/^[a-z A-Z]+$/', $DATA['violation'])) {
-            $this->errors['violation'] = "Only letters allowed in here";
-        }
+       // if (empty($DATA['violation']) || !preg_match('/^[a-z A-Z]+$/', $DATA['violation'])) {
+         //   $this->errors['violation'] = "Only letters allowed in here";
+        //}
 
         if (count($this->errors) == 0) {
             return true;
@@ -78,7 +79,7 @@ class Violation extends Model
         return $this->query("SELECT * FROM violations ORDER BY date DESC LIMIT $limit");
     }
 
-    public function assignViolationToUser($violation_id, $user_id)
+    public function assignViolationToUser ($violation_id, $user_id)
 {
     // Fetch the correct user_id using the primary key from the users table
     $user = new User();
@@ -86,31 +87,45 @@ class Violation extends Model
 
     if ($user_data) {
         $user_id = $user_data[0]->user_id; // Fetch the actual user_id in the format 'name.lastname'
+
+        // Fetch the year_level_id from the user's profile
+        $userProfile = new User(); // Assuming you have a UserProfile class
+        $profile_data = $userProfile->where('user_id', $user_id);
+
+        if ($profile_data) {
+            $year_level_id = $profile_data[0]->year_level_id; // Get the year_level_id
+            $semester_id = $profile_data[0]->semester_id; // Get the year_level_id
+            $school_year_id = $profile_data[0]->school_year_id; // Get the year_level_id
+
+            // Fetch the correct violation_id using the primary key from the violations table
+            $violation = new Violation();
+            $violation_data = $violation->where('id', $violation_id);
+
+            if ($violation_data) {
+                $violation_id = $violation_data[0]->violation_id; // Fetch the actual violation_id (random string)
+
+                // Ensure both user_id, violation_id, and year_level_id are not null before inserting
+                $query = "INSERT INTO violators (user_id, violation_id, year_level_id, school_year_id, semester_id, date, status) 
+                          VALUES (:user_id, :violation_id, :year_level_id, :school_year_id, :semester_id, NOW(), :status)";
+                $this->query($query, [
+                    'user_id' => $user_id,
+                    'violation_id' => $violation_id,
+                    'year_level_id' => $year_level_id,
+                    'school_year_id' => $school_year_id,
+                    'semester_id' => $semester_id,
+                    'status' => 'Unresolved', // Set default status to 'Unresolved'
+                ]);
+            } else {
+                // Handle the case where the violation doesn't exist
+                error_log("Violation not found for ID: $violation_id");
+            }
+        } else {
+            // Handle the case where the user's profile doesn't exist
+            error_log("User  profile not found for user ID: $user_id");
+        }
     } else {
         // Handle the case where the user doesn't exist
-        $user_id = null;
-    }
-
-    // Fetch the correct violation_id using the primary key from the violations table
-    $violation = new Violation();
-    $violation_data = $violation->where('id', $violation_id);
-
-    if ($violation_data) {
-        $violation_id = $violation_data[0]->violation_id; // Fetch the actual violation_id (random string)
-    } else {
-        // Handle the case where the violation doesn't exist
-        $violation_id = null;
-    }
-
-    // Ensure both user_id and violation_id are not null before inserting
-    if ($user_id && $violation_id) {
-        $query = "INSERT INTO violators (user_id, violation_id, date, status) 
-                  VALUES (:user_id, :violation_id, NOW(), :status)";
-        $this->query($query, [
-            'user_id' => $user_id,        // This should be 'name.lastname'
-            'violation_id' => $violation_id,
-            'status' => 'Unresolved',     // Set default status to 'Unresolved'
-        ]);
+        error_log("User  not found for ID: $user_id");
     }
 }
 
@@ -127,6 +142,9 @@ public function updateStatus($id, $status)
     $query = "UPDATE violations SET status = :status WHERE id = :id";
     $this->execute($query, ['status' => $status, 'id' => $id]);
 }
+
+//gikan ni sa home controller akong gi
+
 
 }
 

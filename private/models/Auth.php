@@ -101,4 +101,19 @@ class Auth
     {
         return isset($_SESSION['USER']->rank) && in_array($_SESSION['USER']->rank, ['admin', 'super_admin']);
     }
+    public static function getUserId() {
+        if (isset($_SESSION['USER'])) {
+            return $_SESSION['USER']->user_id;
+        }
+        return false;
+    }
+
+    public static function checkStatus($row)
+{
+    if ($row->status == 'active') {
+        return true;
+    } else {
+        return false;
+    }
+}
 }

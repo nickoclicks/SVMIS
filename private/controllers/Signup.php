@@ -19,7 +19,7 @@ class Signup extends Controller
         $arr['middlename'] = $_POST['middlename'];
         $arr['lastname'] = $_POST['lastname'];
         $arr['gender'] = $_POST['gender'];
-        $arr['year_level'] = $_POST['year_level'];
+        $arr['year_level_id'] = $_POST['year_level_id'];
         $arr['course'] = $_POST['course'];
         $arr['rank'] = $_POST['rank'];
         $arr['email'] = $_POST['email'];
@@ -30,6 +30,8 @@ class Signup extends Controller
         $arr['city'] = $_POST['city'];
         $arr['municipality'] = $_POST['municipality'];
         $arr['phone'] = $_POST['phone'];
+        $arr['school_year_id'] = $_POST['school_year_id'];
+        $arr['semester_id'] = $_POST['semester_id'];
         $user->insert($arr);
         $redirect = $mode == 'students' ? 'students':'users';
         $this->redirect($redirect);

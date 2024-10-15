@@ -14,7 +14,14 @@ class Violators extends Model
         'timer_start',
         'duration',
         'office',
-        'status'  // Added status to reflect updates in status
+        'status',
+        'remarks',
+        'time_start',
+        'time_end',
+        'comp_date',
+        'level',
+        'year_level_id',
+        'semester_id'
     ];
 
     protected $beforeInsert = [
@@ -181,7 +188,7 @@ public function getViolationName($violationId)
 public function getUserName($userId)
     {
         $query = "
-            SELECT u.firstname, u.lastname, v.office
+            SELECT u.firstname, u.lastname, u.std_id, v.office
             FROM users u
             INNER JOIN violators v ON u.user_id = v.user_id
             WHERE v.user_id = :userId
@@ -191,6 +198,19 @@ public function getUserName($userId)
         return $result ? $result[0] : null;
     }
 
+    public function getViolationDescription($violationId)
+    {
+        $query = "
+                SELECT v.description
+                FROM violations v
+                INNER JOIN violators vl ON v.violation_id = vl.violation_id
+                WHERE vl.violation_id = :violationId
+        ";
+        
+        $result = $this->query($query, ['violationId' => $violationId]);
+        return $result ? $result[0]->description : null;
+    }
+    
     public function getOffice($userId)
 {
     $query = "
@@ -225,10 +245,63 @@ public function getDuration($userId)
 }
 
 
+// Add this method to your Violators model
 
-    
+public function getUserViolationStats($userId)
+    {
+        $query = "
+           SELECT 
+            u.firstname, 
+            u.lastname, 
+            vv.level,
+            vv.violation,
+            CASE 
+                WHEN SUM(CASE WHEN vl.status = 'Unresolved' THEN 1 ELSE 0 END) > 0 THEN 'Unresolved'
+                ELSE 'Resolved'
+            END AS status,
+            COUNT(vl.id) AS total_violations
+        FROM 
+            users u
+        LEFT JOIN 
+            violators vl ON u.user_id = vl.user_id
+        LEFT JOIN
+            violations vv ON vl.violation_id = vv.violation_id
+        WHERE 
+            u.user_id = :user_id
+        GROUP BY 
+            vv.violation
+        ORDER BY 
+            total_violations DESC
+        ";
 
-    
+        $result = $this->query($query, ['user_id' => $userId]);
 
+        return $result ? $result : [];
+    }
 
+    public function getOfficeCounts()
+{
+    $query = "
+        SELECT office, COUNT(id) AS count
+        FROM violators
+        GROUP BY office
+    ";
+
+    $result = $this->query($query);
+
+    return $result ? $result : [];
+}
+
+public function filterBySchoolYearId($schoolYearId) {
+    $query = "SELECT * FROM violators WHERE school_year_id = :schoolYearId";
+    return $this->query($query, ['schoolYearId' => $schoolYearId]);
+}
+
+public function countUnresolvedByUserId($userId)
+{
+    $query = "SELECT COUNT(*) as count FROM violators WHERE user_id = :user_id AND status != 'Resolved'";
+    $result = $this->query($query, ['user_id' => $userId]);
+    return $result ? $result[0]->count : 0;
+}
+    //gikan sa home
 }

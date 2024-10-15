@@ -59,7 +59,7 @@
 }
 
 </style>
-<div class="container-fluid p-4 shadow mx-auto" style="max-width: 650px; margin-top: 30px;">
+<div class="dashboard-container p-4 shadow mx-auto" style="max-width: 1700px;">
     <div class="card">
         <div class="card-body">
             <h3 class="text-center mb-4">Add New Violation</h3>
@@ -81,9 +81,23 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="shb_article" class="form-label">Student Handbook Article Number</label>
-                    <input id="shb_article" class="form-control" type="text" value="<?= esc(get_var('shb_article')) ?>" name="shb_article" placeholder="Student Handbook Article Number">
-                </div>
+    <label for="category" class="form-label">Category</label>
+    <select id="category" class="form-control" name="category">
+        <option value="">Select Category</option>
+        <option value="1" <?= get_var('category') == 1 ? 'selected' : ''; ?>>1</option>
+        <option value="2" <?= get_var('category') == 2 ? 'selected' : ''; ?>>2</option>
+        <option value="3" <?= get_var('category') == 3 ? 'selected' : ''; ?>>3</option>
+    </select>
+</div>
+
+<div class="mb-3">
+    <label for="level" class="form-label">Level</label>
+    <select id="level" class="form-control" name="level">
+        <option value="">Select Level</option>
+        <option value="Minor" <?= get_var('level') == 'Minor' ? 'selected' : ''; ?>>Minor</option>
+        <option value="Major" <?= get_var('level') == 'Major' ? 'selected' : ''; ?>>Major</option>
+    </select>
+</div>
 
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
@@ -91,12 +105,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="compensation" class="form-label">Compensation</label>
-                    <textarea id="compensation" class="form-control" name="compensation" placeholder="Compensation" rows="6"><?= esc(get_var('compensation')) ?></textarea>
+                    <label for="compensation" class="form-label">Sanction</label>
+                    <textarea id="compensation" class="form-control" name="compensation" placeholder="Sanction" rows="6"><?= esc(get_var('compensation')) ?></textarea>
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="submit" class="btn btn-primary" id="createBtn">Create</button>
                     <a href="<?= ROOT ?>/violations" class="btn btn-warning text-white">Cancel</a>
                 </div>
             </form>
@@ -104,4 +118,27 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const createButton = document.getElementById('createBtn');
+
+        createButton.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the form from submitting
+            const form = event.target.form; // Get the form element
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to create this violation?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, create it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Submit the form if the user confirms
+                }
+            });
+        });
+    });
+</script>
 <?php $this->view('includes/footer'); ?>

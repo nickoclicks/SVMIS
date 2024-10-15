@@ -1,7 +1,130 @@
 <?php $this->view('includes/header'); ?>
 <?php $this->view('includes/navigation'); ?>
 
-<div class="dashboard-container p-4 shadow mx-auto" style="max-width: 1400px;">
+<style>
+    .student-item {
+    background: linear-gradient(to bottom, #ffffff, #f0f0f0); /* Adjust the colors as needed */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add some shadow for depth */
+    margin-bottom: 15px;
+}
+.navbar {
+    background: linear-gradient(left to right, #ffffff, #e0e0e0); /* Adjust the colors as needed */
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 10px; /* Optional: Add some padding for spacing */
+}
+.btn-view-profile {
+    background: linear-gradient(to right, #0D47A1, #1976D2); /* Dark blue gradient */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+.student-img {
+    width: 70px; /* Adjust size as needed */
+    height: 70px; /* Ensure width and height are equal for a perfect circle */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the entire circle without distortion */
+    border: 3px solid #fff; /* Optional: Inner white border for contrast */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+    margin-bottom: 10px; /* Space between image and text */
+}
+
+.student-img-container {
+    display: inline-block;
+    padding: 5px; /* Space between the image and the gradient border */
+    background: linear-gradient(to right, #ff7e5f, #feb47b); /* Gradient border colors */
+    border-radius: 50%; /* Circular container to match the image */
+}
+
+.student-item:hover .student-img {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+    transform: scale(1.05); /* Slightly enlarge the photo on hover */
+}
+
+.btn-view-profile:hover {
+    background: linear-gradient(to right, #0B3C91, #1565C0); /* Even darker blue gradient on hover */
+}
+
+.indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.indicator i {
+    margin-right: 5px;
+    font-size: 18px;
+}
+
+.indicator-count {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.indicator-red {
+    background-color: #ff7e5f;
+    color: #fff;
+}
+
+.indicator-green {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+/* Styles for both violation and notice indicators */
+.indicator-green {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
+}
+
+.indicator-red {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    box-shadow: 0 2px 5px rgba(244, 67, 54, 0.3);
+}
+
+/* Hover effects */
+.indicator:hover {
+    transform: scale(1.1);
+}
+
+.indicator-green:hover {
+    filter: brightness(1.1);
+}
+
+.indicator-red:hover {
+    filter: brightness(0.9);
+}
+
+.student-info {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.student-info h5 {
+    font-size: 20px;
+    font-weight: bold;
+    
+}
+
+
+
+</style>
+<div class="dashboard-container p-4 shadow mx-auto" style="max-width: 1700px;">
     <nav class="navbar bg-body-tertiary shadow" style="background-color: gray; border-radius: 10px">
         <form class="form-inline" method="GET" action="">
             <div class="input-group">
@@ -37,15 +160,47 @@
                 <div class="student-item">
                     <?php
                     $image = $row->image;
-                    if (!file_exists($image)) {
-                        // Default to gender-based image if no valid profile picture is found
-                        $image = ($row->gender == 'male') ? ROOT . '/assets/male.png' : ROOT . '/assets/female.png';
+                    switch ($row->course) {
+                        case 'BSBA':
+                            $image = ROOT . '/assets/male.png';
+                            break;
+                        case 'TEP':
+                            $image = ROOT . '/assets/female.png';
+                            break;
+                        case 'BSIT':
+                            $image = ROOT . '/assets/female.png';
+                            break;
+                        default:
+                            $image = $row->image;
+                            break;
                     }
                     ?>
                     <img src="<?= htmlspecialchars($image) ?>" alt="Student Image" class="student-img border border-primary">
                     <div class="student-info">
                         <h5><?= htmlspecialchars($row->firstname . " " . $row->lastname) ?></h5>
                         <p><?= ucfirst(htmlspecialchars($row->rank)) ?></p>
+
+                       
+                        <?php
+// For violations
+$hasViolations = $row->unresolved_violations > 0;
+$violationClass = $hasViolations ? 'indicator-red' : 'indicator-green';
+$violationIcon = '<i class="fa fa-exclamation-circle"></i>';
+?>
+<span class="indicator violation-indicator <?= $violationClass ?>">
+    <?= $violationIcon ?> <?= $row->unresolved_violations ?>
+</span>
+
+<?php
+// For notices
+$hasNotices = $row->unresolved_notices > 0;
+$noticeClass = $hasNotices ? 'indicator-red' : 'indicator-green';
+$noticeIcon = '<i class="fa fa-bell"></i>';
+?>
+<span class="indicator notice-indicator <?= $noticeClass ?>">
+    <?= $noticeIcon ?> <?= $row->unresolved_notices ?>
+</span>
+
                     </div>
                     <a href="<?= ROOT ?>/profile/<?= htmlspecialchars($row->user_id) ?>" class="btn-view-profile">View Profile</a>
                 </div>

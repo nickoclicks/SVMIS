@@ -4,117 +4,199 @@ $this->view('includes/header');
 $this->view('includes/navigation'); 
 ?>
 
+<style>
+  
+ 
+.dashboard-container {
+  background: linear-gradient(135deg, rgba(240, 240, 240, 0.5), rgba(250, 250, 250, 0.5));
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.dashboard-container {
+  background: linear-gradient(135deg, rgba(240, 240, 240, 0.5), rgba(250, 250, 250, 0.5));
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(245, 245, 245, 0.9));
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Increase shadow for more depth */
+  color: #333; /* Ensure text is readable against the background */
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px); /* Slight lift on hover for interactivity */
+}
+</style>
+<!-- Dashboard Container -->
 <div class="dashboard-container">
+
   <!-- Stats Section -->
   <div class="stat-row">
     <div class="stat-card">
-    <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
-      <h5>Total Violations</h5>
+      <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <h5>Total Number of Rules</h5>
       <p><?= $totalViolations ?></p>
     </div>
-    
     <div class="stat-card">
     <div class="icon"><i class="fas fa-user"></i></div>
-      <h5>Total Violators</h5>
-      <p><?= $totalViolators ?></p>
-    </div>
-    
+    <h5>Total Violators</h5>
+    <p><?= $totalViolators ?></p>
+
+  <!--  <button id="toggle-analysis" class="btn btn-link">Show Comparative Analysis</button>
+
+    <div id="comparative-analysis" class="comparative-analysis" style="display: none;">
+        <h6>Comparative Analysis</h6>
+        <?php if (isset($totalViolations1) && isset($totalViolations2)): ?>
+            <h6>
+                <strong>School Year <?= htmlspecialchars($schoolYear1 ?? 'N/A') ?>:</strong> <?= $totalViolations1 ?> Violations<br>
+                <strong>School Year <?= htmlspecialchars($schoolYear2 ?? 'N/A') ?>:</strong> <?= $totalViolations2 ?> Violations
+               
+        </h6>
+        <?php else: ?>
+            <p>Select school years to compare.</p>
+        <?php endif; ?>
+    </div>-->
+</div>
     <div class="stat-card">
-    <div class="icon"><i class="fas fa-user-check"></i></div>
+      <div class="icon"><i class="fas fa-user-check"></i></div>
       <h5>Referred to SDC</h5>
-      <p><?= $totalUserViolations ?></p>
+      <p><?= $totalSdcs ?></p>
     </div>
-    
     <div class="stat-card">
-    <div class="icon"><i class="fas fa-file-alt"></i></div>
+      <div class="icon"><i class="fas fa-file-alt"></i></div>
       <h5>Notices</h5>
       <p><?= $totalNotices ?></p>
     </div>
   </div>
 
+  <script>
+document.getElementById('toggle-analysis').addEventListener('click', function() {
+    var analysisSection = document.getElementById('comparative-analysis');
+    if (analysisSection.style.display === 'none') {
+        analysisSection.style.display = 'block';
+        this.textContent = 'Hide Comparative Analysis'; // Change button text
+    } else {
+        analysisSection.style.display = 'none';
+        this.textContent = 'Show Comparative Analysis'; // Change button text
+    }
+});
+</script>
+
   <!-- Charts Section -->
   <div class="chart-row">
     <div class="chart-wrapper">
-      <h6><i class="fas fa-chart-line"></i> Violators Trend</h6>
-      <canvas id="violatorsChart"></canvas>
-    </div>
-    
-    <div class="chart-wrapper">
+      
       <h6><i class="fas fa-chart-pie"></i> Violations Distribution</h6>
       <canvas id="pieChart"></canvas>
+      
     </div>
+
+
+  <div class="col-md-9">
+  <div class="chart-wrapper">
+    <h6><i class="fas fa-chart-line"></i> Violators Trend</h6>
+    <canvas id="violatorsChart"></canvas>
+    <div class="chart-options">
+      <select id="time-period">
+        <option value="week" selected>This Week</option>
+        <option value="day">Per Day</option>
+        <option value="month">This Month</option>
+        <option value="year">This Year</option>
+      </select>
+    </div>
+    </div>
+  </div>
   </div>
 
   <div class="chart-row">
-  <div class="chart-wrapper">
-  <h6><i class="fas fa-chart-bar"></i>Violations by Course</h6>
-  <canvas id="barChart"></canvas>
-</div>
+    <div class="chart-wrapper">
+      
+      <h6><i class="fas fa-chart-bar"></i> Violations by Department</h6>
+      <canvas id="barChart"></canvas>
+    </div>
+    <div class="chart-wrapper">
+      <h6><i class="fas fa-chart-bar"></i> Violation Status Distribution</h6>
+      <canvas id="statusChart"></canvas>
+    </div>
+  </div>
 
-
-<div class="chart-wrapper">
-  <h6><i class="fas fa-chart-bar"></i> Violation Status Distribution</h6>
-  <canvas id="statusChart"></canvas>
-</div>
-</div>
   <!-- Tables Row: Recently Added Violations & Violators -->
-  <div class="table-row">
-  <div class="table-wrapper">
-    <h6><i class="fas fa-list-alt"></i> Recently Added Violations</h6>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th class="table-dark">Violation</th>
-          <th class="table-dark">Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if ($recentViolations): ?>
-          <?php foreach ($recentViolations as $violation): ?>
-            <tr>
-              <td><?= $violation->violation ?></td>
-              <td><?= get_date($violation->date) ?></td>
-            </tr>
-          <?php endforeach; ?>
-        <?php else: ?>
+
+    <!--<div class="row">
+    <div class="col-md-6">
+    <div class="table-row p-4 shadow table-wrapper bg-white" style="border-radius: 1.5%;">
+      <h6><i class="fas fa-list-alt"></i> Recently Added Violations</h6>
+      <table class="table table-hover">
+        <thead>
           <tr>
-            <td colspan="2">No recent violations found.</td>
+            <th class="table-dark text-light">Violation</th>
+            <th class="table-dark text-light">Date</th>
           </tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
-  </div>
-  
-  <div class="table-wrapper">
-    <h6><i class="fas fa-users"></i> Recently Added Violators</h6>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th class="table-dark">Name</th>
-          <th class="table-dark">Date</th>
-          <th class="table-dark">Course</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if ($recentViolators): ?>
-          <?php foreach ($recentViolators as $violator): ?>
+        </thead>
+        <tbody>
+          <?php if ($recentViolations): ?>
+            <?php foreach ($recentViolations as $violation): ?>
+              <tr>
+                <td><?= $violation->violation ?></td>
+                <td><?= get_date($violation->date) ?></td>
+              </tr>
+            <?php endforeach; ?>
+          <?php else: ?>
             <tr>
-              <td><?= $violator->firstname . ' ' . $violator->lastname ?></td>
-              <td><?= get_date($violator->date) ?></td>
-              <td><?= $violator->course ?></td>
+              <td colspan="2">No recent violations found.</td>
             </tr>
-          <?php endforeach; ?>
-        <?php else: ?>
+          <?php endif; ?>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    <div class="col-md-6">
+    <div class="table-row p-4 shadow table-wrapper bg-white" style="border-radius: 1.5%;">
+      <h6><i class="fas fa-users"></i> Recently Added Violators</h6>
+      <table class="table table-hover">
+        <thead>
           <tr>
-            <td colspan="3">No recent violators found.</td>
+          <th class="table-dark text-light">Student ID</th>
+            <th class="table-dark text-light">Name</th>
+            <th class="table-dark text-light">Date</th>
+            <th class="table-dark text-light">Course</th>
+            <th class="table-dark text-light">Violation</th>
+            <th class="table-dark text-light">Level</th>
           </tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
-  </div>
-</div>
-</div>
-</div>
+        </thead>
+        <tbody>
+          <?php if ($recentViolators): ?>
+            <?php foreach ($recentViolators as $violator): ?>
+              <tr>
+              <td><?= $violator->std_id ?></td>
+                <td><?= $violator->firstname . ' ' . $violator->lastname ?></td>
+                <td><?= get_date($violator->date) ?></td>
+                <td><?= $violator->course ?></td>
+                <td><?= $violator->violation ?></td>
+                <td><?= $violator->level ?></td>
+              </tr>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <tr>
+              <td colspan="3">No recent violators found.</td>
+            </tr>
+          <?php endif; ?>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>->
+
+
 
 <!-- Chart.js Script for Charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -125,24 +207,33 @@ var chartData = <?= json_encode($chartData) ?>;
 var pieLabels = <?= json_encode($pieLabels) ?>;
 var pieData = <?= json_encode($pieData) ?>;
 
+
 var ctxLine = document.getElementById('violatorsChart').getContext('2d');
+
+// Create gradient for the line chart background
+var gradientLine = ctxLine.createLinearGradient(0, 0, 0, 400);
+gradientLine.addColorStop(0, 'rgba(78, 115, 223, 0.2)'); // Start color
+gradientLine.addColorStop(1, 'rgba(78, 115, 223, 0)'); // End color
+
 var violatorsChart = new Chart(ctxLine, {
   type: 'line',
   data: {
-    labels: chartLabels,
+    labels: <?= json_encode($chartLabels) ?>,
     datasets: [{
       label: 'Number of Violators',
-      data: chartData,
-      borderColor: '#4e73df', // Primary color for the line
-      backgroundColor: 'rgba(78, 115, 223, 0.1)', // Light background color under the line
-      borderWidth: 3, // Thicker border for better visibility
+      data: <?= json_encode($chartData) ?>,
+      borderColor: '#4e73df', // Primary line color
+      backgroundColor: gradientLine, // Gradient background color under the line
+      borderWidth: 3, // Thicker line for better visibility
       fill: true,
       tension: 0.4, // Smooth curves
       pointBorderColor: '#4e73df', // Border color for points
-      pointBackgroundColor: '#ffffff', // Background color for points
-      pointBorderWidth: 2, // Border width for points
-      pointRadius: 5, // Radius of the points
-      pointHoverRadius: 7 // Radius of the points on hover
+      pointBackgroundColor: '#ffffff', // White background for points
+      pointBorderWidth: 3, // Thicker point border
+      pointRadius: 6, // Slightly larger points
+      pointHoverRadius: 8, // Larger points on hover
+      pointHoverBackgroundColor: '#4e73df', // Background color on hover
+      pointHoverBorderColor: '#fff' // Border color on hover
     }]
   },
   options: {
@@ -150,10 +241,10 @@ var violatorsChart = new Chart(ctxLine, {
     maintainAspectRatio: false,
     layout: {
       padding: {
-        left: 20,
-        right: 20,
-        top: 20,
-        bottom: 20
+        left: 30,
+        right: 30,
+        top: 30,
+        bottom: 30
       }
     },
     scales: {
@@ -161,20 +252,20 @@ var violatorsChart = new Chart(ctxLine, {
         title: {
           display: true,
           text: 'Date',
-          color: '#5a5c69', // Title color
+          color: '#5a5c69', // Stylish color for title
           font: {
-            size: 14, // Font size for the title
-            weight: 'bold' // Font weight for the title
+            size: 16, // Increased font size
+            weight: 'bold' // Bold for emphasis
           }
         },
         grid: {
-          color: '#e0e0e0', // Light grid color
-          borderColor: '#d1d3e2' // Border color for X-axis
+          color: '#e6e6e6', // Subtle grid color
+          borderColor: '#d1d3e2' // Lighter border for X-axis
         },
         ticks: {
-          color: '#6e6e6e', // X-axis ticks color
+          color: '#5a5c69', // Stylish X-axis ticks
           font: {
-            size: 12 // Font size for X-axis ticks
+            size: 14 // Font size for ticks
           }
         }
       },
@@ -182,50 +273,86 @@ var violatorsChart = new Chart(ctxLine, {
         title: {
           display: true,
           text: 'Number of Violators',
-          color: '#5a5c69', // Title color
+          color: '#5a5c69', // Stylish color for title
           font: {
-            size: 14, // Font size for the title
-            weight: 'bold' // Font weight for the title
+            size: 16, // Increased font size
+            weight: 'bold' // Bold for emphasis
           }
         },
         grid: {
-          color: '#e0e0e0', // Light grid color
-          borderColor: '#d1d3e2' // Border color for Y-axis
+          color: '#e6e6e6', // Subtle grid color
+          borderColor: '#d1d3e2' // Lighter border for Y-axis
         },
         ticks: {
-          color: '#6e6e6e', // Y-axis ticks color
+          color: '#5a5c69', // Stylish Y-axis ticks
           font: {
-            size: 12 // Font size for Y-axis ticks
+            size: 14 // Font size for ticks
           }
         }
       }
     },
     plugins: {
       legend: {
-        display: false // Hide the legend if not needed
+        display: false // Hide legend for cleaner look
       },
       tooltip: {
-        backgroundColor: '#ffffff', // Background color for tooltip
-        titleColor: '#333', // Title color for tooltip
-        bodyColor: '#666', // Body color for tooltip
-        borderColor: '#ddd', // Border color for tooltip
-        borderWidth: 2, // Border width for tooltip
-        caretSize: 8, // Size of the tooltip caret
+        backgroundColor: 'rgba(255, 255, 255, 0.8)', // Slightly transparent background
+        titleColor: '#333', // Darker title for contrast
+        bodyColor: '#5a5c69', // Body text color
+        borderColor: '#d1d3e2', // Light border for tooltip
+        borderWidth: 1,
+        caretSize: 8, // Larger caret for tooltip
         titleFont: {
-          size: 14, // Title font size
-          weight: 'bold' // Title font weight
+          size: 14, // Font size for title
+          weight: 'bold'
         },
         bodyFont: {
-          size: 12 // Body font size
+          size: 12 // Font size for body
         },
+        padding: 12, // Extra padding for tooltip
         callbacks: {
           label: function(tooltipItem) {
             return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
           }
         }
       }
+    },
+    animation: {
+      duration: 1500, // Smooth animation
+      easing: 'easeOutCubic' // Smooth easing for animation
     }
   }
+});
+
+
+// Event listener for the time period dropdown
+document.getElementById('time-period').addEventListener('change', function() {
+  var selectedTimePeriod = this.value;
+  var chartData = [];
+  var chartLabels = [];
+
+  // Update chart data based on the selected time period
+  if (selectedTimePeriod === 'week') {
+    chartData = <?= json_encode($chartDataWeek) ?>;
+    chartLabels = <?= json_encode($chartLabelsWeek) ?>;
+  } else if (selectedTimePeriod === 'month') {
+    chartData = <?= json_encode($chartDataMonth) ?>;
+    chartLabels = <?= json_encode($chartLabelsMonth) ?>;
+  }
+  else if (selectedTimePeriod === 'year') {
+    chartData = <?= json_encode($chartDataYear) ?>;
+    chartLabels = <?= json_encode($chartLabelsYear) ?>;
+  }else if (selectedTimePeriod === 'day') {
+    chartData = <?= json_encode($chartDataDay) ?>;
+    chartLabels = <?= json_encode($chartLabelsDay) ?>;
+  }
+
+  // Update the chart with the new data
+  violatorsChart.data.labels = chartLabels;
+  violatorsChart.data.datasets[0].data = chartData;
+  violatorsChart.update();
+
+  
 });
 
 
@@ -234,6 +361,12 @@ var violatorsChart = new Chart(ctxLine, {
 var barChartData = <?= json_encode($barChartData) ?>;
 
 var ctxBar = document.getElementById('barChart').getContext('2d');
+
+// Create gradient for the bars
+var gradient = ctxBar.createLinearGradient(0, 0, 0, 400);
+gradient.addColorStop(0, 'rgba(78, 115, 223, 1)');  // Start color
+gradient.addColorStop(1, 'rgba(78, 115, 223, 0.5)');  // End color
+
 var barChart = new Chart(ctxBar, {
   type: 'bar',
   data: {
@@ -241,14 +374,18 @@ var barChart = new Chart(ctxBar, {
     datasets: [{
       label: 'Number of Violations',
       data: barChartData,
-      backgroundColor: '#4e73df', // Primary color
-      borderColor: '#2e59d9', // Darker shade for borders
-      borderWidth: 2, // Slightly thicker borders
-      barPercentage: 0.8,
-      borderRadius: 10, // More rounded corners for bars
+      backgroundColor: gradient, // Apply gradient to bars
+      borderColor: '#4e73df', // Border color
+      borderWidth: 3, // Thicker borders
+      barPercentage: 0.7, // Slimmer bars
+      borderRadius: 15, // Rounded corners
       hoverBackgroundColor: '#2e59d9', // Hover color
       hoverBorderColor: '#1d72b8', // Hover border color
-      borderSkipped: 'bottom' // Skips border at the bottom for a smoother look
+      borderSkipped: false, // Ensure all borders appear
+      shadowOffsetX: 4, // Shadow to give depth
+      shadowOffsetY: 4,
+      shadowBlur: 10,
+      shadowColor: 'rgba(0, 0, 0, 0.15)'
     }]
   },
   options: {
@@ -256,10 +393,10 @@ var barChart = new Chart(ctxBar, {
     maintainAspectRatio: false,
     layout: {
       padding: {
-        left: 20,
-        right: 20,
-        top: 20,
-        bottom: 20
+        left: 30,
+        right: 30,
+        top: 30,
+        bottom: 30
       }
     },
     scales: {
@@ -267,19 +404,20 @@ var barChart = new Chart(ctxBar, {
         title: {
           display: true,
           text: 'Students',
-          color: '#4e73df', // Primary color for title
+          color: '#333', // Stylish color for the title
           font: {
-            size: 16, // Larger title font size
-            weight: 'bold' // Bold title font weight
+            size: 18, // Increase font size
+            weight: 'bold',
+            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" // Professional font
           }
         },
         grid: {
-          display: false // Remove grid lines for a cleaner look
+          display: false // Hide grid lines for clarity
         },
         ticks: {
-          color: '#6e6e6e', // Darker color for X-axis ticks
+          color: '#5a5c69', // Stylish X-axis ticks
           font: {
-            size: 14 // Larger font size for X-axis ticks
+            size: 15
           }
         }
       },
@@ -287,50 +425,67 @@ var barChart = new Chart(ctxBar, {
         title: {
           display: true,
           text: 'Number of Violations',
-          color: '#4e73df', // Primary color for title
+          color: '#333',
           font: {
-            size: 16, // Larger title font size
-            weight: 'bold' // Bold title font weight
+            size: 18,
+            weight: 'bold',
+            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
           }
         },
         grid: {
-          color: '#e0e0e0', // Light grid color for better contrast
-          borderColor: '#d1d3e2', // Light border color for Y-axis
-          borderWidth: 1
+          color: '#e5e5e5', // Subtle grid color
+          borderColor: '#dcdcdc', // Subtle border color
+          borderDash: [5, 5] // Dotted grid lines for elegance
         },
         ticks: {
-          color: '#6e6e6e', // Darker color for Y-axis ticks
+          color: '#5a5c69', // Stylish Y-axis ticks
           font: {
-            size: 14 // Larger font size for Y-axis ticks
+            size: 15
           },
-          stepSize: 1 // Step size for Y-axis ticks
+          stepSize: 1 // Ensure better granularity
         }
       }
     },
     plugins: {
       legend: {
-        display: false // Hide legend if not needed
+        display: true, // Show legend for clarity
+        labels: {
+          color: '#333', // Legend color
+          font: {
+            size: 14,
+            weight: 'bold'
+          }
+        }
       },
       tooltip: {
-        backgroundColor: '#ffffff', // Background color for tooltip
-        titleColor: '#333', // Dark title color for tooltip
-        bodyColor: '#666', // Dark body color for tooltip
-        borderColor: '#ddd', // Light border color for tooltip
-        borderWidth: 2, // Slightly thicker border
-        caretSize: 8, // Larger size of the tooltip caret
+        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Dark background for tooltip
+        titleColor: '#ffffff', // White title
+        bodyColor: '#ffffff', // White body text
+        borderColor: '#ffffff', // Light border for tooltip
+        borderWidth: 1,
+        caretSize: 6, // Smaller caret for tooltip
         titleFont: {
-          size: 14, // Larger title font size
-          weight: 'bold' // Bold title font weight
+          size: 14,
+          weight: 'bold'
         },
         bodyFont: {
-          size: 12 // Font size for tooltip body
+          size: 13
         },
+        padding: 12, // Add padding for a more spacious look
+        displayColors: false, // Disable dataset color display in tooltips
         callbacks: {
+          title: function(tooltipItem) {
+            return 'Student: ' + tooltipItem[0].label; // Add custom label for the student
+          },
           label: function(tooltipItem) {
-            return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
+            return 'Violations: ' + tooltipItem.raw; // Customize label for clarity
           }
         }
       }
+    },
+    animation: {
+      duration: 1500, // Smooth and slow animations for rendering
+      easing: 'easeOutBounce' // Use bounce effect for a top-tier feel
     }
   }
 });
@@ -340,6 +495,12 @@ var statusLabels = <?= json_encode($statusLabels) ?>;
 var statusData = <?= json_encode($statusData) ?>;
 
 var ctxStatus = document.getElementById('statusChart').getContext('2d');
+
+// Create gradient for the bars
+var gradientStatus = ctxStatus.createLinearGradient(0, 0, 0, 400);
+gradientStatus.addColorStop(0, 'rgba(28, 200, 138, 1)'); // Start color (green)
+gradientStatus.addColorStop(1, 'rgba(28, 200, 138, 0.5)'); // End color (lighter green)
+
 var statusChart = new Chart(ctxStatus, {
   type: 'bar',
   data: {
@@ -347,15 +508,18 @@ var statusChart = new Chart(ctxStatus, {
     datasets: [{
       label: 'Number of Violations by Status',
       data: statusData,
-      backgroundColor: [
-        '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'
-      ],
-      borderColor: '#ffffff',
-      borderWidth: 2, // Slightly thicker borders for better contrast
+      backgroundColor: gradientStatus, // Apply gradient to bars
+      borderColor: '#1cc88a', // Border color
+      borderWidth: 3, // Thicker borders
       barPercentage: 0.7, // Slightly narrower bars
-      borderRadius: 10, // Rounded corners for bars
+      borderRadius: 15, // Rounded corners for bars
       hoverBackgroundColor: '#17a673', // Hover color
-      hoverBorderColor: '#148a5f' // Hover border color
+      hoverBorderColor: '#148a5f', // Hover border color
+      borderSkipped: false, // Ensure all borders appear
+      shadowOffsetX: 4, // Add shadow for depth
+      shadowOffsetY: 4,
+      shadowBlur: 10,
+      shadowColor: 'rgba(0, 0, 0, 0.15)' // Shadow color
     }]
   },
   options: {
@@ -363,10 +527,10 @@ var statusChart = new Chart(ctxStatus, {
     maintainAspectRatio: false,
     layout: {
       padding: {
-        left: 15,
-        right: 15,
-        top: 15,
-        bottom: 15
+        left: 30,
+        right: 30,
+        top: 30,
+        bottom: 30
       }
     },
     scales: {
@@ -374,19 +538,20 @@ var statusChart = new Chart(ctxStatus, {
         title: {
           display: true,
           text: 'Status',
-          color: '#343a40', // Darker color for better visibility
+          color: '#333', // Stylish color for the title
           font: {
-            size: 16, // Increased font size for better readability
-            weight: 'bold' // Bold title for emphasis
+            size: 18, // Increased font size
+            weight: 'bold',
+            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" // Professional font
           }
         },
         grid: {
-          display: false // Remove grid lines for a cleaner look
+          display: false // Hide grid lines for clarity
         },
         ticks: {
-          color: '#495057', // Darker color for X-axis ticks
+          color: '#5a5c69', // Stylish X-axis ticks
           font: {
-            size: 14 // Increased font size for ticks
+            size: 15
           }
         }
       },
@@ -394,21 +559,22 @@ var statusChart = new Chart(ctxStatus, {
         title: {
           display: true,
           text: 'Number of Violations',
-          color: '#343a40', // Darker color for better visibility
+          color: '#333', // Stylish color for the title
           font: {
-            size: 16, // Increased font size for better readability
-            weight: 'bold' // Bold title for emphasis
+            size: 18,
+            weight: 'bold',
+            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
           }
         },
         grid: {
-          color: '#e0e0e0', // Light grid color for subtle separation
-          borderColor: '#ced4da', // Light border color for Y-axis
-          borderWidth: 1
+          color: '#e5e5e5', // Subtle grid color
+          borderColor: '#dcdcdc', // Subtle border color
+          borderDash: [5, 5] // Dotted grid lines for elegance
         },
         ticks: {
-          color: '#495057', // Darker color for Y-axis ticks
+          color: '#5a5c69', // Stylish Y-axis ticks
           font: {
-            size: 14 // Increased font size for ticks
+            size: 15
           },
           stepSize: 1 // Step size for Y-axis ticks
         }
@@ -416,35 +582,80 @@ var statusChart = new Chart(ctxStatus, {
     },
     plugins: {
       legend: {
-        display: false // Hide legend if not needed
+        display: true, // Show legend for clarity
+        labels: {
+          color: '#333', // Legend color
+          font: {
+            size: 14,
+            weight: 'bold'
+          }
+        }
       },
       tooltip: {
-        backgroundColor: '#ffffff', // Background color for tooltip
-        titleColor: '#343a40', // Darker color for tooltip title
-        bodyColor: '#495057', // Darker color for tooltip body
-        borderColor: '#ced4da', // Border color for tooltip
+        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Dark background for tooltip
+        titleColor: '#ffffff', // White title
+        bodyColor: '#ffffff', // White body text
+        borderColor: '#ffffff', // Light border for tooltip
         borderWidth: 1,
-        caretSize: 6, // Size of the tooltip caret
+        caretSize: 6, // Smaller caret for tooltip
+        titleFont: {
+          size: 14,
+          weight: 'bold'
+        },
+        bodyFont: {
+          size: 13
+        },
+        padding: 12, // Add padding for a more spacious look
+        displayColors: false, // Disable dataset color display in tooltips
         callbacks: {
+          title: function(tooltipItem) {
+            return 'Status: ' + tooltipItem[0].label; // Custom label for the status
+          },
           label: function(tooltipItem) {
-            return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
+            return 'Violations: ' + tooltipItem.raw; // Customize label for clarity
           }
         }
       }
+    },
+    animation: {
+      duration: 1500, // Smooth and slow animations for rendering
+      easing: 'easeOutBounce' // Use bounce effect for a top-tier feel
     }
   }
 });
 
 
 var ctxPie = document.getElementById('pieChart').getContext('2d');
+
+// Define vibrant colors for the chart
+var colors = [
+  'rgba(28, 200, 138, 0.9)', // Green
+  'rgba(54, 185, 204, 0.9)', // Blue
+  'rgba(246, 194, 62, 0.9)', // Yellow
+  'rgba(231, 74, 59, 0.9)'   // Red
+];
+
+var hoverColors = [
+  'rgba(28, 200, 138, 1)',
+  'rgba(54, 185, 204, 1)',
+  'rgba(246, 194, 62, 1)',
+  'rgba(231, 74, 59, 1)'
+];
+
+// Calculate total percentage
+var totalValue = pieData.reduce((acc, val) => acc + val, 0);
+var totalPercentage = 100; // Since we're displaying the entire chart
+
 var pieChart = new Chart(ctxPie, {
   type: 'pie',
   data: {
     labels: pieLabels,
     datasets: [{
       data: pieData,
-      backgroundColor: ['#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'],
-      hoverOffset: 4
+      backgroundColor: colors,
+      hoverBackgroundColor: hoverColors,
+      borderWidth: 2, // Thicker border to make it pop
+      borderColor: '#fff' // White border for separation between slices
     }]
   },
   options: {
@@ -452,41 +663,51 @@ var pieChart = new Chart(ctxPie, {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top',
+        position: 'top', // Keep legend on top for better layout
         labels: {
-          color: '#5a5c69' // Legend text color
+          color: '#5a5c69', // Text color
+          font: {
+            size: 14, // Font size
+            weight: 'bold' // Bold for readability
+          }
         }
       },
       tooltip: {
+        backgroundColor: 'rgba(255, 255, 255, 0.9)', // Light tooltip background
+        titleColor: '#333', // Darker title
+        bodyColor: '#666', // Subtle body color
+        borderColor: '#ddd', // Light border
+        borderWidth: 1,
+        caretSize: 6, // Caret size for clarity
+        padding: 12, // Padding for better tooltip spacing
         callbacks: {
           label: function(tooltipItem) {
-            var total = tooltipItem.dataset.data.reduce((acc, val) => acc + val, 0); // Calculate total
-            var percentage = (tooltipItem.raw / total * 100).toFixed(2); // Calculate percentage
-            return `${tooltipItem.label}: ${percentage}%`; // Show percentage in tooltip
+            var percentage = (tooltipItem.raw / totalValue * 100).toFixed(2);
+            return `${tooltipItem.label}: ${percentage}%`;
           }
-        },
-        backgroundColor: '#ffffff', // Tooltip background color
-        titleColor: '#333', // Tooltip title color
-        bodyColor: '#666', // Tooltip body color
-        borderColor: '#ddd', // Tooltip border color
-        borderWidth: 1, // Tooltip border width
-        caretSize: 6 // Tooltip caret size
-      },
-      datalabels: {
-        color: '#ffffff', // Data label color
-        formatter: (value, ctx) => {
-          var total = ctx.chart.data.datasets[0].data.reduce((acc, val) => acc + val, 0); // Calculate total
-          var percentage = (value / total * 100).toFixed(2); // Calculate percentage
-          return `${percentage}%`; // Show percentage inside pie chart
-        },
-        font: {
-          weight: 'bold' // Font weight for data labels
-        },
-        align: 'center' // Align data labels in the center of the segments
+        }
       }
+    },
+    cutout: '60%', // Larger hole for a modern look
+    elements: {
+      arc: {
+        borderWidth: 0, // Cleaner look by default
+        hoverBorderWidth: 2, // Slight border on hover for emphasis
+        hoverBorderColor: '#fff', // White hover border for slice contrast
+        shadowOffsetX: 0,
+        shadowOffsetY: 0,
+        shadowBlur: 12, // Soft shadow for a 3D effect
+        shadowColor: 'rgba(0, 0, 0, 0.15)' // Light shadow color
+      }
+    },
+    animation: {
+      animateScale: true, // Scale animation for smooth entry
+      animateRotate: true // Rotation animation for smooth transition
     }
-  }
+  },
+  plugins: []
 });
+
 
 </script>
 

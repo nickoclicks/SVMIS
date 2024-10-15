@@ -11,6 +11,8 @@ class Violations extends Controller
         $violations = new Violation();
         $data = $violations->findAll();
 
+
+        
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Violations', 'violations'];
 
@@ -33,8 +35,9 @@ class Violations extends Controller
             if ($violations->validate($_POST)) {
                 $arr['violation'] = $_POST['violation'];
                 $arr['description'] = $_POST['description'];
-                $arr['shb_article'] = $_POST['shb_article'];
+                $arr['category'] = $_POST['category'];
                 $arr['compensation'] = $_POST['compensation'];
+                $arr['level'] = $_POST['level'];
                 $arr['date'] = date("Y-m-d H:i:s");
                 $violations->insert($arr);
                 $this->redirect('violations');

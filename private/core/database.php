@@ -40,4 +40,7 @@ class Database
 
   }
 
+  
+  // ... existing code ..
+
 }

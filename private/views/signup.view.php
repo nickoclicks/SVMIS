@@ -1,9 +1,10 @@
 <?php $this->view('includes/header'); ?>
+<?php $this->view('includes/navigation'); ?>
 
 
-<div class="container-fluid">
+<div class="dashboard-container">
   <form method="post" class="needs-validation" novalidate>
-    <div class="p-4 mx-auto shadow rounded" style="width: 100%; max-width: 900px; margin-top: 10px; overflow: hidden;">
+    <div class="card p-4 mx-auto shadow rounded" style="width: 100%; max-width: 1650px; margin-top: 10px; overflow: hidden;">
       <h2 class="text-center mb-4">NBSC - Prefect of Discipline</h2>
       <img src="assets/nbsc1.png" class="border d-block mx-auto mb-4" style="width: 100px;">
 
@@ -105,16 +106,37 @@
       </div>
 
       <!-- Academic Information Section -->
-      <?php if ($mode == 'students'): ?>
+      
         <h5 class="mt-4">Academic Information</h5>
         <div class="row">
           <div class="col-md-6">
             <div class="form-group my-2">
-              <label for="year_level" class="form-label">Year Level</label>
-              <input class="form-control" id="year_level" value="<?=get_var('year_level')?>" type="text" name="year_level" placeholder="Year Level" required>
-              <div class="invalid-feedback">Please provide a valid year level.</div>
-            </div>
+    <label for="year_level_id" class="form-label">Year Level:</label>
+    <select name="year_level_id" id="year_level_id">
+        <option value="">Select Year Level</option>
+        <option value="1" <?php echo isset($_POST['year_level_id']) && $_POST['year_level_id'] == '1' ? 'selected' : ''; ?>>1st Year</option>
+        <option value="2" <?php echo isset($_POST['year_level_id']) && $_POST['year_level_id'] == '2' ? 'selected' : ''; ?>>2nd Year</option>
+        <option value="3" <?php echo isset($_POST['year_level_id']) && $_POST['year_level_id'] == '3' ? 'selected' : ''; ?>>3rd Year</option>
+        <option value="4" <?php echo isset($_POST['year_level_id']) && $_POST['year_level_id'] == '4' ? 'selected' : ''; ?>>4th Year</option>
+    </select>
+    <div class="invalid-feedback">Please provide a valid year level.</div>
+</div>
           </div>
+
+          <!-- New Dropdown for School Year -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group my-2">
+                <label for="school_year_id" class="form-label">School Year</label>
+                <select name="school_year_id" id="school_year_id" class="form-control" required>
+                    <option value="">Select School Year</option>
+                    <option value="1" <?php echo isset($_POST['school_year_id']) && $_POST['school_year_id'] == '1' ? 'selected' : ''; ?>>2024-2025</option>
+                    <option value="2" <?php echo isset($_POST['school_year_id']) && $_POST['school_year_id'] == '2' ? 'selected' : ''; ?>>2025-2026</option>
+                </select>
+                <div class="invalid-feedback">Please select a school year.</div>
+            </div>
+        </div>
+          
           <div class="col-md-6">
             <div class="form-group my-2">
               <label for="course" class="form-label">Course</label>
@@ -123,7 +145,7 @@
             </div>
           </div>
         </div>
-      <?php endif; ?>
+ 
 
       <!-- Gender Selection -->
       <div class="row">

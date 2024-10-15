@@ -21,7 +21,7 @@
     }
 </style>
 <div class="dashboard-container-fluid p-4 shadow-lg mx-auto bg-light" style="max-width: 1700px; border-radius: 10px;">
-<!-- Violations Section -->
+<!-- Violations Section 
 <div class="card shadow-lg mb-5">
     <div class="card-header bg-primary text-white">
         <h6 class="font-weight-bold">
@@ -96,7 +96,7 @@
         </div>
     </div>
 
-    <!-- Notices Section
+    <!-- Notices Section -->
     <div class="card shadow-lg mb-5">
         <div class="card-header">
             <h6 class="font-weight-bold">

@@ -23,7 +23,17 @@ class Form extends Model
         'wit_name',
         'wit_contact',
         'status',
-        'user_id'
+        'user_id',
+        'remarks',
+        'image',
+        'appt_date',
+        'appt_time',
+        'sanction_party',
+        'sanction_type',
+        'hours',
+        'comm_date',
+        'comm_time',
+        'office'
     ];
 
     protected $beforeInsert = [
@@ -75,6 +85,13 @@ class Form extends Model
         return $this->query("SELECT COUNT(*) AS count FROM notice")[0]->count;
     }
 
+    public function countAlll()
+{
+    $query = "SELECT COUNT(*) AS count FROM notice WHERE status = :status";
+    $params = ['status' => 'Referred to SDC'];
+    return $this->query($query, $params)[0]->count;
+}
+
     public function getComplaintsByUserId($user_id)
     {
         $query = "SELECT * FROM notice WHERE user_id = :user_id";
@@ -105,12 +122,29 @@ public function getStudentIdSuggestions($term)
         return $this->query($query, $params);  // Query the database
     }
 
+
+    public function getStudentNameSuggestions($term)
+    {
+        $query = "SELECT std_id, firstname, lastname FROM users WHERE firstname LIKE :term LIMIT 5";
+        $params = ['term' => '%' . $term . '%'];
+        return $this->query($query, $params);  // Query the database
+    }
+
+    public function getRespondentDetailsByName($firstname)
+    {
+        $query = "SELECT firstname, lastname, email, course, year_level, phone, street, barangay, city, municipality FROM users WHERE firstname = :firstname LIMIT 1";
+        $params = ['firstname' => $firstname];
+        return $this->query($query, $params)[0] ?? null;  // Return the first result or null
+    }
+
     public function getRespondentDetailsById($std_id)
     {
         $query = "SELECT firstname, lastname, email, course, year_level, phone, street, barangay, city, municipality FROM users WHERE std_id = :std_id LIMIT 1";
         $params = ['std_id' => $std_id];
         return $this->query($query, $params)[0] ?? null;  // Return the first result or null
     }
+
+
      // Get violator by ID for editing
      public function findById($id)
      {
@@ -131,4 +165,49 @@ public function getStudentIdSuggestions($term)
         $result = $this->query($query, ['userId' => $userId]);
         return $result ? $result[0] : null;
     }
+public function searchUsersByName($query)
+{
+    $searchQuery = "%$query%"; // Prepare the query for LIKE search
+
+    $sql = "
+        SELECT u.firstname, u.lastname, v.office
+        FROM users u
+        LEFT JOIN violators v ON u.user_id = v.user_id
+        WHERE u.firstname LIKE :searchQuery OR u.lastname LIKE :searchQuery
+    ";
+
+    // Execute the query using your established `query()` method
+    $results = $this->query($sql, ['searchQuery' => $searchQuery]);
+
+    // Return the results as an array
+    return $results;
+}
+
+public function getAppointmentsThisWeek()
+{
+    $now = new DateTime();
+    $now->setTime(0, 0, 0); // reset time to 00:00:00
+    $monday = clone $now;
+    $monday->modify('this week'); // set to Monday of this week
+    $sunday = clone $now;
+    $sunday->modify('next Sunday'); // set to Sunday of this week
+
+    $query = "SELECT * FROM notice WHERE appt_date >= :monday AND appt_date <= :sunday";
+    $params = [
+        'monday' => $monday->format('Y-m-d'),
+        'sunday' => $sunday->format('Y-m-d')
+    ];
+
+    return $this->query($query, $params);
+}
+
+public function countUnresolvedNoticesByUserId($userId)
+{
+    $query = "SELECT COUNT(*) as count FROM notice WHERE resp_id = :user_id AND status != 'Resolved'";
+    $result = $this->query($query, ['user_id' => $userId]);
+    return $result ? $result[0]->count : 0;
+}
+    //gikan sa home
+
+    
 }

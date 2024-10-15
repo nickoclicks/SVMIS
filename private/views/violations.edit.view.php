@@ -61,7 +61,7 @@
 }
 
 </style>
-<div class="container-fluid p-4 shadow mx-auto" style="max-width: 1000px;">
+<div class="dashboard-container-fluid p-4 bg-light shadow mx-auto" style="max-width: 1700px;">
 
     <?php if ($row): ?>
         <div class="card">

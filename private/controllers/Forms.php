@@ -8,19 +8,30 @@ class Forms extends Controller
             $this->redirect('login');
         }
 
-        // Get the user_id from the URL
+
+    
+    
+
+      
         $user_id = $_GET['user_id'] ?? null;
 
-        // Check if the user_id is valid
+       
         if (!$user_id) {
-            $this->redirect('profile'); // Redirect if no user_id is found
+            $this->redirect('profile'); 
         }
 
+        $users = new User();
         $form = new Form();
         $errors = null;
 
+        $appointmentsThisWeek = $form->getAppointmentsThisWeek();
+
+        $usersmodel = $users->getUsers();
+        
+
         // Fetch the complaints for the user
-        $complaints = $form->getComplaintsByUserId($user_id); 
+        $complaints = $form->getComplaintsByUserId($user_id);
+         
 
         // Fetch the list of violations
         $violations = $form->getViolations();  // Fetch violations from the model
@@ -45,44 +56,79 @@ class Forms extends Controller
                 'evidence' => $_POST['evidence'] ?? '',
                 'wit_name' => $_POST['wit_name'] ?? '',
                 'wit_contact' => $_POST['wit_contact'] ?? '',
+                'appt_date' => $_POST['appt_date'] ?? '',
+                'appt_time' => $_POST['appt_time'] ?? '',
+                'sanction_party' => $_POST['sanction_party'] ?? '',
+                'sanction_type' => $_POST['sanction_type'] ?? '',
+                'hours' => $_POST['hours'] ?? '',
+                'comm_date' => $_POST['comm_date'] ?? '',
+                'comm_time' => $_POST['comm_time'] ?? '',
+                'office' => $_POST['office'] ?? '',
                 'status' => $_POST['status'] ?? 'Unresolved',  // Default status
                 'user_id' => $user_id,
+                
+                
             ];
 
             // Validate and insert the data
             if ($form->validate($data)) {
                 $form->insert($data);
+                
 
                 // Redirect to the profile of the specific user after successful insertion
-                $this->redirect('profile/' . $user_id);
+                $this->redirect('profile/' . $user_id . '#complainant');
             } else {
                 $errors = $form->errors;
             }
         }
 
-        // Load the form view and pass any errors, complaints, and violations to it
+       
         $this->view('form', [
             'errors' => $errors,
             'complaints' => $complaints,
-            'violations' => $violations,  // Pass the violations to the view
-            'user_id' => $user_id 
+            'violations' => $violations,  
+            'user_id' => $user_id,
+            'users' => $usersmodel,
+            'appointmentsThisWeek' => $appointmentsThisWeek
         ]);
     }
 
     public function getStudentIds()
     {
         $form = new Form();
-        $term = $_GET['term'] ?? '';  // The search term sent via AJAX
+        $term = $_GET['term'] ?? ''; 
         $studentIds = $form->getStudentIdSuggestions($term);
-        echo json_encode($studentIds);  // Return the results as JSON
+        echo json_encode($studentIds); 
     }
+
+    public function getStudentName()
+    {
+        $form = new Form();
+        $term = $_GET['term'] ?? ''; 
+        $studentIds = $form->getStudentNameSuggestions($term);
+        echo json_encode($studentIds); 
+    }
+
+
 
     public function getRespondentDetails()
     {
         $form = new Form();
-        $std_id = $_GET['std_id'] ?? '';  // The selected std_id sent via AJAX
+        $std_id = $_GET['std_id'] ?? ''; 
         $respondentDetails = $form->getRespondentDetailsById($std_id);
-        echo json_encode($respondentDetails);  // Return the results as JSON
+    
+        
+        if ($respondentDetails) {
+            echo json_encode([
+                'email' => $respondentDetails->email,
+                'course' => $respondentDetails->course,
+                'year_level_id' => $respondentDetails->year_level,
+                'phone' => $respondentDetails->phone,
+                'address' => $respondentDetails->address
+            ]);
+        } else {
+            echo json_encode([]);
+        }
     }
 
     public function edit($id = null)
@@ -96,25 +142,48 @@ class Forms extends Controller
 
         if (count($_POST) > 0) {
             if ($form->validate($_POST)) {
+                // Update the form entry in the database
                 $form->update($id, $_POST);
+        
+                // Get the user ID after updating (for redirection)
                 $row = $form->findById($id);
+        
+                // Redirect to the profile page with the correct user ID
+                // No changes needed here
                 $this->redirect('profile/' . $row->user_id);
             } else {
+                // Capture validation errors if they exist
                 $errors = $form->errors;
             }
         }
-
+        
+        // Find the form row data by ID
         $row = $form->where('id', $id);
+        
+        // Breadcrumbs setup
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Violations', 'violations'];
         $crumbs[] = ['Edit', 'violations/edit'];
+        
         if ($row) {
+            // If the row is found, assign it for the view
             $row = $row[0];
         }
+        
+        // Load the form edit view, passing in any errors, the form row, and breadcrumbs
         $this->view('forms.edit', [
-            'errors' => $errors,
+            'errors' => $errors ?? null,
             'row' => $row,
             'crumbs' => $crumbs
         ]);
+        
     }
+
+    
+
+    
+
+    
+
+    
 }
