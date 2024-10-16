@@ -226,8 +226,8 @@ table th, table td {
 
 <div class="dashboard-container mt-4" style="background: linear-gradient(135deg, #ffffff, #f9f9f9); max-width: 1650px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
 
-<a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
 <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
+<a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
 <a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Good Moral Report</a>
 
 
@@ -266,14 +266,14 @@ table th, table td {
             <input type="text" id="student_id" name="student_id" class="form-control" value="<?php echo htmlspecialchars($filters['student_id'] ?? ''); ?>">
         </div>
                 <div class="col-md-2">
-                    <label for="year_level" class="form-label">Year Level</label>
-                    <select id="year_level" name="year_level" class="form-select">
+                    <label for="year_level_id" class="form-label">Year Level</label>
+                    <select id="year_level_id" name="year_level_id" class="form-select">
                         <option value="">All</option>
                         <!-- Add your year levels here -->
-                        <option value="1st" <?php echo $filters['year_level'] == '1st' ? 'selected' : ''; ?>>1st Year</option>
-                        <option value="2nd" <?php echo $filters['year_level'] == '2nd' ? 'selected' : ''; ?>>2nd Year</option>
-                        <option value="3rd" <?php echo $filters['year_level'] == '3rd' ? 'selected' : ''; ?>>3rd Year</option>
-                        <option value="4th" <?php echo $filters['year_level'] == '4th' ? 'selected' : ''; ?>>4th Year</option>
+                        <option value="1st" <?php echo $filters['year_level_id'] == '1st' ? 'selected' : ''; ?>>1st Year</option>
+                        <option value="2nd" <?php echo $filters['year_level_id'] == '2nd' ? 'selected' : ''; ?>>2nd Year</option>
+                        <option value="3rd" <?php echo $filters['year_level_id'] == '3rd' ? 'selected' : ''; ?>>3rd Year</option>
+                        <option value="4th" <?php echo $filters['year_level_id'] == '4th' ? 'selected' : ''; ?>>4th Year</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -332,6 +332,49 @@ $statusCounts = array_count_values($statuses);
         </div>
     </div>
 </div>
+<div class="row">
+        <!-- Display count of each course -->
+<!-- Display count of each course -->
+<?php
+$courses = array_column($recentViolators, 'course');
+$courseCounts = array_count_values($courses);
+?>
+
+<div class="card col-md-5" style="background-color: white; margin-left: 80px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); ">
+    <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-chart-pie"></i> Course Counts</h5>
+        <p class="card-text">This graph shows the distribution of notices across different courses.</p>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+    <?php foreach ($courseCounts as $course => $count): ?>
+        <li style="display: inline; margin-right: 15px;"><?php echo $course . ': ' . $count; ?></li>
+    <?php endforeach; ?>
+</ul>
+
+        <!-- Add a canvas element for the graph -->
+        <canvas id="course-count-graph" style="width: 300px; height: 300px; background-color: white"></canvas>
+    </div>
+</div>
+
+<?php
+$yearLevels = array_column($recentViolators, 'year_level_id');
+$yearLevelCounts = array_count_values($yearLevels);
+?>
+
+<div class="card col-md-5" style=" background-color: white; padding: 20px; margin-left: 80px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-chart-pie"></i> Year Level Counts</h5>
+        <p class="card-text">This graph shows the distribution of notice across different year levels.</p>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+    <?php foreach ($yearLevelCounts as $yearLevel => $count): ?>
+        <li style="display: inline; margin-right: 15px;"><?php echo $yearLevel . ': ' . $count; ?></li>
+    <?php endforeach; ?>
+</ul>
+
+        <!-- Add a canvas element for the graph -->
+        <canvas id="year-level-count-graph" style=" background-color: white"></canvas>
+    </div>
+</div>
+</div>
 
         <!-- Display Tables -->
         <div class="mt-4">
@@ -388,28 +431,7 @@ $statusCounts = array_count_values($statuses);
 
 
 
-        <div class="row">
-        <!-- Display count of each course -->
-<!-- Display count of each course -->
-<?php
-$courses = array_column($recentViolators, 'course');
-$courseCounts = array_count_values($courses);
-?>
-
-<div class="card col-md-5" style="background-color: white; margin-left: 80px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); ">
-    <div class="card-body">
-        <h5 class="card-title"><i class="fas fa-chart-pie"></i> Course Counts</h5>
-        <p class="card-text">This graph shows the distribution of notices across different courses.</p>
-        <ul style="list-style: none; padding: 0; margin: 0;">
-    <?php foreach ($courseCounts as $course => $count): ?>
-        <li style="display: inline; margin-right: 15px;"><?php echo $course . ': ' . $count; ?></li>
-    <?php endforeach; ?>
-</ul>
-
-        <!-- Add a canvas element for the graph -->
-        <canvas id="course-count-graph" style="width: 300px; height: 300px; background-color: white"></canvas>
-    </div>
-</div>
+       
 
 <!-- Add the JavaScript code to create the graph -->
 <script>
@@ -496,26 +518,7 @@ new Chart(ctx, {
 </script>
 
 <!-- Display count of each year level -->
-<?php
-$yearLevels = array_column($recentViolators, 'year_level');
-$yearLevelCounts = array_count_values($yearLevels);
-?>
 
-<div class="card col-md-5" style=" background-color: white; padding: 20px; margin-left: 80px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-    <div class="card-body">
-        <h5 class="card-title"><i class="fas fa-chart-pie"></i> Year Level Counts</h5>
-        <p class="card-text">This graph shows the distribution of notice across different year levels.</p>
-        <ul style="list-style: none; padding: 0; margin: 0;">
-    <?php foreach ($yearLevelCounts as $yearLevel => $count): ?>
-        <li style="display: inline; margin-right: 15px;"><?php echo $yearLevel . ': ' . $count; ?></li>
-    <?php endforeach; ?>
-</ul>
-
-        <!-- Add a canvas element for the graph -->
-        <canvas id="year-level-count-graph" style=" background-color: white"></canvas>
-    </div>
-</div>
-</div>
 
 <!-- Add the JavaScript code to create the graph -->
 <script>

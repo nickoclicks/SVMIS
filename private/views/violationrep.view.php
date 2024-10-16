@@ -183,8 +183,9 @@ table th, table td {
 
 <div class="dashboard-container mt-4">
 
-<a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
 <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
+<a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
+<a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Good Moral Report</a>
 
 <h1>Violation Report</h1>
 <h2>Total Results: <?php echo count($recentViolators); ?></h2>
@@ -255,6 +256,17 @@ $statusCounts = array_count_values($statuses);
     
 </div>
 
+<div class="chart">
+<div class="row">
+    <div class="col-md-6">
+        <canvas id="chart" width="400" height="200"></canvas>
+    </div>
+    <div class="col-md-6">
+    <canvas id="year-level-chart" width="400" height="200"></canvas>
+</div>
+</div>
+</div>
+
 <?php if (!empty($recentViolators)): ?>
                 <table class="table table-bordered table-hovered table-striped" id="table">
         <thead style="background-color: black;">
@@ -289,17 +301,6 @@ $statusCounts = array_count_values($statuses);
 <?php else: ?>
     <p>No records found.</p>
 <?php endif; ?>
-
-
-<div class="row">
-    <div class="col-md-6">
-        <canvas id="chart" width="400" height="200"></canvas>
-    </div>
-    <div class="col-md-6">
-    <canvas id="year-level-chart" width="400" height="200"></canvas>
-</div>
-</div>
-
 
 <script>
     const ctx = document.getElementById('chart').getContext('2d');
@@ -538,14 +539,8 @@ function printContent() {
     // Hide no-print elements
     document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
 
-    // Get the table to print
-    var printContent = document.querySelector('.table.table-bordered.table-hovered.table-striped');
-
-    // Get the cards to print
-    var cards = document.querySelectorAll('.card');
-
     // Get the charts to print
-    var charts = document.querySelectorAll('.card-body canvas');
+    var charts = document.querySelectorAll('.chart canvas');
 
     // Create a new header for the print
     var header = `
@@ -557,27 +552,6 @@ function printContent() {
             <h4 style="margin-bottom: -20px;"><i>(Formerly Northern Bukidnon Community College)</i> R.A.11284</h4>
             <h4 style="margin-bottom: -5px;"><i>Creando futura, Transformationis vitae, Ductae a Deo</i></h4> 
             <hr>
-        </div>
-    `;
-
-    // Create a new table with border
-    var table = printContent.outerHTML;
-    table = table.replace('<table', '<table border="1" cellpadding="5" cellspacing="0"');
-
-    // Convert the cards to HTML
-    var cardsHtml = '';
-    var cardCount = 0;
-    cards.forEach(card => {
-        if (cardCount < 3) {
-            cardsHtml += card.outerHTML;
-            cardCount++;
-        }
-    });
-
-    // Wrap the cards in a container to display them side by side
-    var cardsContainer = `
-        <div style="display: flex; justify-content: space-around;">
-            ${cardsHtml}
         </div>
     `;
 
@@ -596,14 +570,7 @@ function printContent() {
 
     // Wait for all chart images to be generated, then proceed to print
     Promise.all(chartsPromises).then(() => {
-        // Wrap the charts in a container to display them side by side
-        var chartsContainer = `
-            <div style="display: flex; justify-content: space-around;">
-                ${chartsHtml}
-            </div>
-        `;
-
-        var printHtml = header + cardsContainer + chartsContainer + table;
+        var printHtml = header + chartsHtml;
 
         var windowUrl = 'about:blank';
         var windowName = 'Print';

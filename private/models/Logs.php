@@ -6,18 +6,22 @@ class Logs extends Model {
   protected $allowedColumns = ['activity_name', 'date'];
 
   public function getPrintActivities() {
+
+    //for good moral chart
     $chartData = $this->query("
-        SELECT COUNT(log_name) as count, DATE(date) as activity_date 
-        FROM good_moral_logs 
-        WHERE log_name LIKE '%certificate%'
+        SELECT COUNT(activity_name) as count, DATE(date) as activity_date 
+        FROM activity_logs 
+        WHERE activity_name LIKE '%good moral%'
         GROUP BY DATE(date) 
         ORDER BY count DESC
     ");
+    
 
+    //for the violation slip chart
     $chartData1 = $this->query("
-        SELECT COUNT(log_name) as count, DATE(date) as activity_date 
-        FROM good_moral_logs 
-        WHERE log_name LIKE '%slip%'
+         SELECT COUNT(activity_name) as count, DATE(date) as activity_date 
+        FROM activity_logs 
+        WHERE activity_name LIKE '%violation slip%'
         GROUP BY DATE(date) 
         ORDER BY count DESC
     ");

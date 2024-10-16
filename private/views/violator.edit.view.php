@@ -178,9 +178,7 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
 <!-- Add the Print Violation Slip button -->
 <div id="printViolationSlipButton" style="display: none;">
     <button type="button" class="btn btn-secondary" onclick="printViolationSlip()">Print Violation Slip</button>
-    <?php
-log_certificate('Printed violtion slip');
-?>
+    <?php log_activity("Printed violation slip printed for: " . esc($row->firstname . ' ' . $row->lastname)); ?>   
 </div>
 
 <script>

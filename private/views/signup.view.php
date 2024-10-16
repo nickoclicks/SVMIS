@@ -112,7 +112,7 @@
           <div class="col-md-6">
             <div class="form-group my-2">
     <label for="year_level_id" class="form-label">Year Level:</label>
-    <select name="year_level_id" id="year_level_id">
+    <select name="year_level_id" id="year_level_id" class="form-control">
         <option value="">Select Year Level</option>
         <option value="1" <?php echo isset($_POST['year_level_id']) && $_POST['year_level_id'] == '1' ? 'selected' : ''; ?>>1st Year</option>
         <option value="2" <?php echo isset($_POST['year_level_id']) && $_POST['year_level_id'] == '2' ? 'selected' : ''; ?>>2nd Year</option>
@@ -122,6 +122,19 @@
     <div class="invalid-feedback">Please provide a valid year level.</div>
 </div>
           </div>
+
+          <div class="col-md-6">
+        <div class="form-group my-2">
+            <label for="semester_id" class="form-label">Semester</label>
+            <select name="semester_id" id="semester_id" class="form-control" required>
+                <option value="">Select Semester</option>
+                <option value="1" <?php echo isset($_POST['semester_id']) && $_POST['semester_id'] == '1' ? 'selected' : ''; ?>>First Semester</option>
+                <option value="2" <?php echo isset($_POST['semester_id']) && $_POST['semester_id'] == '2' ? 'selected' : ''; ?>>Second Semester</option>
+                <option value="3" <?php echo isset($_POST['semester_id']) && $_POST['semester_id'] == '3' ? 'selected' : ''; ?>>Summer</option>
+            </select>
+            <div class="invalid-feedback">Please select a semester.</div>
+        </div>
+    </div>
 
           <!-- New Dropdown for School Year -->
     <div class="row">

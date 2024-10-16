@@ -203,7 +203,7 @@ $chartDataYear = array_column($chartDataYear, 'count');
         $statusData = $statusDistribution['data'];
 
         // Pass all data to the view
-        $this->view('analytics', [
+        $this->view('home', [
             'totalViolations' => $totalViolations,
             'totalViolators' => $totalViolators,
             'totalSdcs' => $totalSdcs,

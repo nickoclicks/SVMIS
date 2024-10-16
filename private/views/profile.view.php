@@ -634,9 +634,7 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
         <div class="text-center">
             <button class="btn btn-info btn-sm shadow" onclick="showCertificate('firstCertificate')" style="background-color: gray; height: 50px; width: 70px">
                 <i class="fa fa-print"></i>
-                <?php
-log_certificate('Printed certificate for ' . $row->firstname . ' ' . $row->lastname . ' for ' . $selectedPurpose);
-?>
+           
             </button>
         </div>
         <?php endif ?>
@@ -733,7 +731,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function printCertificate() {
 
-        
+     
+    
     // Find the currently visible certificate
     const visibleCertificate = document.querySelector('.certificate.show').innerHTML;
 
@@ -752,6 +751,8 @@ document.addEventListener('DOMContentLoaded', function() {
     printWindow.onload = function() {
         printWindow.focus();
         printWindow.print();
+
+               
         
         
     };

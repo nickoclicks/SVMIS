@@ -120,9 +120,7 @@
     font-size: 18px;
   }
 
-  .bottom-nav .nav-link:hover {
   
-  }
 
   /* Divider */
   .sidebar-divider {
@@ -168,7 +166,7 @@
       </li>
       <?php if (Auth::canPerformAction()): ?>
       <li class="nav-item">
-        <a class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'Sdcs') ? 'active' : '' ?>" href="<?= ROOT ?>/Sdcs">
+        <a class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'reports') ? 'active' : '' ?>" href="<?= ROOT ?>/reports">
           <i class="fas fa-print"></i> <span>Reports</span>
         </a>
       </li>

@@ -162,13 +162,13 @@
                     $image = $row->image;
                     switch ($row->course) {
                         case 'BSBA':
-                            $image = ROOT . '/assets/male.png';
+                            $image = ROOT . '/assets/BSBA.png';
                             break;
                         case 'TEP':
-                            $image = ROOT . '/assets/female.png';
+                            $image = ROOT . '/assets/TEP.png';
                             break;
                         case 'BSIT':
-                            $image = ROOT . '/assets/female.png';
+                            $image = ROOT . '/assets/BSIT.png';
                             break;
                         default:
                             $image = $row->image;

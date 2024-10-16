@@ -123,23 +123,23 @@
         <td><?= get_date($row->date) ?></td>
 
         <?php if (Auth::canPerformAction()): ?>
-        <td>
+    <td>
+        <?php if ($user_id): ?>
+            <a href="<?= ROOT ?>/violations/assign/<?= $row->id ?>?user_id=<?= $user_id ?>" 
+            class="btn btn-outline-success btn-sm"  
+               onclick="return confirmAddViolation(event)">
+                <i class="fa fa-plus fa-lg text-success"></i>
+            </a>
+        <?php else: ?>
             <a href="<?= ROOT ?>/violations/edit/<?= $row->id ?>" class="btn btn-outline-success btn-sm">
                 <i class="fa fa-edit fa-lg text-success"></i>
             </a>
-            <a href="<?= ROOT ?>/violations/delete/<?= $row->id ?>" <a href="<?= ROOT ?>/violations/delete/<?= $row->id ?>" class="btn btn-outline-danger btn-sm">
+            <a href="<?= ROOT ?>/violations/delete/<?= $row->id ?>" class="btn btn-outline-danger btn-sm">
                 <i class="fa fa-trash-alt fa-lg text-danger"></i>
             </a>
-            <?php if ($user_id): ?>
-                <a href="<?= ROOT ?>/violations/assign/<?= $row->id ?>?user_id=<?= $user_id ?>" 
-                   class="vbtn btn btn-sm btn-success" 
-                   onclick="return confirmAddViolation(event)">
-                    <i class="fa fa-plus"></i>
-                </a>
-            <?php endif; ?>
-        </td>
-        <?php endif ?>
-    </tr>
+        <?php endif; ?>
+    </td>
+<?php endif ?>
 <?php endforeach; ?>
 
                     <?php else: ?>

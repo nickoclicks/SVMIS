@@ -82,6 +82,35 @@ class Single_violations extends Controller
       $violators = $vio->where('violation_id',$id);
       $data['violators']  = $violators;
 
+     // Assuming $row->violation_id contains the ID of the violation being displayed
+// Assuming $row->violation_id contains the ID of the violation being displayed
+$violationId = $row->violation_id;
+
+// Retrieve frequency of the specific violation for each date
+$vio = new Violators();
+$violation_frequencies = $vio->query("SELECT DATE(date) as date, COUNT(*) as frequency FROM violators WHERE violation_id = ? GROUP BY DATE(date)", [$violationId]);
+
+$courses = new User();
+$course_frequencies = $courses->query("SELECT T1.course, COUNT(*) as frequency 
+FROM users AS T1 
+INNER JOIN violators AS T2 
+ON T1.user_id = T2.user_id 
+WHERE T2.violation_id = ? 
+GROUP BY T1.course", [$violationId]);
+
+$data['violation_frequencies'] = $violation_frequencies;  // Retrieve courses data
+$data['course_frequencies'] = $course_frequencies;
+
+    $courses = new User();
+    $courses_data = $courses->query("SELECT * FROM users"); 
+    $data['courses'] = $courses_data;
+
+    // Retrieve users per course
+    foreach ($courses_data as $course) {
+      $users = new User();
+      $users_data = $users->query("SELECT * FROM users WHERE course = ?", [$course->course]); // Assuming you have a query method in your User model
+      $course->users = $users_data;
+    }
   }
 
       $data['row']        = $row;
