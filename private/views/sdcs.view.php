@@ -218,7 +218,40 @@ table th, table td {
     transition: all 0.3s ease;
 }
 
+.btn {
+    background-color: #007bff; /* Primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 24px; /* Increased padding for a more substantial look */
+    font-size: 16px; /* Increased font size for better readability */
+    font-weight: 600; /* Bold font for emphasis */
+    text-transform: uppercase; /* Uppercase text for a modern touch */
+    letter-spacing: 1px; /* Spacing between letters for a cleaner look */
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; /* Smooth transitions */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
 
+.btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.btn:active {
+    transform: translateY(1px); /* Pressed effect */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduced shadow when pressed */
+}
+
+/* Additional styles for specific button types */
+.btn-secondary {
+    background-color: #6c757d; /* Secondary color */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Darker shade for secondary button on hover */
+}
 
 </style>
 
@@ -229,6 +262,7 @@ table th, table td {
 <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
 <a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
 <a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Good Moral Report</a>
+<a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Comparative Analysis</a>
 
 
 <h1>Notice Report</h1>

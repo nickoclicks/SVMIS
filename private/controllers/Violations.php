@@ -138,7 +138,7 @@ class Violations extends Controller
         $this->redirect("violations");
     }
 }
-public function updateStatus()
+/*public function updateStatus()
 {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $postData = json_decode(file_get_contents('php://input'), true);

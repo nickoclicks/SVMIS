@@ -115,6 +115,8 @@ class Violation extends Model
                     'semester_id' => $semester_id,
                     'status' => 'Unresolved', // Set default status to 'Unresolved'
                 ]);
+
+                
             } else {
                 // Handle the case where the violation doesn't exist
                 error_log("Violation not found for ID: $violation_id");
@@ -137,11 +139,6 @@ class Violation extends Model
 }*/
 
 
-public function updateStatus($id, $status)
-{
-    $query = "UPDATE violations SET status = :status WHERE id = :id";
-    $this->execute($query, ['status' => $status, 'id' => $id]);
-}
 
 //gikan ni sa home controller akong gi
 

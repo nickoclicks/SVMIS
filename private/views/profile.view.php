@@ -59,12 +59,23 @@ $currentDate = date('jS') . ' day of ' . date('F Y');
 <?php if ($row): ?>
     <div class="row justify-content-center">
         <div class="card col-md-3 text-center shadow-sm" style="border-radius: 15px; padding: 20px; margin-right: 20px;">
-            <?php
-            $image = $row->image;
-            if (!file_exists($image)) {
-                $image = ($row->gender == 'male') ? ROOT . '/assets/male.png' : ROOT . '/assets/female.png';
-            }
-            ?>
+        <?php
+                    $image = $row->image;
+                    switch ($row->course) {
+                        case 'BSBA':
+                            $image = ROOT . '/assets/BSBA.png';
+                            break;
+                        case 'TEP':
+                            $image = ROOT . '/assets/TEP.png';
+                            break;
+                        case 'BSIT':
+                            $image = ROOT . '/assets/BSIT.png';
+                            break;
+                        default:
+                            $image = $row->image;
+                            break;
+                    }
+                    ?>
             <img src="<?php echo $image; ?>" class="border border-primary rounded-circle img-thumbnail mx-auto" style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 20px; margin-top: 40px">
 
             <!-- Status Indicator -->
@@ -345,7 +356,7 @@ $currentDate = date('jS') . ' day of ' . date('F Y');
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr id="no-violation-found">
-                        <td colspan="5" class="text-center">No violation found.</td>
+                        <td colspan="12" class="text-center">No violation found.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -438,6 +449,7 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
                     <th class="text-light">Complaint Name</th>
                     <th class="text-light">Respondent ID</th>
                     <th class="text-light">Respondent</th>
+                    <th class="text-light">Violation</th>
                     <th class="text-light">Date Filed</th>
                     <th class="text-light">Status</th>
                     <?php if (Auth::canPerformAction()): ?>
@@ -461,6 +473,7 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
                                     <?= htmlspecialchars($notice->resp_name) ?>
                                 </a>
                             </td>
+                            <td><?php echo esc($notice->violations); ?></td>
                             <td><?= get_date($notice->date); ?></td>
                             <td><?php echo esc($notice->status); ?></td>
                             <?php if (Auth::canPerformAction()): ?>
@@ -468,7 +481,8 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
                                 <a href="<?= ROOT ?>/forms/edit/<?= $notice->id ?>" class="btn btn-sm btn-info text-white">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                            </td>
+                               
+                               </td>                           
                             <?php endif ?>
                         </tr>
                     <?php endforeach; ?>
@@ -481,6 +495,7 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
         </table>
     </div>
 </div>
+
 
 <script>
     function searchComplaints() {
@@ -689,11 +704,6 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
         <p style="margin-top: -20px; font-size: 20px;">OFFICIAL COLLEGE SEAL</p>
     </div>
 
-    <div class="text-center mt-4">
-        <button class="btn btn-primary" onclick="printCertificate()">Print Certificate</button>
-    </div>
-
-    <!-- Purpose Dropdown -->
     <div class="mt-4">
         <label id="label" for="purposeDropdown" style="font-weight: 600;">Select Purpose:</label>
         <select id="purposeDropdown" class="form-control" onchange="updatePurpose()">
@@ -710,6 +720,13 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
             <input type="text" id="customPurpose" class="form-control" placeholder="Enter purpose">
         </div>
     </div>
+
+    <div class="text-center mt-4">
+         
+    <button class="btn btn-primary" 
+            onclick="printCertificate(this)"
+            data-identifier="uniqueViolationId">Print Certificate</button> 
+</div>
 </div>
 
 
@@ -729,9 +746,9 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePurpose();  // To handle any pre-set dropdown value
     });
 
-    function printCertificate() {
-
-     
+    // JavaScript Function
+function printCertificate(button) {
+   
     
     // Find the currently visible certificate
     const visibleCertificate = document.querySelector('.certificate.show').innerHTML;
@@ -751,9 +768,9 @@ document.addEventListener('DOMContentLoaded', function() {
     printWindow.onload = function() {
         printWindow.focus();
         printWindow.print();
+       
 
-               
-        
+      
         
     };
 }

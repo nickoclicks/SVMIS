@@ -169,7 +169,7 @@
 <div class="dashboard-container mb-4">
     <div class="row">
         <div class="col-8">
-    <div class="card shadow p-5 rounded">
+    <div class="card shadow p-5 rounded" style="height: 820px; overflow-y: auto;">
         <form action="<?= ROOT ?>/forms?user_id=<?= $_GET['user_id'] ?>" method="post" id="complaint-form" class="needs-validation" novalidate>
 
             <!-- Step 1: Type of Complaints -->
@@ -230,11 +230,11 @@
                             <tr>
                                 <td>
                                     <label for="resp_course_year">Course/Year</label>
-                                    <input type="text" class="form-control" name="resp_course_year" id="resp_course_year" autocomplete="off">
+                                    <input type="text" class="form-control" name="resp_course_year" id="resp_course_year" autocomplete="off"  required>
                                 </td>
                                 <td>
                                     <label for="resp_phone">Phone Number</label>
-                                    <input type="text" class="form-control" name="resp_phone" id="resp_phone" autocomplete="off">
+                                    <input type="text" class="form-control" name="resp_phone" id="resp_phone" autocomplete="off" required>
                                 </td>
                             </tr>
                             <tr>
@@ -244,7 +244,7 @@
                                 </td>
                                 <td>
                                     <label for="resp_email">e-Mail Address</label>
-                                    <input type="email" class="form-control" name="resp_email" id="resp_email" autocomplete="off">
+                                    <input type="email" class="form-control" name="resp_email" id="resp_email" autocomplete="on" required>
                                     <div id="student-email-list" class="dropdown-menu"></div>
                                 </td>
                             </tr>
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <!--calendar column-->
         <div class="col-4">
         <!-- Search input -->
-            <div id="calendar" class="calendar-container p-4 shadow rounded">
+            <div id="calendar" class="calendar-container p-4 shadow rounded" style="height: 410px">
                 <div id="calendar-header" class="d-flex justify-content-between align-items-center">
                 <button id="prev-month" class="btn btn-outline-primary"><i class="fas fa-chevron-left"></i></button>
                     <h4 id="calendar-month" class="m-0">September 2024</h4>
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </tbody>
                 </table>
             </div>
-            <div class="user-schedule bg-white">
+            <div class="user-schedule bg-white" style="height: 410px; overflow-y: auto">
   <h5>Appointments Scheduled this Week</h5>
   <table class="table table-bordered table-striped">
     <thead>
@@ -427,19 +427,22 @@ document.addEventListener('DOMContentLoaded', function() {
         <th>Respondent</th>
         <th>Date</th>
         <th>Time</th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
-    <?php foreach ($appointmentsThisWeek as $user): ?>
+<?php foreach ($appointmentsThisWeek as $user): ?>
+    <?php if ($user->status === 'Unresolved'): ?>
         <tr>
             <td><?= ucwords(str_replace(".", " ", $user->user_id)) ?></td>
             <td><?= $user->resp_name?></td>
-            <td><?= date('m/d/Y', strtotime($user->appt_date)) ?></td>
+            <td><?= get_date($user->appt_date)?></td>
             <td><?= date('g:i A', strtotime($user->appt_time)) ?></td>
+            <td><?= $user->status?></td>
         </tr>
-    <?php endforeach; ?>
+    <?php endif; ?>
+<?php endforeach; ?>
 </tbody>
-  </table>
 </div>
     </div>
     </div>
@@ -471,9 +474,6 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleWitnessFields();
 });
 
-
-
-
 document.getElementById('resp_name').addEventListener('keyup', function() {
     var searchTerm = this.value;
 
@@ -486,9 +486,10 @@ document.getElementById('resp_name').addEventListener('keyup', function() {
                 var suggestions = '';
                 if (results.length > 0) {
                     results.forEach(function(result) {
-                        suggestions += '<div class="dropdown-item" onclick="setStudentName(\'' + result.firstname + ' ' + result.lastname + '\', \'' + result.std_id + '\')">' + result.firstname + ' ' + result.lastname + '</div>';
+                        suggestions += '<div class="dropdown-item" onclick="setStudentName(\'' + result.firstname + ' ' + result.lastname + '\', ' + result.std_id + ', \'' + result.email + '\', \'' + result.phone + '\', \'' + result.street + '\', \'' + result.barangay + '\', \'' + result.city + '\', \'' + result.municipality + '\', \'' + result.year_level + '\', \'' + result.course + '\')">' + result.firstname + ' ' + result.lastname + '</div>';
                     });
                     document.getElementById('student-name-list').style.display = 'block';
+                    
                 } else {
                     document.getElementById('student-name-list').style.display = 'none';
                 }
@@ -501,58 +502,21 @@ document.getElementById('resp_name').addEventListener('keyup', function() {
     }
 });
 
-function setStudentName(fullname, std_id) {
+function setStudentName(fullname, std_id, email, phone, street, barangay, city, municipality, year_level, course) {
     document.getElementById('resp_name').value = fullname;
     document.getElementById('resp_id').value = std_id;
+    document.getElementById('resp_email').value = email;
+    document.getElementById('resp_phone').value = phone;
+    document.getElementById('resp_address').value = street + ' ' + barangay + ' ' + city + ' ' + municipality;
+    document.getElementById('resp_course_year').value = course + ' - ' + year_level;
 
-    // Perform an AJAX request to get the respondent's details
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '<?= ROOT ?>/forms/getRespondentDetails?std_id=' + std_id, true);
-    xhr.onload = function() {
-        if (this.status === 200) {
-            var details = JSON.parse(this.responseText);
-            if (details) {
-                document.getElementById('resp_email').value = details.email || '';
-                document.getElementById('resp_course_year').value = (details.course || '') + ' - ' + (details.year_level || '') + ' year ';
-                document.getElementById('resp_phone').value = details.phone || '';
-                document.getElementById('resp_address').value = details.address || '';
-            }
-        }
-    };
-    xhr.send();
-
-    document.getElementById('student-name-list').style.display = 'none';
+    // Perform an AJAX request to get the respondent's details (firstname and lastname)
+   
 }
 
 
 
-/*function setStudentId(std_id) {
-    document.getElementById('resp_id').value = std_id;
-    document.getElementById('student-id-list').style.display = 'none';
 
-    // Perform an AJAX request to get the respondent's details (firstname and lastname)
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '<?= ROOT ?>/forms/getRespondentDetails?std_id=' + std_id, true);
-    xhr.onload = function() {
-        if (this.status === 200) {
-            var details = JSON.parse(this.responseText);
-            if (details) {
-               
-                // Fill in the resp_name field with both firstname and lastname
-                document.getElementById('resp_name').value = (details.firstname || '') + ' ' + (details.lastname || '');
-
-                document.getElementById('resp_email').value = details.email || '';
-
-                document.getElementById('resp_course_year').value = (details.course || '') + ' - ' + (details.year_level || '') + ' year ';
-
-                document.getElementById('resp_phone').value = details.phone || '';
-
-                document.getElementById('resp_address').value = (details.street || '')+ ' ' + (details.barangay || '')+ ' ' + (details.city || '')+ ' ' + (details.municipality || '');
-            }
-        }
-    };
-    xhr.send();
-}*/
 
 document.addEventListener('DOMContentLoaded', function () {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -607,19 +571,7 @@ document.addEventListener('DOMContentLoaded', function () {
     renderCalendar();
 });
 
-//search button
-document.getElementById('search-student').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        let studentName = this.value.trim();
-        
-        if (studentName) {
-            // Perform your search function, e.g., an AJAX request or a redirect
-            console.log("Searching for student:", studentName);
-        } else {
-            alert("Please enter a student name to search.");
-        }
-    }
-});
+
 
 
 </script>

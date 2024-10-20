@@ -244,4 +244,6 @@ function setPartyType(selectedType) {
 
 </script>
 
+
+
 <?php $this->view('includes/footer'); ?>

@@ -1,5 +1,6 @@
 <?php
 
+
 class Forms extends Controller
 {
     public function index()
@@ -7,34 +8,19 @@ class Forms extends Controller
         if (!Auth::logged_in()) {
             $this->redirect('login');
         }
-
-
-    
-    
-
-      
         $user_id = $_GET['user_id'] ?? null;
-
-       
         if (!$user_id) {
             $this->redirect('profile'); 
         }
-
         $users = new User();
         $form = new Form();
         $errors = null;
 
         $appointmentsThisWeek = $form->getAppointmentsThisWeek();
-
         $usersmodel = $users->getUsers();
         
-
-        // Fetch the complaints for the user
         $complaints = $form->getComplaintsByUserId($user_id);
-         
-
-        // Fetch the list of violations
-        $violations = $form->getViolations();  // Fetch violations from the model
+        $violations = $form->getViolations();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Collect form data
@@ -66,23 +52,17 @@ class Forms extends Controller
                 'office' => $_POST['office'] ?? '',
                 'status' => $_POST['status'] ?? 'Unresolved',  // Default status
                 'user_id' => $user_id,
-                
-                
             ];
 
-            // Validate and insert the data
             if ($form->validate($data)) {
                 $form->insert($data);
                 
-
-                // Redirect to the profile of the specific user after successful insertion
                 $this->redirect('profile/' . $user_id . '#complainant');
             } else {
                 $errors = $form->errors;
             }
         }
 
-       
         $this->view('form', [
             'errors' => $errors,
             'complaints' => $complaints,
@@ -109,15 +89,12 @@ class Forms extends Controller
         echo json_encode($studentIds); 
     }
 
-
-
     public function getRespondentDetails()
     {
         $form = new Form();
         $std_id = $_GET['std_id'] ?? ''; 
         $respondentDetails = $form->getRespondentDetailsById($std_id);
     
-        
         if ($respondentDetails) {
             echo json_encode([
                 'email' => $respondentDetails->email,

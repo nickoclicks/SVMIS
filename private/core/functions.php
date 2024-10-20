@@ -1,5 +1,9 @@
 <?php
 
+use PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+
 function get_var($key,$default = "")
 {
   if(isset($_POST[$key]))
@@ -101,14 +105,16 @@ function formatYearLevel($yearLevel) {
   }
 }
 
-function log_activity($activity_name)
+function log_activity($log_name)
 {
     $db = new Database();
     
-    $data['activity_name'] = $activity_name;
-    $data['date'] = date('Y-m-d H:i:s');
-    
-    $query = "INSERT INTO activity_logs (activity_name, date) VALUES (:activity_name, :date)";
+    $data['log_name'] = $log_name; 
+   
+    $data['date'] = date('Y-m-d H:i:s'); 
+
+    // Insert log into activity_logs table
+    $query = "INSERT INTO activity_logs (activity_name, date) VALUES (:log_name, :date)";
     
     $db->query($query, $data);
 }
@@ -125,10 +131,5 @@ function log_certificate($log_name)
     
     $db->query($query, $data);
 }
-
-
-
-
-
 
   

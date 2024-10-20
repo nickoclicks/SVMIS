@@ -5,13 +5,7 @@ $this->view('includes/navigation');
 ?>
 
 <style> 
-.dashboard-container {
-  background: linear-gradient(135deg, rgba(240, 240, 240, 0.5), rgba(250, 250, 250, 0.5));
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
+
 
 .dashboard-container {
   background: linear-gradient(135deg, rgba(240, 240, 240, 0.5), rgba(250, 250, 250, 0.5));
@@ -35,10 +29,18 @@ $this->view('includes/navigation');
 }
 </style>
 <!-- Dashboard Container -->
+
+<?php 
+// Include the necessary headers and navigation
+$this->view('includes/header'); 
+$this->view('includes/navigation'); 
+
+?>
+
+
 <div class="dashboard-container">
 
-
-  <!-- Stats Section -->
+ <!-- Stats Section -->
   <div class="stat-row">
     <div class="stat-card">
       <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
@@ -49,21 +51,6 @@ $this->view('includes/navigation');
     <div class="icon"><i class="fas fa-user"></i></div>
     <h5>Total Violators</h5>
     <p><?= $totalViolators ?></p>
-
-  <!--  <button id="toggle-analysis" class="btn btn-link">Show Comparative Analysis</button>
-
-    <div id="comparative-analysis" class="comparative-analysis" style="display: none;">
-        <h6>Comparative Analysis</h6>
-        <?php if (isset($totalViolations1) && isset($totalViolations2)): ?>
-            <h6>
-                <strong>School Year <?= htmlspecialchars($schoolYear1 ?? 'N/A') ?>:</strong> <?= $totalViolations1 ?> Violations<br>
-                <strong>School Year <?= htmlspecialchars($schoolYear2 ?? 'N/A') ?>:</strong> <?= $totalViolations2 ?> Violations
-               
-        </h6>
-        <?php else: ?>
-            <p>Select school years to compare.</p>
-        <?php endif; ?>
-    </div>-->
 </div>
     <div class="stat-card">
       <div class="icon"><i class="fas fa-user-check"></i></div>
@@ -127,75 +114,6 @@ document.getElementById('toggle-analysis').addEventListener('click', function() 
       <canvas id="statusChart"></canvas>
     </div>
   </div>
-
-  <!-- Tables Row: Recently Added Violations & Violators -->
-
-    <!--<div class="row">
-    <div class="col-md-6">
-    <div class="table-row p-4 shadow table-wrapper bg-white" style="border-radius: 1.5%;">
-      <h6><i class="fas fa-list-alt"></i> Recently Added Violations</h6>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th class="table-dark text-light">Violation</th>
-            <th class="table-dark text-light">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php if ($recentViolations): ?>
-            <?php foreach ($recentViolations as $violation): ?>
-              <tr>
-                <td><?= $violation->violation ?></td>
-                <td><?= get_date($violation->date) ?></td>
-              </tr>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <tr>
-              <td colspan="2">No recent violations found.</td>
-            </tr>
-          <?php endif; ?>
-        </tbody>
-      </table>
-    </div>
-    </div>
-    <div class="col-md-6">
-    <div class="table-row p-4 shadow table-wrapper bg-white" style="border-radius: 1.5%;">
-      <h6><i class="fas fa-users"></i> Recently Added Violators</h6>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-          <th class="table-dark text-light">Student ID</th>
-            <th class="table-dark text-light">Name</th>
-            <th class="table-dark text-light">Date</th>
-            <th class="table-dark text-light">Course</th>
-            <th class="table-dark text-light">Violation</th>
-            <th class="table-dark text-light">Level</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php if ($recentViolators): ?>
-            <?php foreach ($recentViolators as $violator): ?>
-              <tr>
-              <td><?= $violator->std_id ?></td>
-                <td><?= $violator->firstname . ' ' . $violator->lastname ?></td>
-                <td><?= get_date($violator->date) ?></td>
-                <td><?= $violator->course ?></td>
-                <td><?= $violator->violation ?></td>
-                <td><?= $violator->level ?></td>
-              </tr>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <tr>
-              <td colspan="3">No recent violators found.</td>
-            </tr>
-          <?php endif; ?>
-        </tbody>
-      </table>
-    </div>
-    </div>
-  </div>->
-
-
 
 <!-- Chart.js Script for Charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

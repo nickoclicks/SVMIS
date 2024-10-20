@@ -13,7 +13,7 @@
 
 <div class="mx-auto">
     <?php if ($row): ?>
-        <div class="card">
+        <div class="card" style="height: 820px;">
             <div class="m-3">
                 
 
@@ -54,15 +54,12 @@
                     <div class="row">
                         <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="date" class="form-label">Date</label>
+                        <label for="date" class="form-label">Date and Time</label>
                         <input id="date" class="form-control rounded-pill px-3 py-2" type="datetime-local" value="<?= htmlspecialchars(get_var('date', $row->date)) ?>" name="date" placeholder="Date" readonly>
                     </div>
                         </div>
                     <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <input id="description" class="form-control rounded-pill px-3 py-2" type="text" value="<?= htmlspecialchars(get_var('description', $description)) ?>" name="description" placeholder="Description Name" readonly>
-                    </div>
+                    
                     </div>
                     </div>
                     
@@ -178,7 +175,30 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
 <!-- Add the Print Violation Slip button -->
 <div id="printViolationSlipButton" style="display: none;">
     <button type="button" class="btn btn-secondary" onclick="printViolationSlip()">Print Violation Slip</button>
-    <?php log_activity("Printed violation slip printed for: " . esc($row->firstname . ' ' . $row->lastname)); ?>   
+    <?= log_activity("Printed violation slip for " . $userName->firstname ) ?>
+</div>
+
+<div id="printContent" style="display: none;">
+    <div style="text-align: center; margin-bottom: 0;">
+        <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: left;">
+        <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: right;">
+        <h4 style="margin-bottom: -20px;">Republic of the Philippines</h4>
+        <h4 style="margin-bottom: -20px;"><b>NORTHERN BUKIDNON STATE COLLEGE</b></h4>
+        <h4 style="margin-bottom: -20px;"><i>(Formerly Northern Bukidnon Community College)</i> R.A.11284</h4>
+        <h4 style="margin-bottom: -5px;"><i>Creando futura, Transformationis vitae, Ductae a Deo</i></h4>
+        <hr>
+    </div>
+    <center><b><h4>VIOLATION SLIP</h4></b></center>
+    <div class="row d-flex justify-content-between">
+    <div class="col-md-6">
+        <h5>Student ID No: <?= htmlspecialchars(get_var('std_id', $userName->std_id)) ?></h5>
+        <h5>Date: <?= htmlspecialchars(get_var('date', $row->date)) ?></h5>
+    </div>
+    <div class="col-md-6">
+    <h5>Date: <?= htmlspecialchars(get_var('date', $row->date)) ?></h5>
+    </div>
+</div>
+
 </div>
 
 <script>
@@ -212,11 +232,6 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
         printWindow.close();
     }
 </script>
-<div id="printViolationSlipButton" style="display: none;">
-    <button type="button" class="btn btn-secondary" onclick="printViolationSlip()">Print Violation Slip</button>
-</div>
-
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const sanctionsSelect = document.getElementById('otherSanctions');
@@ -397,7 +412,7 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
 
     <div class="col-md-4">
     <!-- Display user's violation statistics -->
-    <div class="card mb-3">
+    <div class="card mb-3" style="height: 410px;  overflow-y: auto;">
         <h5 class="card-header">Violation Statistics of <?= htmlspecialchars($userName->firstname . ' ' . $userName->lastname) ?></h5>
         <div class="card-body">
             <table class="table table-striped">
@@ -431,7 +446,7 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm">
+    <div class="card border-0 shadow-sm" style="height: 390px; overflow-y: auto;">
   <div class="card-body">
     <h5 class="card-title text-center mb-4 fw-bold">Community Service Office Assignment Counts</h5>
     <ul class="list-group list-group-flush">

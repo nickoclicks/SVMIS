@@ -129,6 +129,7 @@
             class="btn btn-outline-success btn-sm"  
                onclick="return confirmAddViolation(event)">
                 <i class="fa fa-plus fa-lg text-success"></i>
+                
             </a>
         <?php else: ?>
             <a href="<?= ROOT ?>/violations/edit/<?= $row->id ?>" class="btn btn-outline-success btn-sm">
@@ -166,6 +167,8 @@
 
 <script>
     function confirmAddViolation(event) {
+
+     
     event.preventDefault(); // Prevent the default behavior of the link
     Swal.fire({
         title: 'Add Violation',

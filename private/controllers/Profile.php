@@ -8,10 +8,8 @@ class Profile extends Controller
         $user = new User();
         $row = $user->first('user_id', $id);
 
-
-        // Fetch violations committed by the user with violation details
         $vio = new Violators();
-        // Modify the query to calculate offense_count separately for each category
+       
 $queryViolations = "
 SELECT violators.*, violations.violation, violations.level, violations.category,
        (SELECT COUNT(*) FROM violators v2 
@@ -52,8 +50,8 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
             }
         }
     }
-        // Fetch notices where user is the complainant
-        $noticeModel = new Form(); // Assuming you have a Form model
+        
+        $noticeModel = new Form();
         $queryNoticesAsComplainant = "
             SELECT * FROM notice
             WHERE user_id = :user_id";
@@ -159,6 +157,7 @@ function formatYearLevel($yearLevel) {
             return ''; // Return empty for invalid year levels
     }
 }
+
 
 
 }

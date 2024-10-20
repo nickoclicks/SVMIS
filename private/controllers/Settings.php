@@ -26,4 +26,8 @@ class Settings extends Controller
             header('Location: ' . ROOT . '/settings');
         }
     }
+
+    
+
+    
 }

@@ -125,7 +125,8 @@ public function getStudentIdSuggestions($term)
 
     public function getStudentNameSuggestions($term)
     {
-        $query = "SELECT std_id, firstname, lastname FROM users WHERE firstname LIKE :term LIMIT 5";
+        $query = "SELECT std_id, firstname, lastname, email, phone, street, barangay, city, municipality, course, year_level FROM users INNER JOIN
+        enrollment on users.year_level_id = enrollment.year_level_id WHERE firstname LIKE :term LIMIT 5";
         $params = ['term' => '%' . $term . '%'];
         return $this->query($query, $params);  // Query the database
     }

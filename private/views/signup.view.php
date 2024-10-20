@@ -6,7 +6,7 @@
   <form method="post" class="needs-validation" novalidate>
     <div class="card p-4 mx-auto shadow rounded" style="width: 100%; max-width: 1650px; margin-top: 10px; overflow: hidden;">
       <h2 class="text-center mb-4">NBSC - Prefect of Discipline</h2>
-      <img src="assets/nbsc1.png" class="border d-block mx-auto mb-4" style="width: 100px;">
+      <img src="assets/nbsc1.png" class="d-block mx-auto mb-4" style="width: 100px;">
 
       <?php if(count($errors) > 0): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">

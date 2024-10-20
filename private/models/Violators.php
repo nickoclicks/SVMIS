@@ -201,16 +201,30 @@ public function getUserName($userId)
     public function getViolationDescription($violationId)
     {
         $query = "
-                SELECT v.description
+                SELECT v.level
                 FROM violations v
                 INNER JOIN violators vl ON v.violation_id = vl.violation_id
                 WHERE vl.violation_id = :violationId
         ";
         
         $result = $this->query($query, ['violationId' => $violationId]);
-        return $result ? $result[0]->description : null;
+        return $result ? $result[0]->level : null;
     }
     
+    public function getViolationCategory($violationId)
+    {
+        $query = "
+                SELECT v.category
+                FROM violations v
+                INNER JOIN violators vl ON v.violation_id = vl.violation_id
+                WHERE vl.violation_id = :violationId
+        ";
+        
+        $result = $this->query($query, ['violationId' => $violationId]);
+        return $result ? $result[0]->category : null;
+    }
+    
+
     public function getOffice($userId)
 {
     $query = "

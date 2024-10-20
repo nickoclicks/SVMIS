@@ -4,20 +4,17 @@ class Home extends Controller
 {
     function index()
     {
-        // Check if the user is logged in
+       //Authentication para sa user 
         if (!Auth::logged_in()) {
             $this->redirect('login');
         }
-
-        
-        
-        // Instantiate the models
+        //Initialize ang mga model nga kinahanglan para sa pag retrieve ug data
         $violation = new Violation();
         $violator = new Violators();
         $user = new User();
         $notice = new Form();
 
-        // Fetch total counts
+        // Fetch ang mga total counts, mao ni ang naa sa mga cards
         $totalViolations = $violation->countAll();
         $totalNotices = $notice->countAll();
         $totalSdcs = $notice->countAlll();

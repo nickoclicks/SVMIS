@@ -59,7 +59,8 @@ class Violator extends Controller
         $office = $violator->getOffice($row->id);
         $userViolationStats = $violator->getUserViolationStats($row->user_id);
         $officeCounts = $violator->getOfficeCounts($row->user_id);
-        $description = $violator->getViolationDescription($row->violation_id);
+        $level = $violator->getViolationDescription($row->violation_id);
+        $category = $violator->getViolationCategory($row->violation_id);
 
         // Get the count of minor violations
         $minorViolationCount = 0;
@@ -110,7 +111,8 @@ class Violator extends Controller
             'office' => $office,
             'userViolationStats' => $userViolationStats,
             'officeCounts' => $officeCounts,
-            'description' => $description,
+            'level' => $level,
+            'category' => $category,
             'showCommunityService' => $showCommunityService,
             'showSuspension' => $showSuspension,
             'showRefer' => $showRefer,

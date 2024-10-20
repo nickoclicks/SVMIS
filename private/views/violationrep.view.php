@@ -4,6 +4,7 @@
 <style>
 /* Global Styles */
 
+/* Global Styles */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -54,7 +55,6 @@ h6 {
 }
 
 /* Dashboard Container */
-
 .dashboard-container {
     max-width: 1650px;
     margin: 40px auto;
@@ -66,9 +66,7 @@ h6 {
 }
 
 /* Card Styles */
-
 .card {
-   
     padding: 20px;
     margin: 20px;
     border-radius: 10px;
@@ -98,7 +96,6 @@ h6 {
 }
 
 /* Table Styles */
-
 table {
     border-collapse: collapse;
     width: 100%;
@@ -111,10 +108,7 @@ table th, table td {
     text-align: left;
 }
 
-
-
 /* Print Header Styles */
-
 .print-header {
     text-align: center;
     margin-bottom: 20px;
@@ -136,13 +130,11 @@ table th, table td {
 }
 
 /* No Print Styles */
-
 .no-print {
     display: none;
 }
 
 /* Responsive Design */
-
 @media (max-width: 768px) {
     .dashboard-container {
         margin: 20px;
@@ -158,6 +150,7 @@ table th, table td {
     }
 }
 
+/* Button Styles */
 .print-button {
     position: absolute;
     top: 60px;
@@ -169,6 +162,7 @@ table th, table td {
     font-size: 16px;
     cursor: pointer;
     border-radius: 10%;
+    transition: background-color 0.3s;
 }
 
 .print-button:hover {
@@ -178,6 +172,120 @@ table th, table td {
 .print-button i {
     margin-right: 5px;
 }
+
+.btn {
+    background-color: #007bff; /* Primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Darker shade */
+    transform: translateY(-2px); /* Lift effect */
+}
+
+/* Enhanced Chart Styles */
+.chart {
+    margin-top: 20px;
+}
+
+canvas {
+    border-radius: 10px; /* Rounded corners for charts */
+}
+
+/* Utility Classes */
+.text-light {
+    color: #ffffff; /* Light text color for table headers */
+}
+
+.bg-dark {
+    background-color: #343a40; /* Dark background for table headers */
+}
+/* Button Styles */
+.btn {
+    background-color: #007bff; /* Primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 24px; /* Increased padding for a more substantial look */
+    font-size: 16px; /* Increased font size for better readability */
+    font-weight: 600; /* Bold font for emphasis */
+    text-transform: uppercase; /* Uppercase text for a modern touch */
+    letter-spacing: 1px; /* Spacing between letters for a cleaner look */
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; /* Smooth transitions */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.btn:active {
+    transform: translateY(1px); /* Pressed effect */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduced shadow when pressed */
+}
+
+/* Additional styles for specific button types */
+.btn-secondary {
+    background-color: #6c757d; /* Secondary color */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Darker shade for secondary button on hover */
+}
+/* Input and Select Styles */
+.form-control, .form-select {
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 15px; /* Padding for comfort */
+    font-size: 16px; /* Font size for readability */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #007bff; /* Primary color on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle shadow effect on focus */
+}
+
+/* Label Styles */
+.form-label {
+    font-weight: bold; /* Bold labels for emphasis */
+    margin-bottom: 5px; /* Spacing below labels */
+    color: #333; /* Dark color for labels */
+}
+
+/* Button Styles for Filter Submission */
+.filter-btn {
+    background-color: #007bff; /* Primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px; /* Padding for comfort */
+    font-size: 16px; /* Font size for readability */
+    font-weight: 600; /* Bold font for emphasis */
+    text-transform: uppercase; /* Uppercase text for a modern touch */
+    letter-spacing: 1px; /* Spacing between letters for a cleaner look */
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; /* Smooth transitions */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.filter-btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.filter-btn:active {
+    transform: translateY(1px); /* Pressed effect */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduced shadow when pressed */
+}
 </style>
 
 
@@ -186,6 +294,7 @@ table th, table td {
 <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
 <a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
 <a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Good Moral Report</a>
+<a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Comparative Analysis</a>
 
 <h1>Violation Report</h1>
 <h2>Total Results: <?php echo count($recentViolators); ?></h2>
