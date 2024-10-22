@@ -267,24 +267,6 @@ table th, table td {
 
 <h1>Notice Report</h1>
 
-<script>
-    // Simple script to toggle the dropdown
-    document.querySelector('.dropdown-button').addEventListener('click', function() {
-        var dropdownContent = document.querySelector('.dropdown-content');
-        dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
-    });
-
-    // Close the dropdown if clicked outside
-    window.addEventListener('click', function(event) {
-        if (!event.target.matches('.dropdown-button')) {
-            var dropdowns = document.querySelectorAll('.dropdown-content');
-            dropdowns.forEach(function(dropdown) {
-                dropdown.style.display = 'none';
-            });
-        }
-    });
-</script>
-
         <h2>Total Results: <?php echo count($recentViolators); ?></h2>
 
         <button class="print-button" style="background-color: white;" onclick="printContent()">

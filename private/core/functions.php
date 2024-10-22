@@ -1,7 +1,5 @@
 <?php
 
-use PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 
 function get_var($key,$default = "")
@@ -119,6 +117,10 @@ function log_activity($log_name)
     $db->query($query, $data);
 }
 
+
+// Check if the form has been submitte
+
+
 function log_certificate($log_name)
 {
     $db = new Database();
@@ -132,4 +134,32 @@ function log_certificate($log_name)
     $db->query($query, $data);
 }
 
-  
+function getViolationCountsByDay($result) {
+  $DatePresentCounts = [];
+
+  // Process the result set
+  while ($row = mysqli_fetch_assoc($result)) {
+      $date = $row['date'];
+      $count = $row['count']; // Assuming you have a count field from your query
+
+      // Get the day name (e.g., Monday, Tuesday)
+      $dayName = date('l', strtotime($date));
+
+      // Initialize the array if it doesn't exist
+      if (!isset($DatePresentCounts[$dayName])) {
+          $DatePresentCounts[$dayName] = 0;
+      }
+
+      // Add the count to the corresponding day
+      $DatePresentCounts[$dayName] += $count;
+  }
+
+  // Ensure the days are in order
+  $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  $orderedCounts = [];
+  foreach ($daysOfWeek as $day) {
+      $orderedCounts[$day] = $DatePresentCounts[$day] ?? 0; // Default to 0 if not set
+  }
+
+  return $orderedCounts;
+}

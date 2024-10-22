@@ -10,6 +10,7 @@ class Profile extends Controller
 
         $vio = new Violators();
        
+       
 $queryViolations = "
 SELECT violators.*, violations.violation, violations.level, violations.category,
        (SELECT COUNT(*) FROM violators v2 

@@ -5,6 +5,8 @@ class Logs extends Model {
 
   protected $allowedColumns = ['activity_name', 'date'];
 
+  
+
   public function getPrintActivities() {
 
     //for good moral chart

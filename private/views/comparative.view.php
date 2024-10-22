@@ -1,147 +1,355 @@
 <?php $this->view('includes/header'); ?>
 <?php $this->view('includes/navigation'); ?>
 
+
 <style>
-    .btn {
-    background-color: #007bff; /* Primary color */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 12px 24px; /* Increased padding for a more substantial look */
-    font-size: 16px; /* Increased font size for better readability */
-    font-weight: 600; /* Bold font for emphasis */
-    text-transform: uppercase; /* Uppercase text for a modern touch */
-    letter-spacing: 1px; /* Spacing between letters for a cleaner look */
-    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; /* Smooth transitions */
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-}
-
-.btn:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-    transform: translateY(-2px); /* Lift effect on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
-}
-
-.btn:active {
-    transform: translateY(1px); /* Pressed effect */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduced shadow when pressed */
-}
-
-/* Additional styles for specific button types */
-.btn-secondary {
-    background-color: #6c757d; /* Secondary color */
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268; /* Darker shade for secondary button on hover */
-}
+    canvas {
+        max-width: 600px;
+        margin: auto;
+    }
 </style>
-<div class="dashboard-container mt-4" style="background: linear-gradient(135deg, #ffffff, #f9f9f9); max-width: 1650px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);">
+</head>
+<body>
 
-    <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
-    <a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
-    <a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Good Moral Report</a>
-    <a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Comparative Analysis</a>
+<div class="dashboard-container mt-4" style="background: linear-gradient(135deg, #ffffff, #f9f9f9); max-width: 1650px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
 
-    <canvas id="violationsChart" width="400" height="200"></canvas>
+<a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
+<a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
+<a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Good Moral Report</a>
+<a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Comparative Analysis</a>
+
+
+<?php
+// Assuming this code is at the top of your page where you handle form submissions
+$filters = [
+    'start_date' => isset($_GET['start_date']) ? $_GET['start_date'] : '',
+    'end_date' => isset($_GET['end_date']) ? $_GET['end_date'] : ''
+];
+
+$filters1 = [
+    'start_date_1' => isset($_GET['start_date_1']) ? $_GET['start_date_1'] : '',
+    'end_date_1' => isset($_GET['end_date_1']) ? $_GET['end_date_1'] : ''
+];
+?>
+
+<div class="row">
+    <div class="col-md-6">
+    <form method="GET" action="">
+            <div class="row mb-3">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+        <div class="col-md-6">
+            <label for="start_date" class="form-label">Start Date</label>
+            <input type="date" id="start_date" name="start_date" class="form-control" value="<?php echo $filters['start_date']; ?>">
+        </div>
+        <div class="col-md-6">
+            <label for="end_date" class="form-label">End Date</label>
+            <input type="date" id="end_date" name="end_date" class="form-control" value="<?php echo $filters['end_date']; ?>">
+        </div>
+
+            </div>
+           
+    </div>
+
+    <div class="col-md-6">
+    
+            <div class="row mb-3">
+            
+        <div class="col-md-6">
+            <label for="start_date_1" class="form-label">Start Date</label>
+            <input type="date" id="start_date_1" name="start_date_1" class="form-control" value="<?php echo $filters1['start_date_1']; ?>">
+        </div>
+        <div class="col-md-6">
+            <label for="end_date_1" class="form-label">End Date</label>
+            <input type="date" id="end_date_1" name="end_date_1" class="form-control" value="<?php echo $filters1['end_date_1']; ?>">
+        </div>
+
+            </div>
+    </div>
+            <center><button type="submit" class="btn btn-secondary" style="width: 10%; color: white; font-weight: 600">Apply Filters</button></center>
+        </form>
+   
+</div>
+
+        <div class="row">         <!-- Display count of each status -->
+<?php
+$yearLevel = array_column($recentViolators, 'year_level');
+$YearLevelCounts = array_count_values($yearLevel);
+?>
+    <div class="col-md-6">
+    <canvas id="status-chart" width="400" height="200"></canvas>
+    <?php
+    $dateofViolation = array_column($recentViolators, 'date');
+    $DateofViolationCounts = array_count_values($dateofViolation);
+    
+    // Convert dates to day names
+    $dayNamesViolation = [];
+    foreach ($dateofViolation as $date) {
+        $dayNamesViolation[] = date('l', strtotime($date)); // 'l' returns full textual representation of the day
+    }
+    $DayViolationCounts = array_count_values($dayNamesViolation);
+    $uniqueDayNamesViolation = array_keys($DayViolationCounts);
+    $uniqueDayCountsViolation = array_values($DayViolationCounts);?>
+
+<canvas id="date-chart" width="400" height="200"></canvas>
+    </div>
+    <div class="col-md-6">
+    <?php
+$yearLevelpresent = array_column($recentViolators1, 'year_level');
+$YearLevelPresentCounts = array_count_values($yearLevelpresent);
+?>
+    <canvas id="statuspresent-chart" width="400" height="200"></canvas>
+
+    <?php
+    $datepresent = array_column($recentViolators1, 'date');
+    $DatePresentCounts = array_count_values($datepresent);
+    
+    // Convert dates to day names
+    $dayNames = [];
+    foreach ($datepresent as $date) {
+        $dayNames[] = date('l', strtotime($date)); // 'l' returns full textual representation of the day
+    }
+    $DayPresentCounts = array_count_values($dayNames);
+    $uniqueDayNames = array_keys($DayPresentCounts);
+    $uniqueDayCounts = array_values($DayPresentCounts);?>
+    <canvas id="datepresent-chart" width="400" height="200"></canvas>
+    </div>
+</div>
+<!-- Add a canvas for the chart -->
+
+<div class="row">
+    <div class="col-md-6">
+        <?php if (!empty($recentViolators)): ?>
+            <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped" id="table" hidden>
+                <thead style="background-color: black;">
+                    <tr>
+                        <th class="text-light">Student ID</th>
+                        <th class="text-light">Violation</th>
+                        <th class="text-light">Date</th>
+                        <th class="text-light">First Name</th>
+                        <th class="text-light">Last Name</th>
+                        <th class="text-light">Year Level</th>
+                        <th class="text-light">Semester</th>
+                        <th class="text-light">Status</th>
+                        <th class="text-light">School Year</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($recentViolators as $archivesModel): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($archivesModel->user_id); ?></td>
+                            <td><?php echo htmlspecialchars($archivesModel->violation); ?></td>
+                            <td><?php echo htmlspecialchars(get_date($archivesModel->date)); ?></td>
+                            <td><?php echo htmlspecialchars($archivesModel->firstname); ?></td>
+                            <td><?php echo htmlspecialchars($archivesModel->lastname); ?></td>
+                            <td><?php echo htmlspecialchars($archivesModel->year_level); ?></td>
+                            <td><?php echo htmlspecialchars($archivesModel->semester_name); ?></td>
+                            <td><?php echo htmlspecialchars($archivesModel->status); ?></td>
+                            <td><?php echo htmlspecialchars($archivesModel->school_year); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No records found.</p>
+        <?php endif; ?>
+    </div>
+</div>
+
+    <div class="col-md-6">
+    <?php if (!empty($recentViolators1)): ?>
+            <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped" id="table" hidden>
+                <thead style="background-color: black;">
+                    <tr>
+                        <th class="text-light">Student ID</th>
+                        <th class="text-light">Complaint</th>
+                        <th class="text-light">Date</th>
+                        <th class="text-light">First Name</th>
+                        <th class="text-light">Last Name</th>
+                        <th class="text-light">Year Level</th>
+                        <th class="text-light">Semester</th>
+                        <th class="text-light">Status</th>
+                        <th class="text-light">School Year</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($recentViolators1 as $violator): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($violator->user_id); ?></td>
+                            <td><?php echo htmlspecialchars($violator->violation); ?></td>
+                            <td><?php echo htmlspecialchars(get_date($violator->date)); ?></td>
+                            <td><?php echo htmlspecialchars($violator->firstname); ?></td>
+                            <td><?php echo htmlspecialchars($violator->lastname); ?></td>
+                            <td><?php echo htmlspecialchars($violator->year_level); ?></td>
+                            <td><?php echo htmlspecialchars($violator->semester_name); ?></td>
+                            <td><?php echo htmlspecialchars($violator->status); ?></td>
+                            <td><?php echo htmlspecialchars($violator->school_year); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No records found.</p>
+        <?php endif; ?>
+    </div>
+    </div>
+</div>
+</div>
+
+
+    
+    <!-- Use Chart.js to render the bar chart -->
+   
     <script>
-       const ctx = document.getElementById('violationsChart').getContext('2d');
+        const ctx = document.getElementById('status-chart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode(array_keys($YearLevelCounts)); ?>,
+                datasets: [{
+                    label: 'Violation Status Counts',
+                    data: <?php echo json_encode(array_values($YearLevelCounts)); ?>,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
 
-// Days of the week from Monday to Sunday
-const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-// Initialize an array for total violations for each day
-const violationsData = new Array(7).fill(0);
-
-// Populate the violations data based on the query result
-const violationsPerDay = <?= json_encode($violationsPerDay) ?>;
-violationsPerDay.forEach(item => {
-    const dayIndex = item.day_of_week - 1; // Adjust for zero-based index
-    violationsData[dayIndex] = item.total_violations;
-});
-
-// Create a gradient for the chart background
-const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-gradient.addColorStop(0, 'rgba(75, 192, 192, 0.6)');
-gradient.addColorStop(1, 'rgba(75, 192, 192, 0.2)');
-
-const violationsChart = new Chart(ctx, {
-    type: 'bar',
+        const ctx1 = document.getElementById('date-chart').getContext('2d');
+const chart1 = new Chart(ctx1, {
+    type: 'line',
     data: {
-        labels: daysOfWeek,
+        labels: <?php echo json_encode($uniqueDayNamesViolation); ?>,
         datasets: [{
-            label: 'Total Violations per Day',
-            data: violationsData,
-            backgroundColor: gradient,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 2,
-            hoverBackgroundColor: 'rgba(75, 192, 192, 0.8)',
-            hoverBorderColor: 'rgba(75, 192, 192, 1)',
-            borderRadius: 5,
-            barPercentage: 0.6,
-            categoryPercentage: 0.5,
+            label: 'Violation Status Counts',
+            data: <?php echo json_encode($uniqueDayCountsViolation); ?>,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
         }]
     },
     options: {
-        responsive: true,
-        maintainAspectRatio: false,
         scales: {
             y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Number of Violations',
-                    font: {
-                        size: 16,
-                        weight: 'bold'
-                    }
-                },
-                grid: {
-                    color: 'rgba(200, 200, 200, 0.5)',
-                    lineWidth: 1
-                }
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+        const ctx2 = document.getElementById('statuspresent-chart').getContext('2d');
+        const chart2 = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode(array_keys($YearLevelPresentCounts)); ?>,
+                datasets: [{
+                    label: 'Violation Status Counts',
+                    data: <?php echo json_encode(array_values($YearLevelPresentCounts)); ?>,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
             },
-            x: {
-                title: {
-                    display: true,
-                    text: 'Days of the Week',
-                    font: {
-                        size: 16,
-                        weight: 'bold'
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
-                },
-                grid: {
-                    display: false
                 }
             }
-        },
-        plugins: {
-            legend: {
-                display: true,
-                position: 'top',
-                labels: {
-                    font: {
-                        size: 14,
-                        weight: 'bold'
-                    },
-                    boxWidth: 20,
-                }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                titleColor: '#fff',
-                bodyColor: '#fff',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                callbacks: {
-                    label: function(tooltipItem) {
-                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
-                    }
-                }
+        });
+
+        
+        const ctx3 = document.getElementById('datepresent-chart').getContext('2d');
+const chart3 = new Chart(ctx3, {
+    type: 'line',
+    data: {
+        labels: <?php echo json_encode($uniqueDayNames); ?>,
+        datasets: [{
+            label: 'Violation Status Counts',
+            data: <?php echo json_encode($uniqueDayCounts); ?>,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
             }
         }
     }
 });
     </script>
+
+</div>
+</div>
+
+
 <?php $this->view('includes/footer'); ?>

@@ -722,10 +722,9 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
     </div>
 
     <div class="text-center mt-4">
-         
     <button class="btn btn-primary" 
-            onclick="printCertificate(this)"
-            data-identifier="uniqueViolationId">Print Certificate</button> 
+            onclick="printCertificate(this)">Print Certificate</button> 
+          
 </div>
 </div>
 
@@ -748,12 +747,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // JavaScript Function
 function printCertificate(button) {
-   
-    
+
     // Find the currently visible certificate
     const visibleCertificate = document.querySelector('.certificate.show').innerHTML;
-
-    
 
     const printWindow = window.open('', '', 'height=600,width=800');
     printWindow.document.write('<html><head><title>Print Certificate</title>');
@@ -768,9 +764,6 @@ function printCertificate(button) {
     printWindow.onload = function() {
         printWindow.focus();
         printWindow.print();
-       
-
-      
         
     };
 }
@@ -809,10 +802,6 @@ document.getElementById('customPurpose').addEventListener('input', function() {
 });
 
 document.getElementById('purposeDropdown').addEventListener('change', updateSelectedPurpose);
-
-
-
-
 
 function showCertificate(certificateId) {
     // Hide all certificates

@@ -84,6 +84,17 @@
                         <input id="violation" class="form-control" type="text" value="<?= esc(get_var('violation', $row->violation)) ?>" name="violation" placeholder="Violation Name">
                     </div>
 
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <input id="category" class="form-control" type="text" value="<?= esc(get_var('category', $row->category)) ?>" name="category" placeholder="Category">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="level" class="form-label">Level</label>
+                        <input id="level" class="form-control" type="text" value="<?= esc(get_var('level', $row->level)) ?>" name="level" placeholder="Level">
+                        
+                    </div>
+
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary me-2">Save</button>
                         <a href="<?= ROOT ?>/violations" class="btn btn-warning text-white">Cancel</a>
