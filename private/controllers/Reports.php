@@ -98,11 +98,23 @@ $whereClause
 GROUP BY users.course
 ", $queryParams);
 
+$dateData = $violator->query("
+SELECT violators.date, COUNT(violators.id) as count
+FROM violators 
+JOIN users ON violators.user_id = users.user_id 
+$whereClause
+GROUP BY violators.date 
+ORDER BY violators.date DESC
+", $queryParams);
+
+
+
+
 $courseLabels = array_column($courseData, 'course');
 $courseCounts = array_column($courseData, 'count');
 
-  $chartLabels = array_column($violatorsData, 'date');
-  $chartData = array_column($violatorsData, 'count');
+$dateLabels = array_column($dateData, 'date');
+$dateCounts = array_column($dateData, 'count');
 
  
   $statuses = array_column($violatorsData, 'status');
@@ -115,8 +127,8 @@ $courseCounts = array_column($courseData, 'count');
     'totalViolators' => $totalViolators,
     'statusCounts' => $statusCounts, 
     'filters' => $filters,
-    'chartLabels' => $chartLabels,
-    'chartData' => $chartData,
+    'dateLabels' => $dateLabels, // New date labels for the chart
+    'dateCounts' => $dateCounts, 
     'courseLabels' => $courseLabels,
     'courseCounts' => $courseCounts,
   ]);

@@ -188,9 +188,7 @@ table th, table td {
 }
 
 /* Enhanced Chart Styles */
-.chart {
-    margin-top: 20px;
-}
+
 
 canvas {
     border-radius: 10px; /* Rounded corners for charts */
@@ -345,9 +343,11 @@ canvas {
 $statuses = array_column($recentViolators, 'status');
 $statusCounts = array_count_values($statuses);
 ?>
+
+<!--
 <div class="row">
     <div class="col-md-6">
-        <div class="card" style="padding: 20px; margin: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <div class="card" style="border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 270px;">
             <div class="card-body">
                 <h5 class="card-title">Total Resolved</h5>
                 <p class="card-text"><?php echo $statusCounts['Resolved'] ?? 0; ?></p>
@@ -355,23 +355,32 @@ $statusCounts = array_count_values($statuses);
         </div>
     </div>
     <div class="col-md-6">
-        <div class="card shadow" style="padding: 20px; margin: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <div class="card shadow" style="border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
             <div class="card-body">
                 <h5 class="card-title">Total Unresolved</h5>
                 <p class="card-text"><?php echo $statusCounts['Unresolved'] ?? 0; ?></p>
             </div>
         </div>
     </div>
-    
-</div>
+
+</div>-->
 
 <div class="chart">
 <div class="row">
     <div class="col-md-6">
+        <div class="card">
         <canvas id="chart" width="400" height="200"></canvas>
+        </div>
     </div>
     <div class="col-md-6">
+    <div class="card">
     <canvas id="year-level-chart" width="400" height="200"></canvas>
+    </div>
+</div>
+<div class="col-md-6">
+<div class="card">
+        <canvas id="date-chart" width="400" height="200"></canvas>
+    </div>
 </div>
 </div>
 </div>
@@ -515,6 +524,100 @@ const chart = new Chart(ctx, {
     }
 });
 
+</script>
+<?php
+// Assuming $violations is an array of violations with a 'date' field
+$dayCounts = array_fill_keys(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], 0);
+
+foreach ($recentViolators as $violator) {
+    $dayOfWeek = date('l', strtotime($violator->date)); // Get the day of the week
+    if (isset($dayCounts[$dayOfWeek])) {
+        $dayCounts[$dayOfWeek]++;
+    }
+}
+
+// Prepare labels and counts for the chart
+$dayLabels = array_keys($dayCounts);
+$dayCountsValues = array_values($dayCounts);
+?>
+<script>
+    // Prepare data for the Date Chart
+    const dateLabels = <?php echo json_encode($dateLabels); ?>; // Get date labels from PHP
+    const dateCounts = <?php echo json_encode($dateCounts); ?>; // Get date counts from PHP
+    const dayLabels = <?php echo json_encode($dayLabels); ?>;
+    const dayCounts = <?php echo json_encode($dayCountsValues); ?>;
+
+    // Create the Date Chart
+    const dateCtx = document.getElementById('date-chart').getContext('2d');
+    const dateChart = new Chart(dateCtx, {
+        type: 'line', // or 'bar', depending on your preference
+        data: {
+            labels: dateLabels,
+            datasets: [{
+                label: 'Violations Count',
+                data: dateCounts,
+                borderColor: '#007bff', // Line color
+                backgroundColor: 'rgba(0, 123, 255, 0.2)', // Fill color
+                borderWidth: 2,
+                fill: true, // Fill the area under the line
+                tension: 0.3 // Smooth line
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    grid: {
+                        display: false // Hide grid lines
+                    },
+                    ticks: {
+                        font: {
+                            size: 16,
+                            weight: 'bold',
+                        },
+                        color: '#444' // Darker labels for modern look
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)', // Light grid lines for minimalism
+                    },
+                    ticks: {
+                        font: {
+                            size: 16,
+                            weight: 'bold',
+                        },
+                        color: '#444' // Darker ticks for better readability
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: 'rgba(34, 34, 34, 0.8)', // Sleek dark tooltip background
+                    titleFont: { size: 16, weight: 'bold' },
+                    bodyFont: { size: 14 },
+                    bodyColor: '#fff',
+                },
+                legend: {
+                    labels: {
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        color: '#444',
+                    },
+                    position: 'top',
+                },
+            },
+            animation: {
+                duration: 2000, // Smooth and slow animation
+                easing: 'easeOutBounce', // Adds a bounce effect to the bars
+            },
+        }
+    });
 </script>
 
 <!-- Add a new canvas element for the year level chart -->
@@ -724,6 +827,14 @@ function updateCharts() {
     yearLevelChart.data.labels = courseLabels;
     yearLevelChart.data.datasets[0].data = courseCounts;
     yearLevelChart.update();
+
+    const newDateCounts = fetchDateCounts(studentId, yearLevel, course, startDate, endDate); // Implement this function to fetch data
+    const newLabels = fetchDateLabels(studentId, yearLevel, course, startDate, endDate); // Implement this function to fetch labels
+
+    violatorsLineChart.data.labels = newLabels; // Update labels for the line chart
+    violatorsLineChart.data.datasets[0].data = newDateCounts; // Update data for the line chart
+    violatorsLineChart.update(); // Re-render the chart
+
 }
 
 // Call the updateCharts function whenever the filter changes
