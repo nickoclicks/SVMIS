@@ -70,10 +70,11 @@ if (!empty($filterConditions)) {
 }
 
   $recentViolators = $violator->query("
-  SELECT violators.*, users.firstname, users.middlename, users.lastname, users.course, users.std_id, violations.violation, violators.date, users.year_level_id
+  SELECT violators.*, users.firstname, users.middlename, users.lastname, users.course, users.std_id, violations.violation, violators.date, enrollment.year_level
   FROM violators
   INNER JOIN users on violators.user_id = users.user_id
   INNER JOIN violations on violators.violation_id = violations.violation_id
+  INNER JOIN enrollment on users.year_level_id = enrollment.year_level_id 
   $whereClause
   ORDER BY violators.date DESC
   ", $queryParams);
@@ -108,6 +109,19 @@ ORDER BY violators.date DESC
 ", $queryParams);
 
 
+$yearData = $violator->query("
+SELECT enrollment.year_level, COUNT(violators.id) as count
+FROM violators 
+JOIN users ON violators.user_id = users.user_id 
+JOIN enrollment on violators.year_level_id = enrollment.year_level_id
+$whereClause
+GROUP BY enrollment.year_level
+", $queryParams);
+
+
+$yrLabels = array_column($yearData, 'year_level');
+$yrCounts = array_column($yearData, 'count');
+
 
 
 $courseLabels = array_column($courseData, 'course');
@@ -131,6 +145,9 @@ $dateCounts = array_column($dateData, 'count');
     'dateCounts' => $dateCounts, 
     'courseLabels' => $courseLabels,
     'courseCounts' => $courseCounts,
+    'yrLabels' => $yrLabels,
+    'yrCounts' => $yrCounts
+
   ]);
 
 }

@@ -76,9 +76,10 @@ class Sdcs extends Controller
         
 
         $recentViolators = $violator->query("
-    SELECT notice.*, users.firstname, users.lastname, users.course, notice.status, users.std_id, users.year_level_id, users.middlename
+    SELECT notice.*, users.firstname, users.lastname, users.course, notice.status, users.std_id, enrollment.year_level, users.middlename
     FROM notice 
     JOIN users ON notice.user_id = users.user_id
+    JOIN enrollment on users.year_level_id = enrollment.year_level_id
     $whereClause
     ORDER BY notice.date DESC
   

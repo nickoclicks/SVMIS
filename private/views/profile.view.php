@@ -469,7 +469,9 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
                                 <?php
                                 $respNameForLink = str_replace(' ', '.', $notice->resp_name); 
                                 ?>
-                                <a href="<?= ROOT ?>/profile/<?= urlencode($respNameForLink) ?>" class="text-reset text-decoration-none">
+                               <?php if (Auth::isAdmin()): ?>
+                                <a href="<?= ROOT ?>/profile/<?= urlencode($respNameForLink) ?> #respondent" class="text-reset text-decoration-none">
+                                <?php endif ?>
                                     <?= htmlspecialchars($notice->resp_name) ?>
                                 </a>
                             </td>

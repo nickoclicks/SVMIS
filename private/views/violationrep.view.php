@@ -66,18 +66,7 @@ h6 {
 }
 
 /* Card Styles */
-.card {
-    padding: 20px;
-    margin: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
 
-.card:hover {
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    transform: translateY(-5px);
-}
 
 .card-body {
     font-family: 'Open Sans', sans-serif;
@@ -344,49 +333,34 @@ $statuses = array_column($recentViolators, 'status');
 $statusCounts = array_count_values($statuses);
 ?>
 
-<!--
-<div class="row">
-    <div class="col-md-6">
-        <div class="card" style="border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 270px;">
-            <div class="card-body">
-                <h5 class="card-title">Total Resolved</h5>
-                <p class="card-text"><?php echo $statusCounts['Resolved'] ?? 0; ?></p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card shadow" style="border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
-                <h5 class="card-title">Total Unresolved</h5>
-                <p class="card-text"><?php echo $statusCounts['Unresolved'] ?? 0; ?></p>
-            </div>
-        </div>
-    </div>
-
-</div>-->
 
 <div class="chart">
 <div class="row">
-    <div class="col-md-6">
-        <div class="card">
+<div class="col-md-6">
+<div class="card" style="margin: 10px;">
+        <canvas id="date-chart" width="400" height="200"></canvas>
+    </div>
+</div>
+<div class="col-md-6">
+        <div class="card" style="margin: 10px">
         <canvas id="chart" width="400" height="200"></canvas>
         </div>
     </div>
     <div class="col-md-6">
-    <div class="card">
-    <canvas id="year-level-chart" width="400" height="200"></canvas>
+<div class="card">
+        <canvas id="yr-chart" width="400" height="200"></canvas>
     </div>
 </div>
-<div class="col-md-6">
-<div class="card">
-        <canvas id="date-chart" width="400" height="200"></canvas>
+    <div class="col-md-6">
+    <div class="card">
+    <canvas id="year-level-chart" width="400" height="200"></canvas>
     </div>
 </div>
 </div>
 </div>
 
 <?php if (!empty($recentViolators)): ?>
-                <table class="table table-bordered table-hovered table-striped" id="table">
+                <table class="table table-bordered table-hovered table-striped" id="table" hidden>
         <thead style="background-color: black;">
             <tr>
                 <th class="text-light">Student ID</th>
@@ -410,7 +384,7 @@ $statusCounts = array_count_values($statuses);
                     <td><?php echo htmlspecialchars($violator->middlename); ?></td>
                     <td><?php echo htmlspecialchars($violator->lastname); ?></td>
                     <td><?php echo htmlspecialchars($violator->course); ?></td>
-                    <td><?php echo htmlspecialchars($violator->year_level_id); ?></td>
+                    <td><?php echo htmlspecialchars($violator->year_level); ?></td>
                     <td><?php echo htmlspecialchars($violator->status); ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -423,20 +397,14 @@ $statusCounts = array_count_values($statuses);
 <script>
     const ctx = document.getElementById('chart').getContext('2d');
 const chart = new Chart(ctx, {
-    type: 'bar',
+    type: 'doughnut',
     data: {
         labels: ['Resolved', 'Unresolved'],
         datasets: [{
             label: 'Violations',
             data: [<?php echo $statusCounts['Resolved'] ?? 0; ?>, <?php echo $statusCounts['Unresolved'] ?? 0; ?>],
-            backgroundColor: [
-                'linear-gradient(135deg, rgba(0, 255, 127, 0.7), rgba(0, 128, 0, 0.7))', // Gradient green
-                'linear-gradient(135deg, rgba(255, 69, 58, 0.7), rgba(255, 0, 0, 0.7))'  // Gradient red
-            ],
-            borderColor: [
-                'rgba(0, 128, 0, 1)',
-                'rgba(255, 0, 0, 1)'
-            ],
+            
+          
             borderWidth: 2,
             borderRadius: 10, // Larger rounded corners for a smoother look
             barPercentage: 0.5, // Slimmer bars for a modern feel
@@ -542,82 +510,117 @@ $dayCountsValues = array_values($dayCounts);
 ?>
 <script>
     // Prepare data for the Date Chart
-    const dateLabels = <?php echo json_encode($dateLabels); ?>; // Get date labels from PHP
-    const dateCounts = <?php echo json_encode($dateCounts); ?>; // Get date counts from PHP
-    const dayLabels = <?php echo json_encode($dayLabels); ?>;
-    const dayCounts = <?php echo json_encode($dayCountsValues); ?>;
+    const dateLabels = <?php echo json_encode($dayLabels); ?>; // Get day labels from PHP
+const dateCounts = <?php echo json_encode($dayCountsValues); ?>; // Get day counts from PHP
 
-    // Create the Date Chart
-    const dateCtx = document.getElementById('date-chart').getContext('2d');
-    const dateChart = new Chart(dateCtx, {
-        type: 'line', // or 'bar', depending on your preference
-        data: {
-            labels: dateLabels,
-            datasets: [{
-                label: 'Violations Count',
-                data: dateCounts,
-                borderColor: '#007bff', // Line color
-                backgroundColor: 'rgba(0, 123, 255, 0.2)', // Fill color
-                borderWidth: 2,
-                fill: true, // Fill the area under the line
-                tension: 0.3 // Smooth line
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    grid: {
-                        display: false // Hide grid lines
-                    },
-                    ticks: {
-                        font: {
-                            size: 16,
-                            weight: 'bold',
-                        },
-                        color: '#444' // Darker labels for modern look
-                    }
+// Create the Date Chart
+const dateCtx = document.getElementById('date-chart').getContext('2d');
+const dateChart = new Chart(dateCtx, {
+    type: 'line', // or 'line', depending on your preference
+    data: {
+        labels: dateLabels,
+        datasets: [{
+            label: 'Violations Count',
+            data: dateCounts,
+            backgroundColor: '#007bff', // Bar color
+            borderWidth: 1,
+            fill: false, // Set to true if you want filled area under the line
+            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Subtle fill color under the line
+            borderColor: 'rgba(75, 192, 192, 1)', // Line color
+            pointBackgroundColor: 'rgba(54, 162, 235, 1)', // Color for the data points
+            pointBorderColor: '#fff', // White border around points for contrast
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 3, // Thicker line for better visibility
+            tension: 0.4, // Smooth curves between points
+            pointRadius: 5, // Bigger points for better visibility
+            pointHoverRadius: 7 // Larger hover effect for points
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                grid: {
+                    display: true,
+                    color: 'rgba(0, 0, 0, 0.05)', // Light grid lines
+                    borderDash: [4, 4] // Dotted grid lines on x-axis
                 },
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)', // Light grid lines for minimalism
+                ticks: {
+                    font: {
+                        size: 16, // Increased font size
+                        weight: 'bold'
                     },
-                    ticks: {
-                        font: {
-                            size: 16,
-                            weight: 'bold',
-                        },
-                        color: '#444' // Darker ticks for better readability
-                    }
+                    color: '#444',
+                    padding: 10,
+                    maxRotation: 45, // Prevent overlapping labels
+                    minRotation: 0
                 }
             },
-            plugins: {
-                tooltip: {
-                    enabled: true,
-                    backgroundColor: 'rgba(34, 34, 34, 0.8)', // Sleek dark tooltip background
-                    titleFont: { size: 16, weight: 'bold' },
-                    bodyFont: { size: 14 },
-                    bodyColor: '#fff',
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.1)', // Light dashed grid lines
+                    borderDash: [5, 5],
                 },
-                legend: {
-                    labels: {
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        },
-                        color: '#444',
+                ticks: {
+                    font: {
+                        size: 16,
+                        weight: 'bold'
                     },
-                    position: 'top',
+                    color: '#444'
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                enabled: true,
+                backgroundColor: 'rgba(34, 34, 34, 0.8)', // Dark tooltip background
+                titleFont: { size: 16, weight: 'bold' }, // Enhanced tooltip font
+                bodyFont: { size: 14 },
+                bodyColor: '#fff', // White tooltip text for better contrast
+                borderColor: '#444',
+                borderWidth: 1,
+                caretPadding: 10,
+                displayColors: false
+            },
+            legend: {
+                labels: {
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    color: '#444',
+                    padding: 20 // More space between legend items
                 },
+                position: 'top'
+            }
+        },
+        animation: {
+            duration: 2000,
+            easing: 'easeOutBounce' // Bounce effect on load
+        },
+        layout: {
+            padding: {
+                left: 30,
+                right: 30,
+                top: 30,
+                bottom: 30
+            }
+        },
+        elements: {
+            line: {
+                tension: 0.4 // Smooth line curves
             },
-            animation: {
-                duration: 2000, // Smooth and slow animation
-                easing: 'easeOutBounce', // Adds a bounce effect to the bars
-            },
+            point: {
+                radius: 5, // Make points more prominent
+                hitRadius: 10,
+                hoverRadius: 7
+            }
         }
-    });
+    }
+});
 </script>
 
 <!-- Add a new canvas element for the year level chart -->
@@ -744,6 +747,131 @@ const yearLevelChart = new Chart(yearLevelCtx, {
 });
 
 </script>
+
+
+<script>
+ const yearLevelCtx2 = document.getElementById('yr-chart').getContext('2d');
+const yrLabels = <?php echo json_encode($yrLabels); ?>;
+const yrCounts = <?php echo json_encode($yrCounts); ?>;
+
+const yrLevelChart = new Chart(yearLevelCtx2, {
+    type: 'bar',
+    data: {
+        labels: yrLabels,
+        datasets: [{
+            label: 'Violations per Course',
+            data: courseCounts,
+            backgroundColor: [
+                '#3498db', // blue
+                '#f1c40f', // yellow
+                '#2ecc71', // green
+                '#e74c3c', // red
+                '#9b59b6', // purple
+                '#1abc9c', // teal
+                'pink'
+            ],
+            borderColor: [
+                'rgba(0, 128, 0, 1)',
+                'rgba(255, 0, 0, 1)'
+            ],
+            borderWidth: 2,
+            borderRadius: 10, // Rounded corners for sleek bars
+            barPercentage: 0.5, // Slimmer bars
+            hoverBackgroundColor: [
+                'rgba(0, 255, 127, 0.9)', // Lighter hover effect for green
+                'rgba(255, 69, 58, 0.9)'  // Lighter hover effect for red
+            ],
+            hoverBorderColor: [
+                'rgba(0, 128, 0, 1)',
+                'rgba(255, 0, 0, 1)'
+            ],
+            shadowOffsetX: 3,
+            shadowOffsetY: 3,
+            shadowBlur: 8,
+            shadowColor: 'rgba(0, 0, 0, 0.2)' // Subtle shadow for 3D effect
+        }]
+    },
+    options: {
+        plugins: {
+            datalabels: {
+                display: true,
+                formatter: (value, context) => {
+                    const percentage = (value / context.dataset.data.reduce((a, b) => a + b, 0)) * 100;
+                    return `${percentage.toFixed(2)}%`;
+                }
+            }
+        },
+        responsive: true,
+        maintainAspectRatio: false, // For better responsiveness
+        scales: {
+            x: {
+                grid: {
+                    display: false, // Cleaner look without grid lines
+                },
+                ticks: {
+                    font: {
+                        size: 16,
+                        weight: 'bold',
+                    },
+                    color: '#444', // Darker labels for modern look
+                }
+            },
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.05)', // Light grid lines for minimalism
+                    borderDash: [3, 3], // Subtle dashed grid lines
+                },
+                ticks: {
+                    font: {
+                        size: 16,
+                        weight: 'bold',
+                    },
+                    color: '#444' // Darker ticks for better readability
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                enabled: true,
+                backgroundColor: 'rgba(34, 34, 34, 0.8)', // Sleek dark tooltip background
+                titleFont: { size: 16, weight: 'bold' },
+                bodyFont: { size: 14 },
+                bodyColor: '#fff',
+                borderColor: '#444',
+                borderWidth: 1,
+                caretPadding: 10, // Padding for a polished look
+                displayColors: false // Remove color boxes for a clean tooltip
+            },
+            legend: {
+                labels: {
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    color: '#444',
+                    padding: 20 // Adds spacing around the legend
+                },
+                position: 'top', // Legend at the top for modern design
+            },
+        },
+        animation: {
+            duration: 2000, // Smooth and slow animation
+            easing: 'easeOutBounce', // Adds a bounce effect to the bars
+        },
+        layout: {
+            padding: {
+                left: 30,
+                right: 30,
+                top: 30,
+                bottom: 30 // Spacious padding for a cleaner look
+            }
+        }
+    }
+});
+
+</script>
+
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
 

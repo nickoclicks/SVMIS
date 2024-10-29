@@ -99,12 +99,26 @@
     <?php if ($rows): ?>
         <?php foreach ($rows as $row): ?>
             <div class="user-item">
-                <?php
-                // Check if the profile picture URL exists; otherwise, assign a default image based on gender
-                $image = isset($row->profile_picture_url) && !empty($row->profile_picture_url) && file_exists($row->profile_picture_url)
-                    ? $row->profile_picture_url
-                    : (($row->gender == 'male') ? ROOT . '/assets/male.png' : ROOT . '/assets/female.png');
-                ?>
+            <?php
+                    $image = $row->image;
+                    switch ($row->course) {
+                        case 'BSBA':
+                            $image = ROOT . '/assets/BSBA.png';
+                            break;
+                        case 'TEP':
+                            $image = ROOT . '/assets/TEP.png';
+                            break;
+                        case 'BSIT':
+                            $image = ROOT . '/assets/BSIT.png';
+                            break;
+                        case "N/A":
+                            $image = ROOT . '/assets/nbsc1.png';
+                            break;
+                        default:
+                            $image = $row->image;
+                            break;
+                    }
+                    ?>
                 <img src="<?= htmlspecialchars($image) ?>" alt="User Image" class="user-img border border-primary">
 
                 

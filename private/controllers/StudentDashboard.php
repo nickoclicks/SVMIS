@@ -8,12 +8,12 @@ class StudentDashboard extends Controller
         if (!Auth::logged_in()) {
             $this->redirect('login');
         }
+        
 
         
-        $violation = $this->load_model('Violators'); 
-        $user = $this->load_model('User');
-        $notice = $this->load_model('Form'); // Assuming you have a Notice model
-
+        $violation = new Violation(); 
+        $user = new User();
+        $notice = new Form(); 
         $userRecord = $user->where('id', Auth::id());
         $user_id = $userRecord[0]->user_id; 
 
@@ -68,6 +68,27 @@ class StudentDashboard extends Controller
             $violationsCommitted = [];
         }
 
+       // Count the number of minor violations for the logged-in user
+    $minorViolationCountQuery = "
+     SELECT COUNT(*) as count 
+        FROM violations v
+        JOIN violators vi ON v.violation_id = vi.violation_id
+        WHERE v.level = 'minor' AND vi.user_id = :user_id
+  
+";
+$minorViolationCountResult = $violation->query($minorViolationCountQuery, ['user_id' => $user_id]);
+$minorViolationCount = $minorViolationCountResult[0]->count ?? 0;
+
+$majorViolationCountQuery = "
+SELECT COUNT(*) as count 
+   FROM violations v
+   JOIN violators vi ON v.violation_id = vi.violation_id
+   WHERE v.level = 'Major' AND vi.user_id = :user_id
+
+";
+$majorViolationCountResult = $violation->query($majorViolationCountQuery, ['user_id' => $user_id]);
+$majorViolationCount = $majorViolationCountResult[0]->count ?? 0;
+
 
         $totalUserViolations = count($violationsCommitted);
 
@@ -76,132 +97,9 @@ class StudentDashboard extends Controller
             'violationsCommitted' => $violationsCommitted,
             'totalNotices' => $totalNotices,
             'totalComplaints' => $totalComplaints,
+            'minorViolationCount' => $minorViolationCount,
+            'majorViolationCount' => $majorViolationCount
         ]);
     }
 
-    public function violationdetails()
-{
-    if (!Auth::logged_in()) {
-        $this->redirect('login');
-    }
-
-    $violation = $this->load_model('Violators');
-    $user = $this->load_model('User');
-    $notice = $this->load_model('Form'); // Assuming you have a Notice model
-
-    // Get user details
-    $userRecord = $user->where('id', Auth::id());
-    $user_id = $userRecord[0]->user_id;
-
-    // Combine firstname and lastname for comparison
-    $fullName = $userRecord[0]->firstname . ' ' . $userRecord[0]->lastname;
-    $resp_name = $fullName;
-
-    // Fetch data for notices
-    $noticeQuery = "SELECT * FROM notice WHERE resp_name = :resp_name";
-    $notices = $notice->query($noticeQuery, ['resp_name' => $resp_name]);
-
-    // Fetch data for violations committed by the user
-    $violationQuery = "
-        SELECT violators.*, violations.violation 
-        FROM violators 
-        JOIN violations ON violators.violation_id = violations.violation_id 
-        WHERE violators.user_id = :user_id";
-    $violationsCommitted = $violation->query($violationQuery, ['user_id' => $user_id]);
-
-    // Fetch data for complaints (if separate from notices)
-    $complaintsQuery = "SELECT * FROM notice WHERE user_id = :user_id";
-    $complaints = $notice->query($complaintsQuery, ['user_id' => $user_id]); // Adjust if you have a separate complaints model
-
-    // Pass all the data to the view
-    $this->view('student_dashboard_details', [
-        'notices' => $notices,
-        'violationsCommitted' => $violationsCommitted,
-        'complaints' => $complaints
-    ]);
-}
-
-public function complaintsdetails()
-{
-    if (!Auth::logged_in()) {
-        $this->redirect('login');
-    }
-
-    $violation = $this->load_model('Violators');
-    $user = $this->load_model('User');
-    $notice = $this->load_model('Form'); // Assuming you have a Notice model
-
-    // Get user details
-    $userRecord = $user->where('id', Auth::id());
-    $user_id = $userRecord[0]->user_id;
-
-    // Combine firstname and lastname for comparison
-    $fullName = $userRecord[0]->firstname . ' ' . $userRecord[0]->lastname;
-    $resp_name = $fullName;
-
-    // Fetch data for notices
-    $noticeQuery = "SELECT * FROM notice WHERE resp_name = :resp_name";
-    $notices = $notice->query($noticeQuery, ['resp_name' => $resp_name]);
-
-    // Fetch data for violations committed by the user
-    $violationQuery = "
-        SELECT violators.*, violations.violation 
-        FROM violators 
-        JOIN violations ON violators.violation_id = violations.violation_id 
-        WHERE violators.user_id = :user_id";
-    $violationsCommitted = $violation->query($violationQuery, ['user_id' => $user_id]);
-
-    // Fetch data for complaints (if separate from notices)
-    $complaintsQuery = "SELECT * FROM notice WHERE user_id = :user_id";
-    $complaints = $notice->query($complaintsQuery, ['user_id' => $user_id]); // Adjust if you have a separate complaints model
-
-    // Pass all the data to the view
-    $this->view('student_complaints_details', [
-        'notices' => $notices,
-        'violationsCommitted' => $violationsCommitted,
-        'complaints' => $complaints
-    ]);
-}
-
-public function noticesdetails()
-{
-    if (!Auth::logged_in()) {
-        $this->redirect('login');
-    }
-
-    $violation = $this->load_model('Violators');
-    $user = $this->load_model('User');
-    $notice = $this->load_model('Form'); // Assuming you have a Notice model
-
-    // Get user details
-    $userRecord = $user->where('id', Auth::id());
-    $user_id = $userRecord[0]->user_id;
-
-    // Combine firstname and lastname for comparison
-    $fullName = $userRecord[0]->firstname . ' ' . $userRecord[0]->lastname;
-    $resp_name = $fullName;
-
-    // Fetch data for notices
-    $noticeQuery = "SELECT * FROM notice WHERE resp_name = :resp_name";
-    $notices = $notice->query($noticeQuery, ['resp_name' => $resp_name]);
-
-    // Fetch data for violations committed by the user
-    $violationQuery = "
-        SELECT violators.*, violations.violation 
-        FROM violators 
-        JOIN violations ON violators.violation_id = violations.violation_id 
-        WHERE violators.user_id = :user_id";
-    $violationsCommitted = $violation->query($violationQuery, ['user_id' => $user_id]);
-
-    // Fetch data for complaints (if separate from notices)
-    $complaintsQuery = "SELECT * FROM notice WHERE user_id = :user_id";
-    $complaints = $notice->query($complaintsQuery, ['user_id' => $user_id]); // Adjust if you have a separate complaints model
-
-    // Pass all the data to the view
-    $this->view('student_notices_details', [
-        'notices' => $notices,
-        'violationsCommitted' => $violationsCommitted,
-        'complaints' => $complaints
-    ]);
-}
 }

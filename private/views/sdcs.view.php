@@ -372,7 +372,7 @@ $courseCounts = array_count_values($courses);
 </div>
 
 <?php
-$yearLevels = array_column($recentViolators, 'year_level_id');
+$yearLevels = array_column($recentViolators, 'year_level');
 $yearLevelCounts = array_count_values($yearLevels);
 ?>
 
@@ -425,7 +425,7 @@ $yearLevelCounts = array_count_values($yearLevels);
                     <td><?php echo htmlspecialchars($violator->middlename); ?></td>
                     <td><?php echo htmlspecialchars($violator->lastname); ?></td>
                     <td><?php echo htmlspecialchars($violator->course); ?></td>
-                    <td><?php echo htmlspecialchars($violator->year_level_id); ?></td>
+                    <td><?php echo htmlspecialchars($violator->year_level); ?></td>
                     <td><?php echo htmlspecialchars($violator->status); ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -462,70 +462,88 @@ new Chart(ctx, {
         datasets: [{
             label: 'Course Counts',
             data: courseCounts,
-            backgroundColor: [
-               
-    '#3498db', // blue
-    '#f1c40f', // yellow
-    '#2ecc71', // green
-    '#e74c3c', // red
-    '#9b59b6', // purple
-    '#1abc9c' // teal
-            ],
-            borderColor: [
-                '#3498db', '#f1c40f', '#2ecc71', '#e74c3c', '#9b59b6', '#1abc9c'
-            ],
             borderWidth: 2,
-            hoverOffset: 20, // Makes the segment "pop out" on hover
+            borderRadius: 10, // Larger rounded corners for a smoother look
+            barPercentage: 0.5, // Slimmer bars for a modern feel
             hoverBackgroundColor: [
-                'rgba(52, 152, 219, 0.9)',
-                'rgba(241, 196, 15, 0.9)',
-                'rgba(46, 204, 113, 0.9)',
-                'rgba(231, 76, 60, 0.9)',
-                'rgba(155, 89, 182, 0.9)',
-                'rgba(26, 188, 156, 0.9)'
-            ]
+                'rgba(0, 255, 127, 0.9)', // Lighter hover effect for green
+                'rgba(255, 69, 58, 0.9)'  // Lighter hover effect for red
+            ],
+            hoverBorderColor: [
+                'rgba(0, 128, 0, 1)',
+                'rgba(255, 0, 0, 1)'
+            ],
+            shadowOffsetX: 3,
+            shadowOffsetY: 3,
+            shadowBlur: 8,
+            shadowColor: 'rgba(0, 0, 0, 0.2)' // Subtle shadow for 3D effect
         }]
     },
     options: {
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: false, // Adjust for responsiveness
+        scales: {
+            x: {
+                grid: {
+                    display: false, // Cleaner look without grid lines
+                },
+                ticks: {
+                    font: {
+                        size: 16,
+                        weight: 'bold',
+                    },
+                    color: '#444', // Darker text for modern aesthetics
+                }
+            },
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.05)', // Very light grid lines for minimalism
+                    borderDash: [3, 3], // Shorter dashes for subtle effect
+                },
+                ticks: {
+                    font: {
+                        size: 16,
+                        weight: 'bold',
+                    },
+                    color: '#444'
+                }
+            }
+        },
         plugins: {
             tooltip: {
                 enabled: true,
-                backgroundColor: 'rgba(34, 34, 34, 0.8)',
+                backgroundColor: 'rgba(34, 34, 34, 0.8)', // Sleek dark tooltip background
                 titleFont: { size: 16, weight: 'bold' },
                 bodyFont: { size: 14 },
                 bodyColor: '#fff',
                 borderColor: '#444',
                 borderWidth: 1,
-                displayColors: false
+                caretPadding: 10, // Padding for a polished look
+                displayColors: false // Remove box color indicators for a cleaner tooltip
             },
             legend: {
-                display: true,
-                position: 'bottom',
                 labels: {
                     font: {
-                        size: 14,
+                        size: 16,
                         weight: 'bold'
                     },
-                    boxWidth: 20,
-                    boxHeight: 20,
-                    padding: 15
+                    color: '#444',
+                    padding: 20, // Adds space between legend items
                 },
-                align: 'center',
-                direction: 'row'
-            }
+                position: 'top', // Legend at the top for a modern look
+            },
         },
         animation: {
-            duration: 2000,
-            easing: 'easeOutBounce'
+            duration: 2000, // Slower, smoother animation
+            easing: 'easeOutBounce', // Stylish bounce animation for the bars
         },
         layout: {
             padding: {
                 left: 30,
                 right: 30,
                 top: 30,
-                bottom: 30
+                bottom: 30, // More spacious padding around the chart
             }
         }
     }

@@ -9,10 +9,12 @@
             <div class="card" style="border-radius: 10px; border: 1px solid #e3e3e3;">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center">
+                        <a href="<?= ROOT ?>/profile/<?= Auth::getUserId() ?>"
                         <h5 class="card-title">Violations</h5>
                         <div class="rounded-circle bg-light p-2">
                             <i class="fa fa-exclamation-triangle" style="color: #007bff; font-size: 1.5rem;"></i>
                         </div>
+                        </a>
                     </div>
                     <hr>
                     <div class="text-center">
@@ -28,10 +30,12 @@
             <div class="card" style="border-radius: 10px; border: 1px solid #e3e3e3;">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center">
+                         <a href="<?= ROOT ?>/profile/<?= Auth::getUserId() ?> . #complainant"
                         <h5 class="card-title">Complaints</h5>
                         <div class="rounded-circle bg-light p-2">
                             <i class="fa fa-bullhorn" style="color: #007bff; font-size: 1.5rem;"></i>
                         </div>
+</a>
                     </div>
                     <hr>
                     <div class="text-center">
@@ -48,10 +52,12 @@
             <div class="card" style="border-radius: 10px; border: 1px solid #e3e3e3;">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center">
+                         <a href="<?= ROOT ?>/profile/<?= Auth::getUserId() ?> . #respondent"
                         <h5 class="card-title">Notices</h5>
                         <div class="rounded-circle bg-light p-2">
                             <i class="fa fa-bell" style="color: #007bff; font-size: 1.5rem;"></i>
                         </div>
+</a>
                     </div>
                     <hr>
                     <div class="text-center">
@@ -66,30 +72,28 @@
 
 <?php
 // Determine current and next possible sanctions based on violation counts
-function getCurrentAndNextSanctions($minorViolationCount, $moderateViolationCount, $majorViolationCount) {
+function getCurrentAndNextSanctions($minorViolationCount, $majorViolationCount) {
     $currentSanctions = [];
     $nextSanctions = [];
 
     // Current sanctions
-    if ($minorViolationCount == 1 || $moderateViolationCount == 1) {
+    if ($minorViolationCount == 1) {
         $currentSanctions[] = "Community Service";
     }
-    if ($moderateViolationCount == 1) {
-        $currentSanctions[] = "Refer to Guidance";
-    }
-    if ($minorViolationCount == 2 || $moderateViolationCount == 2) {
+  
+    if ($minorViolationCount == 2) {
         $currentSanctions[] = "Character Probation";
     }
-    if ($majorViolationCount == 1 || $moderateViolationCount == 2 || $minorViolationCount == 3) {
+    if ($majorViolationCount == 1 || $minorViolationCount == 3) {
         $currentSanctions[] = "Final Character Probation";
     }
-    if ($moderateViolationCount == 3 || $minorViolationCount == 4 || $majorViolationCount >= 1) {
+    if ($minorViolationCount == 4 || $majorViolationCount >= 1) {
         $currentSanctions[] = "Suspension";
     }
     if ($minorViolationCount == 9) {
         $currentSanctions[] = "Non-Readmission";
     }
-    if ($majorViolationCount == 2 || $moderateViolationCount == 4) {
+    if ($majorViolationCount == 2) {
         $currentSanctions[] = "Exclusion";
     }
     if ($majorViolationCount == 3) {
@@ -97,25 +101,23 @@ function getCurrentAndNextSanctions($minorViolationCount, $moderateViolationCoun
     }
 
     // Next possible sanctions
-    if ($minorViolationCount < 1 || $moderateViolationCount < 1) {
+    if ($minorViolationCount < 1) {
         $nextSanctions[] = "Community Service";
     }
-    if ($moderateViolationCount < 1) {
-        $nextSanctions[] = "Refer";
-    }
-    if ($minorViolationCount < 2 || $moderateViolationCount < 2) {
+    
+    if ($minorViolationCount < 2) {
         $nextSanctions[] = "Character Probation";
     }
-    if ($majorViolationCount < 1 || $moderateViolationCount < 2 || $minorViolationCount < 3) {
+    if ($majorViolationCount < 1 || $minorViolationCount < 3) {
         $nextSanctions[] = "Final Character Probation";
     }
-    if ($moderateViolationCount < 3 || $minorViolationCount < 4 || $majorViolationCount < 1) {
+    if ($minorViolationCount < 4 || $majorViolationCount < 1) {
         $nextSanctions[] = "Suspension";
     }
     if ($minorViolationCount < 9) {
         $nextSanctions[] = "Non-readmission";
     }
-    if ($majorViolationCount < 2 || $moderateViolationCount < 4) {
+    if ($majorViolationCount < 2) {
         $nextSanctions[] = "Exclusion";
     }
     if ($majorViolationCount < 3) {
@@ -128,12 +130,9 @@ function getCurrentAndNextSanctions($minorViolationCount, $moderateViolationCoun
     ];
 }
 
-// Example violation counts
-$minorViolationCount = 2; // Replace with actual count
-$moderateViolationCount = 1; // Replace with actual count
-$majorViolationCount = 0; // Replace with actual count
 
-$sanctions = getCurrentAndNextSanctions($minorViolationCount, $moderateViolationCount, $majorViolationCount);
+
+$sanctions = getCurrentAndNextSanctions($minorViolationCount, $majorViolationCount);
 ?>
 
 <!-- Summary Section -->
@@ -146,9 +145,9 @@ $sanctions = getCurrentAndNextSanctions($minorViolationCount, $moderateViolation
     <!-- Violation Levels Section with Grid -->
      <div class="row">
     <div class="violation-levels mb-5">
-        <h4 class="text-secondary mb-4">Violation Levels</h4>
+        <h4 class="text-secondary mb-4">Violation Levels Committed</h4>
         <div class="row text-center">
-            <div class="col-md-4 mb-4">
+            <div class="col-md-6 mb-4">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body">
                         <h5 class="card-title">Minor Violations</h5>
@@ -156,15 +155,10 @@ $sanctions = getCurrentAndNextSanctions($minorViolationCount, $moderateViolation
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Moderate Violations</h5>
-                        <span class="badge bg-warning text-white fs-4"><?php echo $moderateViolationCount; ?></span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
+       
+             
+            
+            <div class="col-md-6 mb-4">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body">
                         <h5 class="card-title">Major Violations</h5>
