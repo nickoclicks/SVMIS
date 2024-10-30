@@ -163,3 +163,4 @@ function getViolationCountsByDay($result) {
 
   return $orderedCounts;
 }
+

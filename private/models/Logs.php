@@ -11,28 +11,40 @@ class Logs extends Model {
 
     //for good moral chart
     $chartData = $this->query("
-        SELECT COUNT(activity_name) as count, DATE(date) as activity_date 
-        FROM activity_logs 
-        WHERE activity_name LIKE '%good moral%'
-        GROUP BY DATE(date) 
-        ORDER BY count DESC
+        SELECT 
+        COUNT(activity_name) AS count, 
+        DATE(date) AS activity_date, 
+        DAYNAME(date) AS activity_day 
+    FROM 
+        activity_logs 
+    WHERE 
+        activity_name LIKE '%good moral%' 
+    GROUP BY 
+        activity_date, activity_day 
+    ORDER BY FIELD(activity_day, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
     ");
     
 
     //for the violation slip chart
     $chartData1 = $this->query("
-         SELECT COUNT(activity_name) as count, DATE(date) as activity_date 
-        FROM activity_logs 
-        WHERE activity_name LIKE '%violation slip%'
-        GROUP BY DATE(date) 
-        ORDER BY count DESC
+         SELECT 
+        COUNT(activity_name) AS count, 
+        DATE(date) AS activity_date, 
+        DAYNAME(date) AS activity_day 
+    FROM 
+        activity_logs 
+    WHERE 
+        activity_name LIKE '%violation slip%' 
+    GROUP BY 
+        activity_date, activity_day 
+    ORDER BY FIELD(activity_day, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
     ");
     
 
     if ($chartData !== false) {
-        $chartLabels = array_column($chartData, 'activity_date');
+        $chartLabels = array_column($chartData, 'activity_day');
         $chartData = array_column($chartData, 'count');
-        $chartLabels1 = array_column($chartData1, 'activity_date');
+        $chartLabels1 = array_column($chartData1, 'activity_day');
         $chartData1 = array_column($chartData1, 'count');
     } else {
         $chartLabels = [];

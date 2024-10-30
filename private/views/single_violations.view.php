@@ -252,7 +252,7 @@ var labels = [];
 var frequencies = [];
 
 <?php foreach ($violation_frequencies as $frequency): ?>
-    labels.push('<?= $frequency->date ?>');
+    labels.push('<?= $frequency->day_name ?>');
     frequencies.push(<?= $frequency->frequency ?>);
 <?php endforeach; ?>
 

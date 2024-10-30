@@ -14,20 +14,20 @@ class Settings extends Controller
         // Load the settings view
         $this->view('settings', ['settings' => $settings,
                                     'activityLogs' => $activityLogs]);
-    }
+    }    
 
-    public function save()
+    public function archiveViolations()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Save settings to session or database
-            $_SESSION['settings'] = $_POST;
+        $settings = new Setting();
+        $settings->archiveResolvedViolations();
 
-            // Redirect back to the settings page
-            header('Location: ' . ROOT . '/settings');
-        }
+        // Optionally, you can set a flash message to indicate success
+        $_SESSION['flash_message'] = "Resolved violations have been archived successfully.";
+
+        // Redirect back to the settings page
+        header("Location: /settings");
+        exit();
+
+        
     }
-
-    
-
-    
 }

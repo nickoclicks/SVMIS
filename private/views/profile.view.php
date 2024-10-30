@@ -723,10 +723,65 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
         </div>
     </div>
 
+
+    <?php 
+// Assuming you have included your Database class and log_activity function at the top of your view file
+
+// Check if the form has been submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the log name from the form submission
+    $log_name = $_POST['log_name'];
+
+    // Call the log_activity function to log the activity
+    log_activity($log_name);
+
+    // Now proceed to print the certificate
+    // You can include your logic here to generate the certificate
+    $currentDate = date('jS') . ' day of ' . date('F Y'); // Example date formatting
+    // Render the certificate or handle the print logic here
+    echo "<script>
+    
+
+    // Get the certificate content including dropdown and other elements
+    let certificateContent = document.getElementById('firstCertificate').innerHTML;
+
+    // Replace dropdowns with selected values in the content
+    const dropdowns = document.querySelectorAll('#firstCertificate select');
+    dropdowns.forEach(dropdown => {
+        const selectedValue = dropdown.options[dropdown.selectedIndex].text;
+        certificateContent = certificateContent.replace(dropdown.outerHTML, selectedValue);
+    });
+
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.write('<html><head><title>Print Certificate</title>');
+    printWindow.document.write('<style>');
+    printWindow.document.write('body { font-family: Arial, sans-serif; margin: 20px; }');
+    printWindow.document.write('button, #label, #purposeDropdown, #customPurposeInput { display: none; }');
+    printWindow.document.write('</style></head><body>');
+    printWindow.document.write(certificateContent);
+    printWindow.document.write('</body></html>');
+
+    printWindow.document.close();
+    printWindow.onload = function() {
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    };
+
+    document.getElementById('purposeDropdown').onchange = updatePurpose;
+    document.getElementById('customPurpose').oninput = function() {
+        document.getElementById('selectedPurposeText').textContent = this.value;
+    };
+</script>";
+
+}
+?>
+
     <div class="text-center mt-4">
-    <button class="btn btn-primary" 
-            onclick="printCertificate(this)">Print Certificate</button> 
-          
+    <form action="" method="POST">
+    <input type="hidden" name="log_name" value="Printed Good Moral Certificate Ngga">
+    <button type="submit" class="btn btn-primary">Print Certificate</button>
+</form>
 </div>
 </div>
 
@@ -747,29 +802,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePurpose();  // To handle any pre-set dropdown value
     });
 
-    // JavaScript Function
-function printCertificate(button) {
-
-    // Find the currently visible certificate
-    const visibleCertificate = document.querySelector('.certificate.show').innerHTML;
-
-    const printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write('<html><head><title>Print Certificate</title>');
-    printWindow.document.write('<style>');
-    printWindow.document.write('body { font-family: Arial, sans-serif; margin: 20px; }');
-    printWindow.document.write('button, #label, #purposeDropdown, #purposeDropdownone, #customPurposeInput { display: none; }');
-    printWindow.document.write('</style></head><body>');
-    printWindow.document.write(visibleCertificate);
-    printWindow.document.write('</body></html>');
-
-    printWindow.document.close();
-    printWindow.onload = function() {
-        printWindow.focus();
-        printWindow.print();
-        
-    };
-}
-
+ 
 
 
 document.getElementById('purposeDropdown').addEventListener('change', updateSelectedPurpose);

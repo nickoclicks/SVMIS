@@ -42,7 +42,7 @@
 
 <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
 <a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
-<a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Good Moral Report</a>
+<a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Certificate Report</a>
 <a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Comparative Analysis</a>
 
 <h1>Certificate Report</h1>
@@ -73,125 +73,101 @@ const chartPrintActivities1 = new Chart(ctxPrintActivities1, {
         datasets: [{
             label: 'Print Activities For Violation Slip',
             data: <?= json_encode($printActivityCounts1) ?>,
-            backgroundColor: [
-                'rgba(75, 192, 192, 0.8)', 
-                'rgba(54, 162, 235, 0.8)', 
-                'rgba(255, 206, 86, 0.8)', 
-                'rgba(255, 159, 64, 0.8)', 
-                'rgba(153, 102, 255, 0.8)', 
-                'rgba(255, 99, 132, 0.8)'
-            ],
-            borderColor: [
-                'rgba(75, 192, 192, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(255, 159, 64, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 99, 132, 1)'
-            ],
-            borderWidth: 2,
-            hoverBorderWidth: 3,
-            hoverBackgroundColor: [
-                'rgba(75, 192, 192, 1)', 
-                'rgba(54, 162, 235, 1)', 
-                'rgba(255, 206, 86, 1)', 
-                'rgba(255, 159, 64, 1)', 
-                'rgba(153, 102, 255, 1)', 
-                'rgba(255, 99, 132, 1)'
-            ]
+            fill: true, // Enable fill under the line for a more modern look
+            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Subtle fill color under the line
+            borderColor: 'rgba(75, 192, 192, 1)', // Line color
+            pointBackgroundColor: 'rgba(54, 162, 235, 1)', // Color for the data points
+            pointBorderColor: '#fff', // White border around points for contrast
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 3, // Thicker line for better visibility
+            tension: 0.4, // Smooth curves between points
+            pointRadius: 5, // Bigger points for better visibility
+            pointHoverRadius: 7 // Larger hover effect for points
         }]
     },
     options: {
-        plugins: {
-            title: {
-                display: true,
-                text: 'Print Activities Overview',
-                font: {
-                    size: 28,
-                    weight: 'bold',
-                    family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                grid: {
+                    display: true,
+                    color: 'rgba(0, 0, 0, 0.05)', // Light grid lines
+                    borderDash: [4, 4] // Dotted grid lines on x-axis
                 },
-                padding: {
-                    top: 20,
-                    bottom: 30
-                },
-                color: '#333',
-            },
-            legend: {
-                display: true,
-                position: 'top',
-                labels: {
-                    boxWidth: 20,
-                    padding: 20,
+                ticks: {
                     font: {
-                        size: 14
+                        size: 16, // Increased font size
+                        weight: 'bold'
                     },
-                    color: '#666',
+                    color: '#444',
+                    padding: 10,
+                    maxRotation: 45, // Prevent overlapping labels
+                    minRotation: 0
                 }
             },
-            tooltip: {
-                enabled: true,
-                backgroundColor: 'rgba(0,0,0,0.7)',
-                titleFont: {
-                    size: 16
-                },
-                bodyFont: {
-                    size: 14
-                },
-                padding: 10,
-                borderColor: '#ccc',
-                borderWidth: 1,
-            }
-        },
-        scales: {
             y: {
                 beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Number of Activities',
-                    font: {
-                        size: 18,
-                        weight: 'bold'
-                    },
-                    color: '#333'
-                },
                 grid: {
-                    color: 'rgba(200, 200, 200, 0.3)',
+                    color: 'rgba(0, 0, 0, 0.1)', // Light dashed grid lines
+                    borderDash: [5, 5],
                 },
                 ticks: {
-                    color: '#333',
                     font: {
-                        size: 14
-                    }
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    color: '#444'
                 }
+            }
+        },
+        plugins: {
+            tooltip: {
+                enabled: true,
+                backgroundColor: 'rgba(34, 34, 34, 0.8)', // Dark tooltip background
+                titleFont: { size: 16, weight: 'bold' }, // Enhanced tooltip font
+                bodyFont: { size: 14 },
+                bodyColor: '#fff', // White tooltip text for better contrast
+                borderColor: '#444',
+                borderWidth: 1,
+                caretPadding: 10,
+                displayColors: false
             },
-            x: {
-                title: {
-                    display: true,
-                    text: 'Activity Type',
+            legend: {
+                labels: {
                     font: {
-                        size: 18,
+                        size: 16,
                         weight: 'bold'
                     },
-                    color: '#333'
+                    color: '#444',
+                    padding: 20 // More space between legend items
                 },
-                grid: {
-                    color: 'rgba(200, 200, 200, 0.3)',
-                },
-                ticks: {
-                    color: '#333',
-                    font: {
-                        size: 14
-                    }
-                }
+                position: 'top'
             }
         },
         animation: {
-            duration: 1500,
-            easing: 'easeOutBounce'
+            duration: 2000,
+            easing: 'easeOutBounce' // Bounce effect on load
         },
-        responsive: true,
-        maintainAspectRatio: false
+        layout: {
+            padding: {
+                left: 30,
+                right: 30,
+                top: 30,
+                bottom: 30
+            }
+        },
+        elements: {
+            line: {
+                tension: 0.4 // Smooth line curves
+            },
+            point: {
+                radius: 5, // Make points more prominent
+                hitRadius: 10,
+                hoverRadius: 7
+            }
+        }
     }
 });
 
@@ -205,127 +181,104 @@ const chartPrintActivities = new Chart(ctxPrintActivities, {
         datasets: [{
             label: 'Print Activities For Good Moral Certificate',
             data: <?= json_encode($printActivityCounts) ?>,
-            backgroundColor: [
-                'rgba(54, 162, 235, 0.8)', 
-                'rgba(255, 99, 132, 0.8)', 
-                'rgba(255, 206, 86, 0.8)', 
-                'rgba(75, 192, 192, 0.8)', 
-                'rgba(153, 102, 255, 0.8)', 
-                'rgba(255, 159, 64, 0.8)'
-            ],
-            borderColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 99, 132, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 2,
-            hoverBorderWidth: 3,
-            hoverBackgroundColor: [
-                'rgba(54, 162, 235, 1)', 
-                'rgba(255, 99, 132, 1)', 
-                'rgba(255, 206, 86, 1)', 
-                'rgba(75, 192, 192, 1)', 
-                'rgba(153, 102, 255, 1)', 
-                'rgba(255, 159, 64, 1)'
-            ]
+            fill: true, // Enable fill under the line for a more modern look
+            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Subtle fill color under the line
+            borderColor: 'rgba(75, 192, 192, 1)', // Line color
+            pointBackgroundColor: 'rgba(54, 162, 235, 1)', // Color for the data points
+            pointBorderColor: '#fff', // White border around points for contrast
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 3, // Thicker line for better visibility
+            tension: 0.4, // Smooth curves between points
+            pointRadius: 5, // Bigger points for better visibility
+            pointHoverRadius: 7 // Larger hover effect for points
         }]
     },
     options: {
-        plugins: {
-            title: {
-                display: true,
-                text: 'Print Activities for Good Moral Certificate',
-                font: {
-                    size: 28,
-                    weight: 'bold',
-                    family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                grid: {
+                    display: true,
+                    color: 'rgba(0, 0, 0, 0.05)', // Light grid lines
+                    borderDash: [4, 4] // Dotted grid lines on x-axis
                 },
-                padding: {
-                    top: 20,
-                    bottom: 30
-                },
-                color: '#333',
-            },
-            legend: {
-                display: true,
-                position: 'top',
-                labels: {
-                    boxWidth: 20,
-                    padding: 20,
+                ticks: {
                     font: {
-                        size: 14
+                        size: 16, // Increased font size
+                        weight: 'bold'
                     },
-                    color: '#666',
+                    color: '#444',
+                    padding: 10,
+                    maxRotation: 45, // Prevent overlapping labels
+                    minRotation: 0
                 }
             },
-            tooltip: {
-                enabled: true,
-                backgroundColor: 'rgba(0,0,0,0.7)',
-                titleFont: {
-                    size: 16
-                },
-                bodyFont: {
-                    size: 14
-                },
-                padding: 10,
-                borderColor: '#ccc',
-                borderWidth: 1,
-            }
-        },
-        scales: {
             y: {
                 beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Number of Activities',
-                    font: {
-                        size: 18,
-                        weight: 'bold'
-                    },
-                    color: '#333'
-                },
                 grid: {
-                    color: 'rgba(200, 200, 200, 0.3)',
+                    color: 'rgba(0, 0, 0, 0.1)', // Light dashed grid lines
+                    borderDash: [5, 5],
                 },
                 ticks: {
-                    color: '#333',
                     font: {
-                        size: 14
-                    }
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    color: '#444'
                 }
+            }
+        },
+        plugins: {
+            tooltip: {
+                enabled: true,
+                backgroundColor: 'rgba(34, 34, 34, 0.8)', // Dark tooltip background
+                titleFont: { size: 16, weight: 'bold' }, // Enhanced tooltip font
+                bodyFont: { size: 14 },
+                bodyColor: '#fff', // White tooltip text for better contrast
+                borderColor: '#444',
+                borderWidth: 1,
+                caretPadding: 10,
+                displayColors: false
             },
-            x: {
-                title: {
-                    display: true,
-                    text: 'Activity Type',
+            legend: {
+                labels: {
                     font: {
-                        size: 18,
+                        size: 16,
                         weight: 'bold'
                     },
-                    color: '#333'
+                    color: '#444',
+                    padding: 20 // More space between legend items
                 },
-                grid: {
-                    color: 'rgba(200, 200, 200, 0.3)',
-                },
-                ticks: {
-                    color: '#333',
-                    font: {
-                        size: 14
-                    }
-                }
+                position: 'top'
             }
         },
         animation: {
-            duration: 1500,
-            easing: 'easeOutBounce'
+            duration: 2000,
+            easing: 'easeOutBounce' // Bounce effect on load
         },
-        responsive: true,
-        maintainAspectRatio: false
+        layout: {
+            padding: {
+                left: 30,
+                right: 30,
+                top: 30,
+                bottom: 30
+            }
+        },
+        elements: {
+            line: {
+                tension: 0.4 // Smooth line curves
+            },
+            point: {
+                radius: 5, // Make points more prominent
+                hitRadius: 10,
+                hoverRadius: 7
+            }
+        }
     }
 });
+
 
     </script>
     <script>

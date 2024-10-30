@@ -159,6 +159,4 @@ function formatYearLevel($yearLevel) {
     }
 }
 
-
-
 }

@@ -74,6 +74,7 @@
         <?php if (Auth::canPerformAction()): ?>
             <a href="<?= ROOT ?>/violations/add" class="btn">
                 <i class="fa fa-plus"></i> Add New Violation
+               
             </a>
             <?php endif ?>
         </div>
@@ -101,9 +102,6 @@
                 <tbody id="violationTable">
                     <?php
                     $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
-                    
-                    
-
                     if ($rows): ?>
                         <?php foreach ($rows as $row): ?>
     <tr>

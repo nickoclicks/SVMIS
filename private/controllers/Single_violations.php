@@ -88,7 +88,11 @@ $violationId = $row->violation_id;
 
 // Retrieve frequency of the specific violation for each date
 $vio = new Violators();
-$violation_frequencies = $vio->query("SELECT DATE(date) as date, COUNT(*) as frequency FROM violators WHERE violation_id = ? GROUP BY DATE(date)", [$violationId]);
+$violation_frequencies = $vio->query("SELECT DAYNAME(date) as day_name, violation_id, COUNT(*) as frequency 
+FROM violators 
+WHERE violation_id = ? 
+GROUP BY day_name, violation_id
+ORDER BY FIELD(day_name, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')", [$violationId]);
 
 $courses = new User();
 $course_frequencies = $courses->query("SELECT T1.course, COUNT(*) as frequency 
