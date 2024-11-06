@@ -53,4 +53,9 @@ class Logs extends Model {
 
     return ['labels' => $chartLabels, 'data' => $chartData, 'data1' => $chartData1, 'labels1' => $chartLabels1];
 }
+
+public function countAll()
+{
+    return $this->query("SELECT COUNT(*) AS count FROM activity_logs")[0]->count;
+}
 }

@@ -1,12 +1,7 @@
 
 <style>
   /* Main Body Styling */
-  body {
-    padding-left: 90px; /* Adjusted for collapsed sidebar */
-    transition: padding-left 0.3s ease;
-    font-family: 'Poppins', sans-serif; /* Modern font choice */
-  }
-
+ 
   /* Sidebar Styling */
   .sidebar {
     background: linear-gradient(45deg, darkblue, #1a233a);
@@ -131,8 +126,22 @@
   background-color: #2f55a4; /* A lighter blue shade that complements the dark blue sidebar */
   color: #fff;
 }
+.notification-count {
+  position: absolute;
+  top: -5px; /* Adjust to position it above the icon */
+  right: -10px; /* Adjust to position it to the right of the icon */
+  background-color: red; /* Background color for the count */
+  color: white; /* Text color */
+  border-radius: 50%; /* Make it circular */
+  padding: 2px 6px; /* Padding for the count */
+  font-size: 12px; /* Font size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
 
+<?php $upcomingCount = countUpcomingAppointmentsForNextWeek(); ?>
 <!-- Sidebar Structure -->
 <div class="sidebar fixed-top bg-dark">
   <!-- Sidebar Brand -->
@@ -185,7 +194,8 @@
       <?php if (Auth::isAdmin()): ?>
       <li class="nav-item">
       <a class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'settings') ? 'active' : '' ?>" href="<?= ROOT ?>/settings">
-        <i class="fas fa-cog"></i> <span>Settings</span>
+        <i class="fas fa-bell"><h6 style="margin-top: -30px; margin-left: 16px; color: red; font-weight: bold"><?= htmlspecialchars($upcomingCount ) ?></h6></i>
+        <span>Notification</span>
       </a>
     </li>
     <?php endif; ?>

@@ -112,7 +112,7 @@ function log_activity($log_name)
     $data['date'] = date('Y-m-d H:i:s'); 
 
     // Insert log into activity_logs table
-    $query = "INSERT INTO activity_logs (activity_name, date) VALUES (:log_name, :date)";
+    $query = "INSERT INTO good_moral_logs (log_name, date) VALUES (:log_name, :date)";
     
     $db->query($query, $data);
 }
@@ -164,3 +164,31 @@ function getViolationCountsByDay($result) {
   return $orderedCounts;
 }
 
+
+function countUpcomingAppointmentsForNextWeek()
+{
+    $db = new Form(); // Create a new instance of the Database class
+
+    // Set the date range for counting appointments
+    
+    // Set the date range for today
+    $today = new DateTime();
+    $today->setTime(0, 0, 0); // Reset time to 00:00:00
+    $endOfDay = clone $today;
+    $endOfDay->setTime(23, 59, 59); // Set to 23:59:59 of today
+
+    // Prepare the SQL query to count appointments for today
+    $query = "SELECT COUNT(*) as count FROM notice WHERE appt_date >= :today AND appt_date <= :endOfDay";
+
+    // Define the parameters for the query
+    $params = [
+        'today' => $today->format('Y-m-d H:i:s'),
+        'endOfDay' => $endOfDay->format('Y-m-d H:i:s')
+    ];
+
+    // Execute the query and fetch the result
+    $result = $db->query($query, $params);
+
+    // Return the count or 0 if no results
+    return $result ? (int)$result[0]->count : 0;
+}

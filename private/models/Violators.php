@@ -188,9 +188,10 @@ public function getViolationName($violationId)
 public function getUserName($userId)
     {
         $query = "
-            SELECT u.firstname, u.lastname, u.std_id, v.office
+            SELECT u.firstname, u.lastname, u.std_id, v.office, e.year_level, u.course
             FROM users u
             INNER JOIN violators v ON u.user_id = v.user_id
+            INNER JOIN enrollment e ON u.year_level_id = e.year_level_id
             WHERE v.user_id = :userId
         ";
         

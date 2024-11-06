@@ -54,8 +54,9 @@ $currentDate = date('jS') . ' day of ' . date('F Y');
 
 
 ?>
-<div class="dashboard-container p-4 shadow mx-auto" style="max-width: 1700px; background-color: #f9f9f9; border-radius: 15px;">
-    
+<div style="margin-left: -150px;">
+<div class="dashboard-container p-4 mx-auto" style="max-width: 1700px; margin-top: -10px">
+
 <?php if ($row): ?>
     <div class="row justify-content-center">
         <div class="card col-md-3 text-center shadow-sm" style="border-radius: 15px; padding: 20px; margin-right: 20px;">
@@ -293,7 +294,7 @@ $currentDate = date('jS') . ' day of ' . date('F Y');
                     <th class="text-light">Status</th>
                     <th class="text-light">Level</th>
                     <th class="text-light">Category</th>
-                    <th class="text-light">Offense</th>
+                    
                     <!--<th class="text-light">Possible Sanction</th>-->
                     <th class="text-light">Sanction Imposed</th>
                     <th class="text-light">Year Level</th>
@@ -321,26 +322,8 @@ $currentDate = date('jS') . ' day of ' . date('F Y');
         <i class="fa fa-tag"></i> <?= $violation->level ?>
     </span>
                             <td><?= esc($violation->category); ?></td>
-                            <td><?= formatOffense(esc($violation->offense_count)); ?></td>
-                       <!--     <td style="
-                                background: <?= ($violation->level == 'Major') 
-                                    ? 'linear-gradient(45deg, #FF3737, #FF6347)' 
-                                    : 'linear-gradient(45deg, #FFC107, #FFA07A)'; ?>;
-                                color: white;
-                                padding: 8px 12px;
-                                border-radius: 8px;
-                                font-weight: bold;
-                                text-align: center;
-                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                               
-                            " >
-                                <select name="sanction[<?= $violation->id ?>]" class="form-select">
-                                    <option value="" class="text-muted">View Possible Sanctions</option>
-                                    <?php foreach ($violation->sanctions as $sanction): ?>
-                                        <option value="<?= $sanction ?>"><?= $sanction ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </td> -->
+                           
+                       
                             <td><?= !empty($violation->compensation) ? esc($violation->compensation) : 'N/A'; ?></td>
                             <td><?= esc($violation->year_level); ?></td>
                             <td><?= esc($violation->semester_name); ?></td>
@@ -451,6 +434,7 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
                     <th class="text-light">Respondent</th>
                     <th class="text-light">Violation</th>
                     <th class="text-light">Date Filed</th>
+                    <th class="text-light">Appointment Date</th>
                     <th class="text-light">Status</th>
                     <?php if (Auth::canPerformAction()): ?>
                     <th class="text-light">Actions</th>
@@ -477,13 +461,17 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
                             </td>
                             <td><?php echo esc($notice->violations); ?></td>
                             <td><?= get_date($notice->date); ?></td>
+                            <td><?= get_date($notice->appt_date); ?></td>
                             <td><?php echo esc($notice->status); ?></td>
                             <?php if (Auth::canPerformAction()): ?>
                             <td>
                                 <a href="<?= ROOT ?>/forms/edit/<?= $notice->id ?>" class="btn btn-sm btn-info text-white">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                               
+                                <!--
+                                <button class="btn btn-sm btn-primary" onclick="printComplaint(this)"> 
+                        <i class="fa fa-print"></i> Print 
+                    </button>-->
                                </td>                           
                             <?php endif ?>
                         </tr>
@@ -497,7 +485,6 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
         </table>
     </div>
 </div>
-
 
 <script>
     function searchComplaints() {
@@ -725,7 +712,6 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
 
 
     <?php 
-// Assuming you have included your Database class and log_activity function at the top of your view file
 
 // Check if the form has been submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -739,53 +725,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // You can include your logic here to generate the certificate
     $currentDate = date('jS') . ' day of ' . date('F Y'); // Example date formatting
     // Render the certificate or handle the print logic here
-    echo "<script>
     
-
-    // Get the certificate content including dropdown and other elements
-    let certificateContent = document.getElementById('firstCertificate').innerHTML;
-
-    // Replace dropdowns with selected values in the content
-    const dropdowns = document.querySelectorAll('#firstCertificate select');
-    dropdowns.forEach(dropdown => {
-        const selectedValue = dropdown.options[dropdown.selectedIndex].text;
-        certificateContent = certificateContent.replace(dropdown.outerHTML, selectedValue);
-    });
-
-    const printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write('<html><head><title>Print Certificate</title>');
-    printWindow.document.write('<style>');
-    printWindow.document.write('body { font-family: Arial, sans-serif; margin: 20px; }');
-    printWindow.document.write('button, #label, #purposeDropdown, #customPurposeInput { display: none; }');
-    printWindow.document.write('</style></head><body>');
-    printWindow.document.write(certificateContent);
-    printWindow.document.write('</body></html>');
-
-    printWindow.document.close();
-    printWindow.onload = function() {
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
-    };
-
-    document.getElementById('purposeDropdown').onchange = updatePurpose;
-    document.getElementById('customPurpose').oninput = function() {
-        document.getElementById('selectedPurposeText').textContent = this.value;
-    };
-</script>";
 
 }
 ?>
 
     <div class="text-center mt-4">
     <form action="" method="POST">
-    <input type="hidden" name="log_name" value="Printed Good Moral Certificate Ngga">
-    <button type="submit" class="btn btn-primary">Print Certificate</button>
+    <input type="hidden" name="log_name" value="Printed Good Moral Certificate">
+    <button type="submit" class="btn btn-primary" onclick="printCertificate()">Print Certificate</button>
 </form>
 </div>
 </div>
 
 
+</div>
 </div>
 
     <?php else: ?>
@@ -795,7 +749,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 </div>
 
+<script>
+    function printCertificate() {
+    let certificateContent = document.getElementById('firstCertificate').innerHTML;
 
+// Replace dropdowns with selected values in the content
+const dropdowns = document.querySelectorAll('#firstCertificate select');
+dropdowns.forEach(dropdown => {
+    const selectedValue = dropdown.options[dropdown.selectedIndex].text;
+    certificateContent = certificateContent.replace(dropdown.outerHTML, selectedValue);
+});
+
+const printWindow = window.open('', '', 'height=600,width=800');
+printWindow.document.write('<html><head><title>Print Certificate</title>');
+printWindow.document.write('<style>');
+printWindow.document.write('body { font-family: Arial, sans-serif; margin: 20px; }');
+printWindow.document.write('button, #label, #purposeDropdown, #customPurposeInput { display: none; }');
+printWindow.document.write('</style></head><body>');
+printWindow.document.write(certificateContent);
+printWindow.document.write('</body></html>');
+
+printWindow.document.close();
+printWindow.onload = function() {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+};
+
+document.getElementById('purposeDropdown').onchange = updatePurpose;
+document.getElementById('customPurpose').oninput = function() {
+    document.getElementById('selectedPurposeText').textContent = this.value;
+};
+    }
+</script>
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {

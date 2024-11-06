@@ -166,7 +166,9 @@
 
 </style>
 
-<div class="dashboard-container mb-4">
+
+<div style="margin-left: -150px">
+<div class="row dashboard-container mx-auto" style="width: 1650px;">
     <div class="row">
         <div class="col-8">
     <div class="card shadow p-5 rounded" style="height: 820px; overflow-y: auto;">

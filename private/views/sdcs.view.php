@@ -74,13 +74,10 @@ h6 {
     margin: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+
 }
 
-.card:hover {
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    transform: translateY(-5px);
-}
+
 
 .card-body {
     font-family: 'Open Sans', sans-serif;
@@ -256,8 +253,8 @@ table th, table td {
 </style>
 
 
-
-<div class="dashboard-container mt-4" style="background: linear-gradient(135deg, #ffffff, #f9f9f9); max-width: 1650px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+<div style="margin-left: -150px;">
+<div class="dashboard-container p-4 mx-auto" style="max-width: 1700px; margin-top: -10px">
 
 <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
 <a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
@@ -348,6 +345,8 @@ $statusCounts = array_count_values($statuses);
         </div>
     </div>
 </div>
+
+<div id="grpah-container">
 <div class="row">
         <!-- Display count of each course -->
 <!-- Display count of each course -->
@@ -359,12 +358,7 @@ $courseCounts = array_count_values($courses);
 <div class="card col-md-5" style="background-color: white; margin-left: 80px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); ">
     <div class="card-body">
         <h5 class="card-title"><i class="fas fa-chart-pie"></i> Course Counts</h5>
-        <p class="card-text">This graph shows the distribution of notices across different courses.</p>
-        <ul style="list-style: none; padding: 0; margin: 0;">
-    <?php foreach ($courseCounts as $course => $count): ?>
-        <li style="display: inline; margin-right: 15px;"><?php echo $course . ': ' . $count; ?></li>
-    <?php endforeach; ?>
-</ul>
+        
 
         <!-- Add a canvas element for the graph -->
         <canvas id="course-count-graph" style="width: 300px; height: 300px; background-color: white"></canvas>
@@ -379,16 +373,12 @@ $yearLevelCounts = array_count_values($yearLevels);
 <div class="card col-md-5" style=" background-color: white; padding: 20px; margin-left: 80px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
     <div class="card-body">
         <h5 class="card-title"><i class="fas fa-chart-pie"></i> Year Level Counts</h5>
-        <p class="card-text">This graph shows the distribution of notice across different year levels.</p>
-        <ul style="list-style: none; padding: 0; margin: 0;">
-    <?php foreach ($yearLevelCounts as $yearLevel => $count): ?>
-        <li style="display: inline; margin-right: 15px;"><?php echo $yearLevel . ': ' . $count; ?></li>
-    <?php endforeach; ?>
-</ul>
+       
 
         <!-- Add a canvas element for the graph -->
         <canvas id="year-level-count-graph" style=" background-color: white"></canvas>
     </div>
+</div>
 </div>
 </div>
 
@@ -401,7 +391,7 @@ $yearLevelCounts = array_count_values($yearLevels);
             <!-- Recent Violators Table -->
             
             <?php if (!empty($recentViolators)): ?>
-                <table class="table table-bordered table-hovered table-striped" id="table">
+                <table class="table table-bordered table-hovered table-striped" id="table" hidden>
         <thead style="background-color: black;">
             <tr>
                 <th class="text-light">Student ID</th>
@@ -436,6 +426,8 @@ $yearLevelCounts = array_count_values($yearLevels);
 <?php endif; ?>
 
     </div>
+</div>
+</div>
 
    
     <!-- Printable Section -->
@@ -456,7 +448,7 @@ const courseLabels = <?php echo json_encode(array_keys($courseCounts)); ?>;
 const courseCounts = <?php echo json_encode(array_values($courseCounts)); ?>;
 
 new Chart(ctx, {
-    type: 'pie',
+    type: 'doughnut',
     data: {
         labels: courseLabels,
         datasets: [{
@@ -464,7 +456,6 @@ new Chart(ctx, {
             data: courseCounts,
             borderWidth: 2,
             borderRadius: 10, // Larger rounded corners for a smoother look
-            barPercentage: 0.5, // Slimmer bars for a modern feel
             hoverBackgroundColor: [
                 'rgba(0, 255, 127, 0.9)', // Lighter hover effect for green
                 'rgba(255, 69, 58, 0.9)'  // Lighter hover effect for red
@@ -482,34 +473,6 @@ new Chart(ctx, {
     options: {
         responsive: true,
         maintainAspectRatio: false, // Adjust for responsiveness
-        scales: {
-            x: {
-                grid: {
-                    display: false, // Cleaner look without grid lines
-                },
-                ticks: {
-                    font: {
-                        size: 16,
-                        weight: 'bold',
-                    },
-                    color: '#444', // Darker text for modern aesthetics
-                }
-            },
-            y: {
-                beginAtZero: true,
-                grid: {
-                    color: 'rgba(0, 0, 0, 0.05)', // Very light grid lines for minimalism
-                    borderDash: [3, 3], // Shorter dashes for subtle effect
-                },
-                ticks: {
-                    font: {
-                        size: 16,
-                        weight: 'bold',
-                    },
-                    color: '#444'
-                }
-            }
-        },
         plugins: {
             tooltip: {
                 enabled: true,
@@ -533,10 +496,6 @@ new Chart(ctx, {
                 },
                 position: 'top', // Legend at the top for a modern look
             },
-        },
-        animation: {
-            duration: 2000, // Slower, smoother animation
-            easing: 'easeOutBounce', // Stylish bounce animation for the bars
         },
         layout: {
             padding: {
@@ -647,10 +606,7 @@ new Chart(ctx3, {
                 }
             }
         },
-        animation: {
-            duration: 2000,
-            easing: 'easeOutBounce'
-        },
+     
         layout: {
             padding: {
                 left: 30,
@@ -666,92 +622,96 @@ new Chart(ctx3, {
 
 <script>
     function printContent() {
-    // Hide no-print elements
-    document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
+        // Hide no-print elements
+        document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
 
-    // Get the table to print
-    var printContent = document.querySelector('.table.table-bordered.table-hovered.table-striped');
+        // Get the table to print
+        var printContent = document.querySelector('.table.table-bordered.table-hovered.table-striped');
 
-    // Get the cards to print
-    var cards = document.querySelectorAll('.card');
+        // Get the cards to print
+        var cards = document.querySelectorAll('.card');
 
-    // Get the charts to print
-    var charts = document.querySelectorAll('.card-body canvas');
+        // Get the charts to print
+        var charts = document.querySelectorAll('.card-body canvas');
 
-    // Create a new header for the print
-    var header = `
-        <div style="text-align: center; margin-bottom: 0;">
-            <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: left;">
-            <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: right;">
-            <h4 style="margin-bottom: -20px;">Republic of the Philippines</h4>
-            <h4 style="margin-bottom: -20px;"><b>NORTHERN BUKIDNON STATE COLLEGE</b></h4>
-            <h4 style="margin-bottom: -20px;"><i>(Formerly Northern Bukidnon Community College)</i> R.A.11284</h4>
-            <h4 style="margin-bottom: -5px;"><i>Creando futura, Transformationis vitae, Ductae a Deo</i></h4> 
-            <hr>
-        </div>
-    `;
-
-    // Create a new table with border
-    var table = printContent.outerHTML;
-    table = table.replace('<table', '<table border="1" cellpadding="5" cellspacing="0"','<th class="text-light">', '<th style="color: white;">');
-
-    // Convert the cards to HTML
-    var cardsHtml = '';
-    var cardCount = 0;
-    cards.forEach(card => {
-        if (cardCount < 3) {
-            cardsHtml += card.outerHTML;
-            cardCount++;
-        }
-    });
-
-    // Wrap the cards in a container to display them side by side
-    var cardsContainer = `
-        <div style="display: flex; justify-content: space-around;">
-            ${cardsHtml}
-        </div>
-    `;
-
-    // Convert the charts to images
-    var chartsHtml = '';
-    var chartsPromises = [];
-    charts.forEach(chart => {
-        chartsPromises.push(
-            html2canvas(chart).then(canvas => {
-                chartsHtml += `<img src="${canvas.toDataURL()}" style="width: 100%; height: auto;">`;
-            }).catch(err => {
-                console.error('Error capturing chart:', err); // Log any errors
-            })
-        );
-    });
-
-    // Wait for all chart images to be generated, then proceed to print
-    Promise.all(chartsPromises).then(() => {
-        // Wrap the charts in a container to display them side by side
-        var chartsContainer = `
-            <div style="display: flex; justify-content: space-around;">
-                ${chartsHtml}
+        // Create a new header for the print
+        var header = `
+            <div style="text-align: center; margin-bottom: 0;">
+                <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: left;">
+                <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: right;">
+                <h4 style="margin-bottom: -20px;">Republic of the Philippines</h4>
+                <h4 style="margin-bottom: -20px;"><b>NORTHERN BUKIDNON STATE COLLEGE</b></h4>
+                <h4 style="margin-bottom: -20px;"><i>(Formerly Northern Bukidnon Community College)</i> R.A.11284</h4>
+                <h4 style="margin-bottom: -5px;"><i>Creando futura, Transformationis vitae, Ductae a Deo</i></h4> 
+                <hr>
             </div>
         `;
 
-        var printHtml = header + cardsContainer + chartsContainer + table;
+        // Create a new table with border
+        var table = printContent.outerHTML;
+        table = table.replace('<table', '<table border="1" cellpadding="5" cellspacing="0"','<th class="text-light">', '<th style="color: white;">');
 
-        var windowUrl = 'about:blank';
-        var windowName = 'Print';
-        var windowFeatures = 'width=800,height=600,left=100,top=100';
-        var windowOpen = window.open(windowUrl, windowName, windowFeatures);
+        // Convert the cards to HTML
+        var cardsHtml = '';
+        var cardCount = 0;
+        cards.forEach(card => {
+            if (cardCount < 3) {
+                cardsHtml += card.outerHTML;
+                cardCount++;
+            }
+        });
 
-        if (windowOpen) { // Check if windowOpen is not null
-            windowOpen.document.write(printHtml);
-            windowOpen.document.close();
-            windowOpen.focus();
-            windowOpen.print();
-        } else {
-            console.error("Failed to open the print window. Please check your browser settings.");
-        }
-    });
-}
+        // Wrap the cards in a container to display them side by side
+        var cardsContainer = `
+            <div style="display: flex; justify-content: space-around;">
+                ${cardsHtml}
+            </div>
+        `;
 
+        // Convert the charts to images
+        var chartsHtml = '';
+        var chartsPromises = [];
+        charts.forEach(chart => {
+            chartsPromises.push(
+                html2canvas(chart).then(canvas => {
+                    chartsHtml += `<img src="${canvas.toDataURL()}" style="width: 100%; height: auto;">`;
+                }).catch(err => {
+                    console.error('Error capturing chart:', err); // Log any errors
+                })
+            );
+        });
+
+        // Wait for all chart images to be generated, then proceed to print
+        Promise.all(chartsPromises).then(() => {
+            // Wrap the charts in a container to display them side by side
+            var chartsContainer = `
+                <div style="display: flex; justify-content: space-around;">
+                    ${chartsHtml}
+                </div>
+            `;
+
+            var printHtml = header + cardsContainer + chartsContainer + table;
+
+            var windowUrl = 'about:blank';
+            var windowName = 'Print';
+            var windowFeatures = 'width=800,height=600,left=100,top=100';
+            var windowOpen = window.open(windowUrl, windowName, windowFeatures);
+
+            if (windowOpen) { // Check if windowOpen is not null
+                windowOpen.document.write(printHtml);
+                windowOpen.document.close();
+                windowOpen.focus();
+
+                // Wait for the new window to load before printing
+                windowOpen.onload = function() {
+                    windowOpen.print();
+                    windowOpen.close(); // Close the print window after printing
+                };
+            } else {
+                console.error("Failed to open the print window. Please check your browser settings.");
+            }
+        });
+    }
 </script>
 
 <?php $this->view('includes/footer'); ?>

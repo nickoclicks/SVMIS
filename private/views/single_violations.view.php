@@ -48,6 +48,7 @@
 }
 
 </style>
+<div style="margin-left: -150px;">
 <div class="dashboard-container-fluid p-4 shadow mx-auto" style="max-width: 1700px;">
 
     <?php if ($row): ?>

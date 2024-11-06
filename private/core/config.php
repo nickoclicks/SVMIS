@@ -1,7 +1,7 @@
 <?php
 
-define('ROOT', 'http://localhost/PerpektoDose/public');
-define('ASSETS', 'http://localhost/PerpektoDose/public/assets');
+define('ROOT', 'http://localhost/NBSC_Prefect/public');
+define('ASSETS', 'http://localhost/NBSC_Prefect/public/assets');
 
 define ('DBNAME', 'Prefect_db');
 define ('DBHOST', 'localhost');

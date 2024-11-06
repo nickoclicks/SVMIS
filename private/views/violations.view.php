@@ -51,13 +51,13 @@
 }
 
 </style>
-
+<div style="margin-left: -150px;">
 <div class="dashboard-container p-4 mx-auto" style="max-width: 1700px;">
 
 
 
     <div class="row mb-4 sticky-top">
-    <nav class="navbar bg-body-tertiary shadow" style="background-color: gray; border-radius: 10px">
+    <nav class="navbar shadow" style="background-color: white; border-radius: 10px">
     <div class="col-md-2">
     <div class="input-group">
     <span class="input-group-text" style="margin-left: 10px"><i class="fa fa-search"></i></span>
@@ -123,12 +123,16 @@
         <?php if (Auth::canPerformAction()): ?>
     <td>
         <?php if ($user_id): ?>
-            <a href="<?= ROOT ?>/violations/assign/<?= $row->id ?>?user_id=<?= $user_id ?>" 
-            class="btn btn-outline-success btn-sm"  
-               onclick="return confirmAddViolation(event)">
-                <i class="fa fa-plus fa-lg text-success"></i>
-                
-            </a>
+            <?php if (isset($row->id) && isset($user_id)): ?>
+    <a href="<?= ROOT ?>/violations/assign/<?= $row->id ?>?user_id=<?= $user_id ?>" 
+       class="btn btn-outline-success btn-sm"  
+       onclick="return confirmAddViolation(event)">
+        <i class="fa fa-plus fa-lg text-success"></i>
+    </a>
+<?php else: ?>
+    <!-- Optionally, display a message or hide the button -->
+    <span class="text-danger">Invalid user or violation ID.</span>
+<?php endif; ?>
         <?php else: ?>
             <a href="<?= ROOT ?>/violations/edit/<?= $row->id ?>" class="btn btn-outline-success btn-sm">
                 <i class="fa fa-edit fa-lg text-success"></i>
@@ -161,7 +165,7 @@
     </div>
 </div>
 </div>
-
+</div>
 
 <script>
     function confirmAddViolation(event) {

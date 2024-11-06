@@ -138,75 +138,7 @@ class Violations extends Controller
         $this->redirect("violations");
     }
 }
-/*public function updateStatus()
-{
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $postData = json_decode(file_get_contents('php://input'), true);
-        $violationId = $postData['id'] ?? null;
-        $newStatus = $postData['status'] ?? null;
 
-        error_log('Received POST data: ' . print_r($postData, true)); // Log the received data
-
-        if (empty($violationId) || empty($newStatus)) {
-            echo json_encode(['success' => false, 'message' => 'Invalid input.']);
-            return;
-        }
-
-        $model = $this->loadModel('Violators');
-        $result = $model->updateViolationStatus($violationId, $newStatus);
-
-        if ($result) {
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Database update failed.']);
-        }
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
-    }
-}
-
-
-  /*  public function getViolationDetails()
-    {
-        if (isset($_GET['id'])) {
-            $id = $_GET['id'];
-            $model = $this->loadModel('Violators');
-            $violation = $model->getViolationById($id);
-
-            if ($violation) {
-                echo json_encode($violation);
-            } else {
-                echo json_encode(null);
-            }
-        } else {
-            echo json_encode(null);
-        }
-    }
-
-   /* public function details($violation_id)
-{
-    // Load the violation model
-    $violationModel = new Violation();
-
-    // Fetch the violation details by ID
-    $violation = $violationModel->getViolationById($violation_id);
-
-    // Check if the request method is POST to update the status
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['status'], $_POST['violation_id'])) {
-        $status = $_POST['status'];
-        $violation_id = $_POST['violation_id'];
-
-        // Update the status in the database
-        $violationModel->updateStatus($violation_id, $status);
-
-        // Redirect to the same page to reflect the updated status
-        header("Location: " . ROOT . "/violations/details/$violation_id");
-        exit;
-    }
-
-    // Pass the violation details to the view
-    $this->view('private/personal_violation', ['violation' => $violation]);
-*/
     }
 
 

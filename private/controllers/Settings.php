@@ -8,12 +8,19 @@ class Settings extends Controller
         $settings = isset($_SESSION['settings']) ? $_SESSION['settings'] : [];
 
         $settings = new Setting();
+        $forms = new Form();
 
         $activityLogs = $settings->getActivityLogs();
+        $appointments = $forms->getAppointmentsThisWeekForNotification();
+        $appointmentsforpast = $forms->getAppointmentsThisWeekForNotificationforPast();
+        $upcomingappointments = $forms->getUpcomingAppointmentsThisWeekForNotification();
 
         // Load the settings view
         $this->view('settings', ['settings' => $settings,
-                                    'activityLogs' => $activityLogs]);
+                                    'activityLogs' => $activityLogs,
+                                'appointments' => $appointments,
+                            'appointmentsforpast' => $appointmentsforpast,
+                        'upcomingappointments' => $upcomingappointments]);
     }    
 
     public function archiveViolations()

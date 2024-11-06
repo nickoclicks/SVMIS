@@ -42,18 +42,49 @@
 .btn-secondary:hover {
     background-color: #5a6268; /* Darker shade for secondary button on hover */
 }
+.print-button {
+    position: absolute;
+    top: 60px;
+    right: 45px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10%;
+    transition: background-color 0.3s;
+}
+
+.print-button:hover {
+    background-color: #3e8e41;
+}
+
+.print-button i {
+    margin-right: 5px;
+}
+h4 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
 
 </style>
 </head>
 <body>
 
-<div class="dashboard-container mt-4" style="background: linear-gradient(135deg, #ffffff, #f9f9f9); max-width: 1650px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+<div style="margin-left: -150px;">
+<div class="dashboard-container p-4 mx-auto" style="max-width: 1700px; margin-top: -10px">
 
 <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
 <a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
 <a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Certificate Report</a>
 <a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Comparative Analysis</a>
 
+<h1>Comparative Analysis</h1>
+
+<button class="print-button" style="background-color: white;" onclick="printGraphs()">
+    <i class="fas fa-print text-dark"><h4>Print</h4></i>
+</button>
 
 <?php
 // Assuming this code is at the top of your page where you handle form submissions
@@ -110,6 +141,7 @@ $filters1 = [
    
 </div>
 
+<div id="graphs-container">
         <div class="row">         <!-- Display count of each status -->
 <?php
 $yearLevel = array_column($recentViolators, 'year_level');
@@ -162,7 +194,7 @@ $YearLevelPresentCounts = array_count_values($yearLevelpresent);
     </div>
     </div>
 </div>
-<!-- Add a canvas for the chart -->
+</div>
 
 <div class="row">
     <div class="col-md-6">
@@ -242,6 +274,7 @@ $YearLevelPresentCounts = array_count_values($yearLevelpresent);
         <?php endif; ?>
     </div>
     </div>
+</div>
 </div>
 </div>
 
@@ -708,6 +741,69 @@ const chart3 = new Chart(ctx3, {
 
     </script>
 
+<script>
+    function printGraphs() {
+        // Hide no-print elements
+        document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
+
+        // Get the charts to print
+        var charts = document.querySelectorAll('#graphs-container canvas');
+
+        // Create a new header for the print
+        var header = `
+            <div style="text-align: center; margin-bottom: 0;">
+                <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: left;">
+                <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: right;">
+                <h4 style="margin-bottom: -20px;">Republic of the Philippines</h4>
+                <h4 style="margin-bottom: -20px;"><b>NORTHERN BUKIDNON STATE COLLEGE</b></h4>
+                <h4 style="margin-bottom: -20px;"><i>(Formerly Northern Bukidnon Community College)</i> R.A.11284</h4>
+                <h4 style="margin-bottom: -5px;"><i>Creando futura, Transformationis vitae, Ductae a Deo</i></h4>
+                <hr>
+            </div>
+        `;
+
+        // Prepare to convert the charts to images
+        var chartsHtml = '';
+        var chartsPromises = [];
+
+        charts.forEach(chart => {
+            chartsPromises.push(new Promise((resolve) => {
+                // Use toDataURL to get the image of the chart
+                var chartImage = chart.toDataURL();
+                chartsHtml += `<img src="${chartImage}" style="width: 100%; height: auto; margin: 10px;">`;
+                resolve();
+            }));
+        });
+
+        // Wait for all charts to be converted to images
+        Promise.all(chartsPromises).then(() => {
+            // Wrap the charts in a container
+            var chartsContainer = `
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    ${chartsHtml}
+                </div>
+            `;
+
+            var printHtml = header + chartsContainer;
+
+            // Create a new window for printing
+            var printWindow = window.open('', 'Print', 'width=800,height=600,left=100,top=100');
+            if (printWindow) {
+                printWindow.document.write(printHtml);
+                printWindow.document.close();
+                printWindow.focus();
+
+                // Wait for the new window to load before printing
+                printWindow.onload = function() {
+                    printWindow.print();
+                    printWindow.close(); // Close the print window after printing
+                };
+            } else {
+                console.error("Failed to open the print window. Please check your browser settings.");
+            }
+        });
+    }
+</script>
 </div>
 </div>
 

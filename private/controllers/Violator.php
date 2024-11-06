@@ -88,16 +88,16 @@ class Violator extends Controller
         $showViolationSlip = $minorViolationCount == 1;
         $showWarningSlip = $minorViolationCount == 2;
         $showWrittenApology = $minorViolationCount == 2 || $minorViolationCount == 3 || $majorViolationCount >= 3;
-        $showConference = $minorViolationCount == 2 && $minorViolationCount <= 4 || $majorViolationCount >= 1;
-        $showCounseling = $minorViolationCount == 4 || $majorViolationCount >= 1;
+        $showConference = $minorViolationCount == 2 && $minorViolationCount <= 4 || $minorViolationCount >= 5 || $majorViolationCount >= 1;
+        $showCounseling = $minorViolationCount >= 4 || $majorViolationCount >= 1;
         $showCommunityService = $minorViolationCount == 2 && $minorViolationCount <= 4 || $majorViolationCount >= 1;
-        $showViolationReport = $minorViolationCount == 3 || $majorViolationCount >= 1;
-        $showRefer = $moderateViolationCount == 1;
+        $showViolationReport = $minorViolationCount == 3 || $minorViolationCount >= 5 || $majorViolationCount >= 1;
+        $showRefer = $minorViolationCount > 1 || $majorViolationCount >= 1;
         $showCharacter = $minorViolationCount == 3 || $minorViolationCount == 4;
-        $showFinalchar = $majorViolationCount >= 1 || $minorViolationCount == 3;
+        $showFinalchar = $majorViolationCount >= 1 || $minorViolationCount >= 3;
         $showSuspension = $moderateViolationCount == 9 || $minorViolationCount == 9;
         $showNonre = $minorViolationCount == 9;
-        $showExclusion = $majorViolationCount == 2 || $moderateViolationCount == 4;
+        $showExclusion = $majorViolationCount == 2;
         $showExpulsion = $majorViolationCount == 3;
         $showReportPolice = $majorViolationCount >= 3;
 

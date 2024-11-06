@@ -5,47 +5,32 @@ class Login extends Controller
     function index()
     {
         $errors = array();
-
-        if (count($_POST) > 0) {
+        
+        // Check if the form is submitted
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = new User();
+            $row = $user->where('email', $_POST['email']);
+            
+            // Verify user credentials
+            if ($row && password_verify($_POST['password'], $row[0]->password)) {
+                Auth::authenticate($row[0]);
 
-            if ($row = $user->where('email', $_POST['email'])) {
-
-                $row = $row[0];
-                if (password_verify($_POST['password'], $row->password)) {
-                    Auth::authenticate($row); 
-
-                    if (Auth::isAdmin() || Auth::isSuperAdmin()) {
-                        log_activity('Admin Login ' . $row->firstname . ' ' . $row->lastname);
-                        $this->redirect('home'); 
-                    } elseif (Auth::isStudent()) {
-                        log_activity('Student Login ' . $row->firstname . ' ' . $row->lastname);
-                        $this->redirect('studentdashboard');
-                    } else {
-                        log_activity('User  Login ' . $row->firstname . ' ' . $row->lastname);
-                        $this->redirect('home');
-                    }
-                  
-                    if (Auth::isAdmin() || Auth::isSuperAdmin()) {
-                        $this->redirect('home'); 
-                    } elseif (Auth::isStudent()) {
-                        $this->redirect('studentdashboard');
-                    } else {
-                        
-                        $this->redirect('home');
-                    }
+                // Redirect based on user role
+                if (Auth::isAdmin() || Auth::isSuperAdmin()) {
+                    return $this->redirect('home'); 
+                } elseif (Auth::isStudent()) {
+                    return $this->redirect('studentdashboard');
+                } else {
+                    return $this->redirect('home');
                 }
             }
-
+            // If login fails, set error message
             $errors['email'] = "Wrong email or password";
         }
-
+        
+        // Render the login view with errors
         $this->view('login', [
             'errors' => $errors
         ]);
-
-        
     }
-
-    
 }

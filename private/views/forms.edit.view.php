@@ -5,7 +5,8 @@
 
 </style>
 
-<div class="dashboard-container shadow mx-auto" style="max-width: 1600px;">
+<div style="margin-left: -150px;">
+<div class="dashboard-container shadow mx-auto" style="max-width: 1700px;">
     <?php if ($row): ?>
         <div class="card">
             <div class="card-body">
@@ -32,7 +33,7 @@
                         <div class="col-md-6">
                             <div class="mb-4">
                                 <label for="appt_date" class="form-label">Date of Hearing</label>
-                                <input id="appt_date" class="form-control" type="text" value="<?= esc(get_date(get_var('appt_date', $row->appt_date))) ?>" name="appt_date" readonly>
+                                <input id="appt_date" class="form-control" type="text" value="<?= esc(get_var('appt_date', $row->appt_date)) ?>" name="appt_date" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -199,12 +200,7 @@ function setPartyType(selectedType) {
                                 <input id="remarks" class="form-control" type="text" value="<?= esc(get_var('remarks', $row->remarks)) ?>" name="remarks" placeholder="Remarks">
                             </div>
                         
-                        <div class="col-md-6">
-                            <div class="mb-4">
-                        <label for="date" class="form-label">Date</label>
-                        <input id="date" class="form-control" type="date" value="<?= esc(get_var('date', $row->date)) ?>" name="date">
-                    </div>
-                        </div> 
+                        
                         </div>
                     </div>
 

@@ -10,8 +10,7 @@ require ("PHPMailer.php");
 require ("SMTP.php");
 require ("Exception.php");
 
-use PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+
 
 spl_autoload_register(function($class_name)
 {

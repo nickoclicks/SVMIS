@@ -1,6 +1,5 @@
 {
     "require": {
-        "phpmailer/phpmailer": "*",
-        "sendinblue/sendinblue-api-bundle": "*"
+        "twilio/sdk": "*"
     }
 }

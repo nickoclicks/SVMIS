@@ -275,8 +275,8 @@ canvas {
 }
 </style>
 
-
-<div class="dashboard-container mt-4">
+<div style="margin-left: -150px;">
+<div class="dashboard-container p-4 mx-auto" style="max-width: 1700px; margin-top: -10px">
 
 <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
 <a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
@@ -393,7 +393,8 @@ $statusCounts = array_count_values($statuses);
 <?php else: ?>
     <p>No records found.</p>
 <?php endif; ?>
-
+</div>
+</div>
 <script>
     const ctx = document.getElementById('chart').getContext('2d');
 const chart = new Chart(ctx, {
@@ -455,15 +456,13 @@ const chart = new Chart(ctx, {
         },
         plugins: {
             tooltip: {
-                enabled: true,
-                backgroundColor: 'rgba(34, 34, 34, 0.8)', // Sleek dark tooltip background
-                titleFont: { size: 16, weight: 'bold' },
-                bodyFont: { size: 14 },
-                bodyColor: '#fff',
-                borderColor: '#444',
-                borderWidth: 1,
-                caretPadding: 10, // Padding for a polished look
-                displayColors: false // Remove box color indicators for a cleaner tooltip
+                callbacks: {
+                    label: function(tooltipItem) {
+                        var totalValue = tooltipItem.dataset.data.reduce((acc, val) => acc + val, 0); // Calculate total value
+                        var percentage = (tooltipItem.raw / totalValue * 100).toFixed(2); // Calculate percentage
+                        return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`; // Display count and percentage
+                    }
+                }
             },
             legend: {
                 labels: {
@@ -476,10 +475,6 @@ const chart = new Chart(ctx, {
                 },
                 position: 'top', // Legend at the top for a modern look
             },
-        },
-        animation: {
-            duration: 2000, // Slower, smoother animation
-            easing: 'easeOutBounce', // Stylish bounce animation for the bars
         },
         layout: {
             padding: {
@@ -575,15 +570,13 @@ const dateChart = new Chart(dateCtx, {
         },
         plugins: {
             tooltip: {
-                enabled: true,
-                backgroundColor: 'rgba(34, 34, 34, 0.8)', // Dark tooltip background
-                titleFont: { size: 16, weight: 'bold' }, // Enhanced tooltip font
-                bodyFont: { size: 14 },
-                bodyColor: '#fff', // White tooltip text for better contrast
-                borderColor: '#444',
-                borderWidth: 1,
-                caretPadding: 10,
-                displayColors: false
+                callbacks: {
+                    label: function(tooltipItem) {
+                        var totalValue = tooltipItem.dataset.data.reduce((acc, val) => acc + val, 0); // Calculate total value
+                        var percentage = (tooltipItem.raw / totalValue * 100).toFixed(2); // Calculate percentage
+                        return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`; // Display count and percentage
+                    }
+                }
             },
             legend: {
                 labels: {
@@ -597,10 +590,7 @@ const dateChart = new Chart(dateCtx, {
                 position: 'top'
             }
         },
-        animation: {
-            duration: 2000,
-            easing: 'easeOutBounce' // Bounce effect on load
-        },
+     
         layout: {
             padding: {
                 left: 30,
@@ -627,10 +617,127 @@ const dateChart = new Chart(dateCtx, {
 
 <script>
  const yearLevelCtx = document.getElementById('year-level-chart').getContext('2d');
+const yrLabels = <?php echo json_encode($yrLabels); ?>;
+const yrCounts = <?php echo json_encode($yrCounts); ?>;
+
+const yearLevelChart = new Chart(yearLevelCtx, {
+    type: 'bar',
+    data: {
+        labels: yrLabels,
+        datasets: [{
+            label: 'Violations per Course',
+            data: yrCounts,
+            backgroundColor: [
+                '#3498db', // blue
+                '#f1c40f', // yellow
+                '#2ecc71', // green
+                '#e74c3c', // red
+                '#9b59b6', // purple
+                '#1abc9c', // teal
+                'pink'
+            ],
+            borderColor: [
+                'rgba(0, 128, 0, 1)',
+                'rgba(255, 0, 0, 1)'
+            ],
+            borderWidth: 2,
+            borderRadius: 10, // Rounded corners for sleek bars
+            barPercentage: 0.5, // Slimmer bars
+            hoverBackgroundColor: [
+                'rgba(0, 255, 127, 0.9)', // Lighter hover effect for green
+                'rgba(255, 69, 58, 0.9)'  // Lighter hover effect for red
+            ],
+            hoverBorderColor: [
+                'rgba(0, 128, 0, 1)',
+                'rgba(255, 0, 0, 1)'
+            ],
+            shadowOffsetX: 3,
+            shadowOffsetY: 3,
+            shadowBlur: 8,
+            shadowColor: 'rgba(0, 0, 0, 0.2)' // Subtle shadow for 3D effect
+        }]
+    },
+    options: {
+        plugins: {
+            datalabels: {
+                display: true,
+                formatter: (value, context) => {
+                    const percentage = (value / context.dataset.data.reduce((a, b) => a + b, 0)) * 100;
+                    return `${percentage.toFixed(2)}%`;
+                }
+            }
+        },
+        responsive: true,
+        maintainAspectRatio: false, // For better responsiveness
+        scales: {
+            x: {
+                grid: {
+                    display: false, // Cleaner look without grid lines
+                },
+                ticks: {
+                    font: {
+                        size: 16,
+                        weight: 'bold',
+                    },
+                    color: '#444', // Darker labels for modern look
+                }
+            },
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.05)', // Light grid lines for minimalism
+                    borderDash: [3, 3], // Subtle dashed grid lines
+                },
+                ticks: {
+                    font: {
+                        size: 16,
+                        weight: 'bold',
+                    },
+                    color: '#444' // Darker ticks for better readability
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        var totalValue = tooltipItem.dataset.data.reduce((acc, val) => acc + val, 0); // Calculate total value
+                        var percentage = (tooltipItem.raw / totalValue * 100).toFixed(2); // Calculate percentage
+                        return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`; // Display count and percentage
+                    }
+                }
+            },
+            legend: {
+                labels: {
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    color: '#444',
+                    padding: 20 // Adds spacing around the legend
+                },
+                position: 'top', // Legend at the top for modern design
+            },
+        },
+      
+        layout: {
+            padding: {
+                left: 30,
+                right: 30,
+                top: 30,
+                bottom: 30 // Spacious padding for a cleaner look
+            }
+        }
+    }
+});
+
+</script>
+<script>
+ const yearLevelCtx2 = document.getElementById('yr-chart').getContext('2d');
 const courseLabels = <?php echo json_encode($courseLabels); ?>;
 const courseCounts = <?php echo json_encode($courseCounts); ?>;
 
-const yearLevelChart = new Chart(yearLevelCtx, {
+const yrLevelChart = new Chart(yearLevelCtx2, {
     type: 'bar',
     data: {
         labels: courseLabels,
@@ -709,15 +816,13 @@ const yearLevelChart = new Chart(yearLevelCtx, {
         },
         plugins: {
             tooltip: {
-                enabled: true,
-                backgroundColor: 'rgba(34, 34, 34, 0.8)', // Sleek dark tooltip background
-                titleFont: { size: 16, weight: 'bold' },
-                bodyFont: { size: 14 },
-                bodyColor: '#fff',
-                borderColor: '#444',
-                borderWidth: 1,
-                caretPadding: 10, // Padding for a polished look
-                displayColors: false // Remove color boxes for a clean tooltip
+                callbacks: {
+                    label: function(tooltipItem) {
+                        var totalValue = tooltipItem.dataset.data.reduce((acc, val) => acc + val, 0); // Calculate total value
+                        var percentage = (tooltipItem.raw / totalValue * 100).toFixed(2); // Calculate percentage
+                        return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`; // Display count and percentage
+                    }
+                }
             },
             legend: {
                 labels: {
@@ -731,134 +836,7 @@ const yearLevelChart = new Chart(yearLevelCtx, {
                 position: 'top', // Legend at the top for modern design
             },
         },
-        animation: {
-            duration: 2000, // Smooth and slow animation
-            easing: 'easeOutBounce', // Adds a bounce effect to the bars
-        },
-        layout: {
-            padding: {
-                left: 30,
-                right: 30,
-                top: 30,
-                bottom: 30 // Spacious padding for a cleaner look
-            }
-        }
-    }
-});
-
-</script>
-
-
-<script>
- const yearLevelCtx2 = document.getElementById('yr-chart').getContext('2d');
-const yrLabels = <?php echo json_encode($yrLabels); ?>;
-const yrCounts = <?php echo json_encode($yrCounts); ?>;
-
-const yrLevelChart = new Chart(yearLevelCtx2, {
-    type: 'bar',
-    data: {
-        labels: yrLabels,
-        datasets: [{
-            label: 'Violations per Course',
-            data: courseCounts,
-            backgroundColor: [
-                '#3498db', // blue
-                '#f1c40f', // yellow
-                '#2ecc71', // green
-                '#e74c3c', // red
-                '#9b59b6', // purple
-                '#1abc9c', // teal
-                'pink'
-            ],
-            borderColor: [
-                'rgba(0, 128, 0, 1)',
-                'rgba(255, 0, 0, 1)'
-            ],
-            borderWidth: 2,
-            borderRadius: 10, // Rounded corners for sleek bars
-            barPercentage: 0.5, // Slimmer bars
-            hoverBackgroundColor: [
-                'rgba(0, 255, 127, 0.9)', // Lighter hover effect for green
-                'rgba(255, 69, 58, 0.9)'  // Lighter hover effect for red
-            ],
-            hoverBorderColor: [
-                'rgba(0, 128, 0, 1)',
-                'rgba(255, 0, 0, 1)'
-            ],
-            shadowOffsetX: 3,
-            shadowOffsetY: 3,
-            shadowBlur: 8,
-            shadowColor: 'rgba(0, 0, 0, 0.2)' // Subtle shadow for 3D effect
-        }]
-    },
-    options: {
-        plugins: {
-            datalabels: {
-                display: true,
-                formatter: (value, context) => {
-                    const percentage = (value / context.dataset.data.reduce((a, b) => a + b, 0)) * 100;
-                    return `${percentage.toFixed(2)}%`;
-                }
-            }
-        },
-        responsive: true,
-        maintainAspectRatio: false, // For better responsiveness
-        scales: {
-            x: {
-                grid: {
-                    display: false, // Cleaner look without grid lines
-                },
-                ticks: {
-                    font: {
-                        size: 16,
-                        weight: 'bold',
-                    },
-                    color: '#444', // Darker labels for modern look
-                }
-            },
-            y: {
-                beginAtZero: true,
-                grid: {
-                    color: 'rgba(0, 0, 0, 0.05)', // Light grid lines for minimalism
-                    borderDash: [3, 3], // Subtle dashed grid lines
-                },
-                ticks: {
-                    font: {
-                        size: 16,
-                        weight: 'bold',
-                    },
-                    color: '#444' // Darker ticks for better readability
-                }
-            }
-        },
-        plugins: {
-            tooltip: {
-                enabled: true,
-                backgroundColor: 'rgba(34, 34, 34, 0.8)', // Sleek dark tooltip background
-                titleFont: { size: 16, weight: 'bold' },
-                bodyFont: { size: 14 },
-                bodyColor: '#fff',
-                borderColor: '#444',
-                borderWidth: 1,
-                caretPadding: 10, // Padding for a polished look
-                displayColors: false // Remove color boxes for a clean tooltip
-            },
-            legend: {
-                labels: {
-                    font: {
-                        size: 16,
-                        weight: 'bold'
-                    },
-                    color: '#444',
-                    padding: 20 // Adds spacing around the legend
-                },
-                position: 'top', // Legend at the top for modern design
-            },
-        },
-        animation: {
-            duration: 2000, // Smooth and slow animation
-            easing: 'easeOutBounce', // Adds a bounce effect to the bars
-        },
+     
         layout: {
             padding: {
                 left: 30,

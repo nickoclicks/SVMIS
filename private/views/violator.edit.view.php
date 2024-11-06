@@ -5,10 +5,19 @@
     #community-service-details {
     display: none;
 }
+textarea {
+    width: 100%; /* Make the textarea take the full width of the container */
+    margin-top: 5px; /* Add some space above the textarea */
+    margin-bottom: 15px; /* Add some space below the textarea */
+    padding: 5px; /* Add padding inside the textarea */
+    font-size: 14px; /* Set a font size */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 4px; /* Rounded corners */
+}
 </style>
 
-
-<div class="row dashboard-container mx-auto">
+<div style="margin-left: -150px;">
+<div class="row dashboard-container mx-auto" style="width: 1700px;">
     <div class="col-md-8">
 
 <div class="mx-auto">
@@ -52,15 +61,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="date" class="form-label">Date and Time</label>
-                        <input id="date" class="form-control rounded-pill px-3 py-2" type="datetime-local" value="<?= htmlspecialchars(get_var('date', $row->date)) ?>" name="date" placeholder="Date" readonly>
-                    </div>
-                        </div>
-                    <div class="col-md-6">
-                    
-                    </div>
+                       
                     </div>
                     
                     <?php 
@@ -172,12 +173,6 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
 <!-- Add a section for the print content -->
 
 
-<!-- Add the Print Violation Slip button -->
-<div id="printViolationSlipButton" style="display: none;">
-    <button type="button" class="btn btn-secondary" onclick="printViolationSlip()">Print Violation Slip</button>
-    <?= log_activity("Printed violation slip for " . $userName->firstname ) ?>
-</div>
-
 <div id="printContent" style="display: none;">
     <div style="text-align: center; margin-bottom: 0;">
         <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: left;">
@@ -192,13 +187,44 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
     <div class="row d-flex justify-content-between">
     <div class="col-md-6">
         <h5>Student ID No: <?= htmlspecialchars(get_var('std_id', $userName->std_id)) ?></h5>
-        <h5>Date: <?= htmlspecialchars(get_var('date', $row->date)) ?></h5>
+        <h5>Date of Violation: <?= htmlspecialchars(get_var('date', $row->date)) ?></h5>
     </div>
     <div class="col-md-6">
-    <h5>Date: <?= htmlspecialchars(get_var('date', $row->date)) ?></h5>
+    <h5>Year/Course: <?= htmlspecialchars(get_var('year_level', $userName->year_level . ' ' . $userName->course)) ?></h5>
+    <h5>Student Name: <?= htmlspecialchars(get_var('user_name', $userName->firstname . ' ' . $userName->lastname)) ?></h5>
+    <h5>Violation Name: <?= htmlspecialchars(get_var('violation', is_object($violationName) ? $violationName->violation : $violationName)) ?></h5>
+    
+
+    <div>
+    <hr style="border: 1px solid #000; margin: 0; width: 180px; margin-top: 150px"/> <!-- Line above the heading -->
+    <h4>Student's Signature</h4>
+   <!-- Line for signature -->
+</div>
+
+<div>
+<hr style="border: 1px solid #000; margin: 0; width: 180px; margin-top: 60px"/> 
+    <h4>Prefect of Students</h4>
+    
+</div>
+    
     </div>
 </div>
 
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $log_name = $_post['log_name'];
+
+    log_activity($log_name);
+}
+?>
+
+</div>
+<div id="printViolationSlipButton" style="display: none;">
+<form action="" method="POST">
+<input type="hidden" name="log_name" value="Printed Good Moral Certificate">
+    <button type="button" class="btn btn-secondary" onclick="printViolationSlip()">Print Violation Slip</button>
+    <?= log_activity("Printed violation slip for " . $userName->firstname ) ?>
+</form>
 </div>
 
 <script>
@@ -251,58 +277,6 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
         }
     });
 
-    function printViolationSlip() {
-    // Create a new window for printing
-    const printWindow = window.open('', '', 'height=500,width=800');
-    printWindow.document.write('<html><head><title>Violation Slip</title>');
-    printWindow.document.write('<style>body { font-family: Arial, sans-serif; }</style>');
-    printWindow.document.write('<style>.grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }</style>');
-    printWindow.document.write('<style>.grid-item { background-color: #eee; padding: 20px; }</style>');
-    printWindow.document.write('</head><body>');
-    
-    // Add the header
-    printWindow.document.write(`
-        <div style="text-align: center; margin-bottom: 0;">
-            <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: left;">
-            <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: right;">
-            <h4 style="margin-bottom: -20px;">Republic of the Philippines</h4>
-            <h4 style="margin-bottom: -20px;"><b>NORTHERN BUKIDNON STATE COLLEGE</b></h4>
-            <h4 style="margin-bottom: -20px;"><i>(Formerly Northern Bukidnon Community College)</i> R.A.11284</h4>
-            <h4 style="margin-bottom: -5px;"><i>Creando futura, Transformationis vitae, Ductae a Deo</i></h4> 
-            <hr>
-        </div>
-    `);
-    
-    // Add the content
-    printWindow.document.write(`
-        <center><b><h4>VIOLATION SLIP</h4></b></center>
-        
-        <div class="grid-container">
-            <div class="grid-item">Student ID: <?= htmlspecialchars(get_var('std_id', $userName->std_id)) ?></div>
-            <div class="grid-item">Date: <?= htmlspecialchars(get_var('date', $row->date)) ?></div>
-        </div>
-        <div class="grid-container">
-        <div class="grid-item">Student Name: <?= htmlspecialchars($userName->firstname . ' ' . $userName->lastname) ?></div>
-            <div class="grid-item">Violation: <?= htmlspecialchars(get_var('violation', $violationName)) ?></div>
-            
-        </div>
-        <div class="grid-container">
-            <div class="grid-item" colspan="2">Description: <?= htmlspecialchars(get_var('description', $description)) ?></div>
-             <div class="grid-item">Date of Violation: <?= htmlspecialchars(get_var('date', $row->date)) ?></div>
-        </div>
-
-        
-    <div style="text-align: left; margin-top: 30px;">Student's Signature: ______________________</div>
-    
-
-    <div style="text-align: left; margin-top: 50px;">Prefect of Students: ______________________</div>
-
-    `);
-    
-    printWindow.document.write('</body></html>');
-    printWindow.print();
-    printWindow.close();
-    }
 
     document.addEventListener('DOMContentLoaded', function () {
     const communityServiceSelect = document.getElementById('otherSanctions');

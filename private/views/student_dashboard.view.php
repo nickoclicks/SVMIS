@@ -1,6 +1,7 @@
 <?php $this->view('includes/header'); ?>
 <?php $this->view('includes/navigation'); ?>
 
+<div style="margin-left: -150px">
 <div class="dashboard-container-fluid p-4 shadow-lg mx-auto bg-light" style="max-width: 1700px; border-radius: 10px;">
 
     <div class="row text-center">

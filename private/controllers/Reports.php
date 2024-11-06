@@ -91,6 +91,10 @@ GROUP BY users.course, violators.date
 ORDER BY count DESC
 ");
 
+if ($violatorsData === false) {
+  $violatorsData = [];
+}
+
 $courseData = $violator->query("
 SELECT users.course, COUNT(violators.id) as count
 FROM violators 
@@ -98,6 +102,10 @@ JOIN users ON violators.user_id = users.user_id
 $whereClause
 GROUP BY users.course
 ", $queryParams);
+
+if ($courseData === false) {
+  $courseData = [];
+}
 
 $dateData = $violator->query("
 SELECT violators.date, COUNT(violators.id) as count
@@ -108,6 +116,9 @@ GROUP BY violators.date
 ORDER BY violators.date DESC
 ", $queryParams);
 
+if ($dateData === false) {
+  $dateData = [];
+}
 
 $yearData = $violator->query("
 SELECT enrollment.year_level, COUNT(violators.id) as count
@@ -118,6 +129,9 @@ $whereClause
 GROUP BY enrollment.year_level
 ", $queryParams);
 
+if ($yearData === false) {
+  $yearData = [];
+}
 
 $yrLabels = array_column($yearData, 'year_level');
 $yrCounts = array_column($yearData, 'count');

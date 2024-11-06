@@ -208,7 +208,51 @@ public function countUnresolvedNoticesByUserId($userId)
     $result = $this->query($query, ['user_id' => $userId]);
     return $result ? $result[0]->count : 0;
 }
-    //gikan sa home
 
-    
+public function getAppointmentsThisWeekForNotification()
+{
+    $today = new DateTime();
+$today->setTime(0, 0, 0); // reset time to 00:00:00
+$endOfDay = clone $today;
+$endOfDay->setTime(23, 59, 59); // set to 23:59:59 of today
+
+$query = "SELECT * FROM notice WHERE appt_date >= :today AND appt_date <= :endOfDay";
+$params = [
+    'today' => $today->format('Y-m-d H:i:s'),
+    'endOfDay' => $endOfDay->format('Y-m-d H:i:s')
+];
+
+return $this->query($query, $params);
+}
+
+public function getAppointmentsThisWeekForNotificationforPast()
+{
+    $today = new DateTime();
+$today->setTime(23, 59, 59); // set to 23:59:59 of today
+
+$query = "SELECT * FROM notice WHERE appt_date <= :endOfDay";
+$params = [
+    'endOfDay' => $today->format('Y-m-d H:i:s')
+];
+
+return $this->query($query, $params);
+}
+   
+public function getUpcomingAppointmentsThisWeekForNotification()
+{
+    $tomorrow = new DateTime();
+$tomorrow->setTime(0, 0, 0); // reset time to the start of tomorrow
+
+$nextWeek = new DateTime();
+$nextWeek->modify('+1 week');
+$nextWeek->setTime(23, 59, 59); // set to the end of the next week
+
+$query = "SELECT * FROM notice WHERE appt_date > :tomorrow AND appt_date <= :endOfNextWeek";
+$params = [
+    'tomorrow' => $tomorrow->format('Y-m-d H:i:s'),
+    'endOfNextWeek' => $nextWeek->format('Y-m-d H:i:s')
+];
+
+return $this->query($query, $params);
+}
 }
