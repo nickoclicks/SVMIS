@@ -67,12 +67,13 @@ h4 {
 <div style="margin-left: -150px;">
 <div class="dashboard-container p-4 mx-auto" style="max-width: 1700px; margin-top: -10px">
 
-<a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
-<a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
-<a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Certificate Report</a>
-<a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Comparative Analysis</a>
-
-<h1>Certificate Report</h1>
+<center style="margin-bottom: 20px;">
+    <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px;">Violation</a>
+    <a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px">Complaints</a>
+    <a href="goodmoral" class="btn btn-secondary border" style="background-color: #007bff; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: white; width: 270px">Certificate Report</a>
+    <a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px">Comparative Analysis</a>
+</center>
+<center><h2 style="font-size: 18px;">Certificate Report</h2></center>
 
 <button class="print-button" style="background-color: white;" onclick="printGraphs()">
     <i class="fas fa-print text-dark"><h4>Print</h4></i>
@@ -86,8 +87,7 @@ $filters = [
 ];
 ?>
 
-<div class="p-3 border rounded shadow-sm bg-light" style="margin: 10px;">
-    <h5 class="text-center mb-3">Past Records</h5>
+<div class="p-3  rounded shadow-sm" style="margin: 10px;">
     <form method="GET" action="">
             <div class="row mb-3">
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
@@ -102,7 +102,7 @@ $filters = [
 </div>
 
             </div>
-            <center><button type="submit" class="btn btn-secondary" style="width: 10%; color: white; font-weight: 600">Apply Filters</button></center>
+            <center><button type="submit" class="btn btn-secondary" style="width: 10%; color: white; font-weight: 600; margin-bottom: 10px">Apply Filters</button></center>
         </form>
 
 <div id="graphs-container">

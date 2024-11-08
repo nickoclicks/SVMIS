@@ -204,7 +204,7 @@ public function getAppointmentsThisWeek()
 
 public function countUnresolvedNoticesByUserId($userId)
 {
-    $query = "SELECT COUNT(*) as count FROM notice WHERE resp_id = :user_id AND status != 'Resolved'";
+    $query = "SELECT COUNT(*) as count FROM notice WHERE resp_id = :user_id AND status != 'Resolved' AND status != 'Referred to SDC' AND status != 'Settled amicably' AND status != 'Dismissed'";
     $result = $this->query($query, ['user_id' => $userId]);
     return $result ? $result[0]->count : 0;
 }
@@ -254,5 +254,7 @@ $params = [
 ];
 
 return $this->query($query, $params);
+
+
 }
 }

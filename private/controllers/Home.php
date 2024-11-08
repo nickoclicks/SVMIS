@@ -13,7 +13,7 @@ class Home extends Controller
         $user = new User();
         $notice = new Form();
 
-        $totalViolations = $violation->countAll();
+        $totalViolations = $violator->countAlll();
         $totalNotices = $notice->countAll();
         $totalSdcs = $notice->countAlll();
         $totalViolators = $violator->countAll();
@@ -119,8 +119,8 @@ return $row->month . ' - Week ' . $row->week;
         $statusData = $statusDistribution['data'];
 
         $this->view('home', [
-            'totalViolations' => $totalViolations,
             'totalViolators' => $totalViolators,
+            'totalViolations' => $totalViolations,
             'totalSdcs' => $totalSdcs,
             'totalUserViolations' => $totalUserViolations,
             'violationsCommitted' => $violationsCommitted,

@@ -2,7 +2,7 @@
 <?php $this->view('includes/navigation'); ?>
 
 
-<div class="dashboard-container">
+<div class="dashboard-container" style="margin-left: -150px;">
   <form method="post" class="needs-validation" novalidate>
     <div class="card p-4 mx-auto shadow rounded" style="width: 100%; max-width: 1650px; margin-top: 10px; overflow: hidden;">
       <h2 class="text-center mb-4">NBSC - Prefect of Discipline</h2>
@@ -91,14 +91,14 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group my-2">
-            <label for="city" class="form-label">City</label>
+            <label for="city" class="form-label">City/Municipality</label>
             <input class="form-control" id="city" value="<?=get_var('city')?>" type="text" name="city" placeholder="City" required>
             <div class="invalid-feedback">Please provide a valid city.</div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group my-2">
-            <label for="municipality" class="form-label">Municipality</label>
+            <label for="municipality" class="form-label">Province</label>
             <input class="form-control" id="municipality" value="<?=get_var('municipality')?>" type="text" name="municipality" placeholder="Municipality" required>
             <div class="invalid-feedback">Please provide a valid municipality.</div>
           </div>
@@ -153,7 +153,12 @@
           <div class="col-md-6">
             <div class="form-group my-2">
               <label for="course" class="form-label">Course</label>
-              <input class="form-control" id="course" value="<?=get_var('course')?>" type="text" name="course" placeholder="Course" required>
+              <select name="course" id="course" class="form-control" required>
+              <option value="">Select Course</option>
+                    <option value="BSBA" <?php echo isset($_POST['course']) && $_POST['course'] == 'BSBA' ? 'selected' : ''; ?>>BSBA</option>
+                    <option value="BSIT" <?php echo isset($_POST['course']) && $_POST['course'] == 'BSIT' ? 'selected' : ''; ?>>BSIT</option>
+                    <option value="TEP" <?php echo isset($_POST['course']) && $_POST['course'] == 'TEP' ? 'selected' : ''; ?>>TEP</option>
+                    </select>
               <div class="invalid-feedback">Please provide a valid course.</div>
             </div>
           </div>
@@ -166,7 +171,7 @@
           <div class="form-group my-2">
             <label for="gender" class="form-label">Gender</label>
             <select class="form-control" id="gender" name="gender" required>
-              <option <?=get_select('gender', '')?> value="">-----SELECT SEX-----</option>
+              <option <?=get_select('gender', '')?> value="">Select Sex</option>
               <option <?=get_select('gender', 'male')?> value="male">Male</option>
               <option <?=get_select('gender', 'female')?> value="female">Female</option>
             </select>
@@ -181,7 +186,7 @@
             <div class="form-group my-2">
               <label for="rank" class="form-label">Rank</label>
               <select class="form-control" id="rank" name="rank" required>
-                <option <?=get_select('rank', '')?> value="">-----SELECT RANK-----</option>
+                <option <?=get_select('rank', '')?> value="">Select Rank</option>
                 <?php if(Auth::getRank() == 'super_admin'): ?>
                   <option <?=get_select('rank', 'super_admin')?> value="super_admin">Super Admin</option>
                 <?php endif; ?>

@@ -278,13 +278,16 @@ canvas {
 <div style="margin-left: -150px;">
 <div class="dashboard-container p-4 mx-auto" style="max-width: 1700px; margin-top: -10px">
 
-<a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
-<a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
-<a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Certificate Report</a>
-<a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Comparative Analysis</a>
+<center style="margin-bottom: 20px;">
+    <a href="reports" class="btn btn-secondary border" style="background-color: #007bff; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: white; width: 270px;">Violation</a>
+    <a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px">Complaints</a>
+    <a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px">Certificate Report</a>
+    <a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px">Comparative Analysis</a>
+</center>
+<center><h2 style="font-size: 18px;">Violation Report</h2>
+<h3>Total: <?php echo count($recentViolators); ?></h3>   
+</center>
 
-<h1>Violation Report</h1>
-<h2>Total Results: <?php echo count($recentViolators); ?></h2>
 
 <button class="print-button" style="background-color: white;" onclick="printContent()">
     <i class="fas fa-print text-dark"><h4>Print</h4></i>
@@ -539,24 +542,24 @@ const dateChart = new Chart(dateCtx, {
             x: {
                 grid: {
                     display: true,
-                    color: 'rgba(0, 0, 0, 0.05)', // Light grid lines
-                    borderDash: [4, 4] // Dotted grid lines on x-axis
+                    color: 'rgba(0, 0, 0, 0.05)', 
+                    borderDash: [4, 4] 
                 },
                 ticks: {
                     font: {
-                        size: 16, // Increased font size
+                        size: 16,
                         weight: 'bold'
                     },
                     color: '#444',
                     padding: 10,
-                    maxRotation: 45, // Prevent overlapping labels
+                    maxRotation: 45, 
                     minRotation: 0
                 }
             },
             y: {
                 beginAtZero: true,
                 grid: {
-                    color: 'rgba(0, 0, 0, 0.1)', // Light dashed grid lines
+                    color: 'rgba(0, 0, 0, 0.1)', 
                     borderDash: [5, 5],
                 },
                 ticks: {
@@ -859,8 +862,8 @@ function printContent() {
 
     // Get the charts to print
     var charts = document.querySelectorAll('.chart canvas');
+    
 
-    // Create a new header for the print
     var header = `
         <div style="text-align: center; margin-bottom: 0;">
             <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: left;">
@@ -873,19 +876,18 @@ function printContent() {
         </div>
     `;
 
-    // Convert the charts to images
-    var chartsHtml = '';
+    var chartsHtml = '<div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin: 20px 0;">'; // Flex container for charts
     var chartsPromises = [];
+    
     charts.forEach(chart => {
         chartsPromises.push(
             html2canvas(chart).then(canvas => {
-                chartsHtml += `<img src="${canvas.toDataURL()}" style="width: 100%; height: auto;">`;
+                chartsHtml += `<img src="${canvas.toDataURL()}" style="width: 45%; height: auto; margin: 10px;">`; // Adjust width and margin
             }).catch(err => {
-                console.error('Error capturing chart:', err); // Log any errors
+                console.error('Error capturing chart:', err);
             })
         );
     });
-
     // Wait for all chart images to be generated, then proceed to print
     Promise.all(chartsPromises).then(() => {
         var printHtml = header + chartsHtml;

@@ -10,7 +10,7 @@
         </ul>
     <?php endif; ?>
 
-    <div class="dashboard-container">
+    <div class="dashboard-container" style="margin-left: -150px;">
     <div class="row"">
         <div class="">
             <div class="card  style="max-width: 1700px;">
@@ -85,23 +85,34 @@
                             </div>
 
                             <div class="form-group col-md-3">
-                            <label for="course">Course:</label>
-                           
-                                <input type="text" name="course" class="form-control" value="<?= $row->course ?>">
-                        </div>
+    <label for="course">Course:</label>
+    <select name="course" id="courseSelect" class="form-control">
+        <option value="" disabled>Select a course</option>
+        <option value="BSBA" <?php echo (isset($row->course) && $row->course == 'BSBA') ? 'selected' : ''; ?>>BSBA</option>
+        <option value="BSIT" <?php echo (isset($row->course) && $row->course == 'BSIT') ? 'selected' : ''; ?>>BSIT</option>
+        <option value="TEP" <?php echo (isset($row->course) && $row->course == 'TEP') ? 'selected' : ''; ?>>TEP</option>
+    </select>
+</div>
 
-                        <div class="col-md-3">
-                            <label for="year_level_id">Year Level:</label>
-                            
-                                <input type="text" name="year_level_id" class="form-control" value="<?= $row->year_level_id ?>">
-                            </div>
-
-                            <div class="form-group col-md-3">
-                            <label for="rank">Rank:</label>
-                           
-                                <input type="text" name="rank" class="form-control" value="<?= $row->rank ?>">
-                        </div>
-                        </div>
+<div class="form-group col-md-3">
+    <label for="year_level_id">Year Level:</label>
+    <select name="year_level_id" id="year_level_id" class="form-control">
+        <option value="" disabled>Select a Year Level</option>
+        <option value="1" <?php echo (isset($row->year_level_id) && $row->year_level_id == '1') ? 'selected' : ''; ?>>1st Year</option>
+        <option value="2" <?php echo (isset($row->year_level_id) && $row->year_level_id == '2') ? 'selected' : ''; ?>>2nd Year</option>
+        <option value="3" <?php echo (isset($row->year_level_id) && $row->year_level_id == '3') ? 'selected' : ''; ?>>3rd Year</option>
+        <option value="4" <?php echo (isset($row->year_level_id) && $row->year_level_id == '4') ? 'selected' : ''; ?>>4th Year</option>             
+    </select>           
+</div>
+<div class="form-group col-md-3">
+    <label for="rank">Rank:</label>
+    <select name="rank" id="rank" class="form-control">
+        <option value="admin" <?php echo (isset($row->rank) && $row->rank == 'admin') ? 'selected' : ''; ?>>Admin</option>
+        <option value="staff" <?php echo (isset($row->rank) && $row->rank == 'staff') ? 'selected' : ''; ?>>Staff</option>
+        <option value="student" <?php echo (isset($row->rank) && $row->rank == 'student') ? 'selected' : ''; ?>>Student</option>
+    </select>
+</div>
+</div>
 
                         <h5 class="fw-bold text-black">Address</h5>
 
@@ -148,3 +159,7 @@
     </div>
 </div>
 </form>
+
+
+<?php $this->view('includes/footer'); ?>
+

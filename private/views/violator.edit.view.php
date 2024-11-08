@@ -6,13 +6,13 @@
     display: none;
 }
 textarea {
-    width: 100%; /* Make the textarea take the full width of the container */
-    margin-top: 5px; /* Add some space above the textarea */
-    margin-bottom: 15px; /* Add some space below the textarea */
-    padding: 5px; /* Add padding inside the textarea */
-    font-size: 14px; /* Set a font size */
-    border: 1px solid #ccc; /* Add a border */
-    border-radius: 4px; /* Rounded corners */
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 15px; 
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px; 
 }
 </style>
 
@@ -22,7 +22,7 @@ textarea {
 
 <div class="mx-auto">
     <?php if ($row): ?>
-        <div class="card" style="height: 820px;">
+        <div class="card" style="height: 820px; overflow:scroll">
             <div class="m-3">
                 
 
@@ -36,7 +36,7 @@ textarea {
                     </div>
                 <?php endif; ?>
                 
-
+                        <center><h3 style="font-size: 20px;">Violation Details</h3></center>
                 <form method="post">
                     <div class="mb-3">
                         <input id="user_id" class="form-control" type="text" value="<?= esc(get_var('user_id', $row->user_id)) ?>" name="user_id" placeholder="User ID" hidden>
@@ -45,15 +45,17 @@ textarea {
                     <div class="row">
                     <div class="col-md-6">
   <div class="mb-3">
-    <label for="user_name" class="form-label">Name</label>
-    <input id="user_name" class="form-control rounded-pill px-3 py-2" type="text" value="<?= htmlspecialchars($userName->firstname . ' ' . $userName->lastname) ?>" name="user_name" placeholder="User  Name" readonly>
+    <label for="user_name" class="form-label">Violator Name:</label>
+    <input id="user_name" type="text" class="form-control" value="<?= htmlspecialchars($userName->firstname . ' ' . $userName->lastname) ?>" name="user_name" placeholder="User Name" style="background-color: white; border: white; font-size: 20px; font-weight: bold;" readonly>
   </div>
 </div>
                     
                     <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="violation_id" class="form-label">Violation</label>
-                        <input id="violation_id" class="form-control rounded-pill px-3 py-2" type="text" value="<?= htmlspecialchars(get_var('violation', $violationName)) ?>" name="violation" placeholder="Violation Name" readonly>
+                        <label for="violation_id" class="form-label">Violation Committed:</label>
+                        <input id="violation_id" class="form-control" type="text" value="<?= htmlspecialchars(get_var('violation', $violationName)) ?>" name="violation" placeholder="Violation Name" style="background-color: white; border: white; font-size: 20px; font-weight: bold;" readonly>
+                
+                       
                     </div>
                     </div>
 
@@ -61,8 +63,37 @@ textarea {
                     </div>
 
                     <div class="row">
-                       
+                       <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date Committed:</label>
+                        <input id="date" class="form-control" type="date" value="<?= htmlspecialchars(get_var('date', $row->date)) ?>" name="date" placeholder="Date" style="background-color: white; border: white; font-size: 20px; font-weight: bold;" readonly>
                     </div>
+                        </div>
+                    </div>
+
+
+                    <hr>
+
+                    <div class="row">
+
+                    <div class="col-md-6">
+    <div class="mb-3">
+        <label for="status" class="form-label">Violation Status <b style="color: red;">*</b></label>
+        <select id="status" class="form-control" style="background-color: white; border: white; font-size: 22px; font-weight: bold;" name="status" <?= !$isEditable ? 'disabled' : '' ?> required>
+            <option value="Unresolved" <?= htmlspecialchars(get_var('status', $row->status)) == 'Unresolved' ? 'selected' : '' ?>>Unresolved</option>
+            <option value="Resolved" <?= htmlspecialchars(get_var('status', $row->status)) == 'Resolved' ? 'selected' : '' ?>>Resolved</option>
+        </select>
+    </div>
+</div>
+
+<div class="col-md-6">
+<div class="mb-3">
+    <label for="remarks" class="form-label">Remarks</label>
+    <textarea id="remarks" class="form-control" style="background-color: white; border: white; font-size: 22px; font-weight: bold;" name="remarks" placeholder="Remarks"><?= htmlspecialchars($row->remarks) ?></textarea>
+</div>
+    </div>
+
+</div>
                     
                     <?php 
 $selectedCompensation = get_var('compensation', $row->compensation);
@@ -73,10 +104,10 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
 
 ?>
 
-<div class="col-md-12">
+<div class="col-md-6">
     <div class="mb-3">
-        <label for="compensation" class="form-label">Sanctions</label>
-        <select id="otherSanctions" class="form-select rounded-pill px-3 py-2" name="compensation">
+        <label for="compensation" class="form-label" required>Sanction Imposed <b style="color: red;">*</b></label>
+        <select id="otherSanctions" class="form-select" style="background-color: white; border: black; font-size: 22px; font-weight: bold;" name="compensation" required>
             <option value="">Select Sanction</option>
             <?php if ($showViolationSlip) { ?>
                 <option value="Violation Slip" <?= $selectedCompensation == 'Violation Slip' ? 'selected' : '' ?>>Violation Slip</option>
@@ -170,8 +201,6 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
         </div>
     </div>
 </div>
-<!-- Add a section for the print content -->
-
 
 <div id="printContent" style="display: none;">
     <div style="text-align: center; margin-bottom: 0;">
@@ -209,6 +238,8 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
     
     </div>
 </div>
+
+
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -297,30 +328,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 });
 </script>
 
-<!-- JavaScript code remains the same -->
-
-<div class="row">
-
-<div class="col-md-6">
-<div class="mb-3">
-    <label for="remarks" class="form-label">Remarks</label>
-    <textarea id="remarks" class="form-control" name="remarks" placeholder="Remarks"><?= htmlspecialchars($row->remarks) ?></textarea>
-</div>
-    </div>
-
-    <div class="col-md-6">
-    <div class="mb-3">
-    <label for="status" class="form-label">Status</label>
-    <select id="status" class="form-control" name="status" <?= !$isEditable ? 'disabled' : '' ?>>
-        <option value="Unresolved" <?= htmlspecialchars(get_var('status', $row->status)) == 'Unresolved' ? 'selected' : '' ?>>Unresolved</option>
-        <option value="Resolved" <?= htmlspecialchars(get_var('status', $row->status)) == 'Resolved' ? 'selected' : '' ?>>Resolved</option>
-    </select>
-    </div>
-    </div>
-</div>
-
-
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
     const communityServiceRadio = document.getElementById('communityService');
@@ -366,10 +373,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary me-2">Save</button>
-                        <a href="<?= ROOT ?>/profile/<?= $row->user_id ?>" class="btn btn-warning text-white">Cancel</a>
-                    </div>
+<center><div class="d-flex" style="width: 700px; margin-top: 100px;">
+<button type="submit" class="btn btn-primary flex-fill">Save</button>
+    <a href="<?= ROOT ?>/profile/<?= $row->user_id ?>" class="btn btn-warning flex-fill">Cancel</a>
+</div></center>
                 </form>
 
                 

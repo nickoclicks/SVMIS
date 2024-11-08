@@ -52,36 +52,7 @@ class Students extends Controller
         $enrollment = new Enrollment();
         $errors = array();
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            try {
-                $this->db->beginTransaction();
-
-                // Validate and create user
-                if ($user->validate($_POST)) {
-                    $userId = $user->create($_POST);
-
-                    if ($userId) {
-                        // Prepare and create enrollment
-                        $enrollmentData = [
-                            'user_id' => $userId,
-                            'year_level' => $_POST['year_level']
-                        ];
-
-                        if ($enrollment->create($enrollmentData)) {
-                            $this->db->commit();
-                            $this->redirect('users');
-                        } else {
-                            throw new Exception("Failed to insert enrollment data.");
-                        }
-                    }
-                } else {
-                    $errors = $user->errors;
-                }
-            } catch (Exception $e) {
-                $this->db->rollBack();
-                $errors[] = $e->getMessage();
-            }
-        }
+       
 
         $this->view('signup', [
             'errors' => $errors,

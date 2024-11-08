@@ -73,6 +73,7 @@ class Violation extends Model
     {
         return $this->query("SELECT COUNT(*) AS count FROM violations")[0]->count;
     }
+    
 
     public function findRecent($limit = 5)
     {
@@ -130,18 +131,5 @@ class Violation extends Model
         error_log("User  not found for ID: $user_id");
     }
 }
-
-/*public function getViolationById($id)
-{
-    $query = "SELECT * FROM violators WHERE id = :id";
-    $result = $this->db->query($query, [':id' => $id]);
-    return $result ? $result : null;
-}*/
-
-
-
-//gikan ni sa home controller akong gi
-
-
 }
 

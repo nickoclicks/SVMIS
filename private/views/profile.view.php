@@ -72,6 +72,9 @@ $currentDate = date('jS') . ' day of ' . date('F Y');
                         case 'BSIT':
                             $image = ROOT . '/assets/BSIT.png';
                             break;
+                        case "N/A":
+                            $image = ROOT . '/assets/nbsc1.png';
+                            break;
                         default:
                             $image = $row->image;
                             break;
@@ -114,9 +117,10 @@ $currentDate = date('jS') . ' day of ' . date('F Y');
             $unresolvedNoticesCount = 0;
             if (is_array($noticesAsRespondent) || is_object($noticesAsRespondent)) {
                 foreach ($noticesAsRespondent as $notice) {
-                    if ($notice->status !== 'Resolved') {
+                    if ($notice->status != 'Settled amicably' && $notice->status != 'Resolved' && $notice->status != 'Referred to SDC' && $notice->status != 'Dismissed') {
                         $unresolvedNoticesCount++;
                     }
+                    
                 }
             }
             ?>
@@ -750,21 +754,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
-    function printCertificate() {
-    let certificateContent = document.getElementById('firstCertificate').innerHTML;
-
-// Replace dropdowns with selected values in the content
+function printCertificate() {
+let certificateContent = document.getElementById('firstCertificate').innerHTML;
 const dropdowns = document.querySelectorAll('#firstCertificate select');
 dropdowns.forEach(dropdown => {
-    const selectedValue = dropdown.options[dropdown.selectedIndex].text;
-    certificateContent = certificateContent.replace(dropdown.outerHTML, selectedValue);
+const selectedValue = dropdown.options[dropdown.selectedIndex].text;
+certificateContent = certificateContent.replace(dropdown.outerHTML, selectedValue);
 });
 
 const printWindow = window.open('', '', 'height=600,width=800');
 printWindow.document.write('<html><head><title>Print Certificate</title>');
 printWindow.document.write('<style>');
 printWindow.document.write('body { font-family: Arial, sans-serif; margin: 20px; }');
-printWindow.document.write('button, #label, #purposeDropdown, #customPurposeInput { display: none; }');
+printWindow.document.write('button, .mt-4, #label, #purposeDropdown, #customPurposeInput { display: none; }');
 printWindow.document.write('</style></head><body>');
 printWindow.document.write(certificateContent);
 printWindow.document.write('</body></html>');

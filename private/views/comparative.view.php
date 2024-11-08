@@ -75,12 +75,13 @@ h4 {
 <div style="margin-left: -150px;">
 <div class="dashboard-container p-4 mx-auto" style="max-width: 1700px; margin-top: -10px">
 
-<a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Violation</a>
-<a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Notice</a>
-<a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Certificate Report</a>
-<a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black">Comparative Analysis</a>
-
-<h1>Comparative Analysis</h1>
+<center style="margin-bottom: 20px;">
+    <a href="reports" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px;">Violation</a>
+    <a href="sdcs" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px">Complaints</a>
+    <a href="goodmoral" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px">Certificate Report</a>
+    <a href="comparative" class="btn btn-secondary border" style="background-color: #007bff; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: white; width: 270px">Comparative Analysis</a>
+</center>
+<center><h2 style="font-size: 18px;">Comparative Analysis</h2></center>
 
 <button class="print-button" style="background-color: white;" onclick="printGraphs()">
     <i class="fas fa-print text-dark"><h4>Print</h4></i>

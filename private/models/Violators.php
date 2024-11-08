@@ -52,6 +52,11 @@ class Violators extends Model
 
     public function countAll()
     {
+        return $this->query("SELECT COUNT(DISTINCT user_id) AS count FROM violators;")[0]->count;
+    }
+
+    public function countAlll()
+    {
         return $this->query("SELECT COUNT(*) AS count FROM violators")[0]->count;
     }
 
@@ -79,22 +84,7 @@ class Violators extends Model
         return $result ? $result[0] : null;
     }
 
-    /* Update violator's information
-    public function updateViolator($id, $data)
-    {
-        // Construct the update query based on allowed columns
-        $allowedColumns = array_intersect_key($data, array_flip($this->allowedColumns));
 
-        if (!empty($allowedColumns)) {
-            $setClause = implode(', ', array_map(fn($col) => "$col = :$col", array_keys($allowedColumns)));
-
-            $query = "UPDATE violators SET $setClause WHERE id = :id";
-
-            $allowedColumns['id'] = $id; // Include the ID in parameters
-            return $this->query($query, $allowedColumns);
-        }
-        return false;
-    }*/
     public function validate($data)
 {
     $errors = [];
@@ -123,27 +113,6 @@ public function update($id, $data)
     return false;
 }
 
-
-
-/*public function findViolatorWithViolation($user_id)
-{
-    $query = "
-        SELECT violators.*, violations.violation 
-        FROM violators 
-        LEFT JOIN violations 
-        ON violators.violation_id = violations.id 
-        WHERE violators.user_id = :user_id 
-        LIMIT 1
-    ";
-
-    $params = ['user_id' => $user_id];
-    $result = $this->query($query, $params);
-
-    // Debugging: Log or output the result
-    error_log(print_r($result, true));
-
-    return $result ? $result[0] : null;
-}*/
 
 public function updateViolator($id, $data)
 {
@@ -175,7 +144,7 @@ public function getCompensationOptions($violation_id)
 public function getViolationName($violationId)
 {
     $query = "
-        SELECT v.violation
+        SELECT v.violation, v.level
         FROM violations v
         INNER JOIN violators vl ON v.violation_id = vl.violation_id
         WHERE vl.violation_id = :violationId

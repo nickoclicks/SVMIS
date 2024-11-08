@@ -58,12 +58,13 @@ $this->view('includes/navigation');
 </script>
 
   <div class="stat-row">
+    
     <div class="stat-card">
-    <div class="icon" style="color: rgba(0, 0, 255, 0.8);"><i class="fas fa-file-alt"></i></div>
-      <h5 style="color: rgba(0, 0, 255, 0.8);">Total Number of Rules</h5>
-      <p style="color: rgba(0, 0, 255, 0.8);"><?= $totalViolations ?></p>
-    </div>
-    <div class="stat-card">
+    <div class="icon" style="color: rgba(0, 0, 255, 0.8);"><i class="fas fa-user"></i></div>
+    <h5 style="color: rgba(0, 0, 255, 0.8);">Total Violations</h5>
+    <p style="color: rgba(0, 0, 255, 0.8);"><?= $totalViolations ?></p>
+</div>
+<div class="stat-card">
     <div class="icon" style="color: rgba(0, 0, 255, 0.8);"><i class="fas fa-user"></i></div>
     <h5 style="color: rgba(0, 0, 255, 0.8);">Total Violators</h5>
     <p style="color: rgba(0, 0, 255, 0.8);"><?= $totalViolators ?></p>
@@ -75,7 +76,7 @@ $this->view('includes/navigation');
     </div>
     <div class="stat-card">
     <div class="icon" style="color: rgba(0, 0, 255, 0.8);"><i class="fas fa-exclamation-triangle"></i></div>
-      <h5 style="color: rgba(0, 0, 255, 0.8);">Notices</h5>
+      <h5 style="color: rgba(0, 0, 255, 0.8);">Total Complaints</h5>
       <p style="color: rgba(0, 0, 255, 0.8);"><?= $totalNotices ?></p>
     </div>
   </div>
@@ -282,9 +283,9 @@ var barChart = new Chart(ctxBar, {
             label: 'Number of Violations',
             data: barChartData,
             backgroundColor: [
+                'rgba(255, 206, 86, 1)',
+                'rgba(28, 200, 138, 1)', 
                 'rgba(78, 115, 223, 1)', 
-                'rgba(28, 200, 138, 1)',
-                'rgba(255, 206, 86, 1)', 
                 
             ],
             borderColor: '#4e73df',

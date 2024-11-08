@@ -52,11 +52,11 @@ if (!empty($filterConditions)) {
     $whereClause = 'WHERE ' . implode(' AND ', $filterConditions);
 }
 
-  $recentActivity = $logs->query("
-  SELECT * FROM good_moral_logs
-  $whereClause
-  ORDER BY date DESC
-  ", $queryParams);
+$recentActivity = $logs->query("
+SELECT * FROM good_moral_logs
+$whereClause
+ORDER BY WEEKDAY(date), date DESC
+", $queryParams);
 
   if ($recentActivity === false) {
     $recentActivity = [];
