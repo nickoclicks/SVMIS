@@ -5,44 +5,29 @@
 <div class="dashboard-container-fluid p-4 shadow-lg mx-auto bg-light" style="max-width: 1700px; border-radius: 10px;">
 
     <div class="row text-center">
-        <!-- Violations Card -->
         <div class="col-md-4 mb-4">
-            <div class="card" style="border-radius: 10px; border: 1px solid #e3e3e3;">
+        <div class="stat-card">
                 <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center">
+                <div class="icon" style="color: rgba(0, 0, 255, 0.8);"><i class="fa fa-exclamation-triangle"></i></div>
                         <a href="<?= ROOT ?>/profile/<?= Auth::getUserId() ?>"
-                        <h5 class="card-title">Violations</h5>
-                        <div class="rounded-circle bg-light p-2">
-                            <i class="fa fa-exclamation-triangle" style="color: #007bff; font-size: 1.5rem;"></i>
-                        </div>
+                        <h5 class="card-title justify-content-center text-decoration-none" style="font-size: 20px; font-weight: bold; color: rgba(0, 0, 255, 0.8);">Violations Committed</h5>
+                        <p style="color: rgba(0, 0, 255, 0.8);"><?= $totalUserViolations ?></p>
                         </a>
-                    </div>
-                    <hr>
-                    <div class="text-center">
-                        <h1 class="display-4 fw-bold"><?= $totalUserViolations ?></h1>
-                        <p class="text-muted">Total Violations</p>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Complaints Card -->
+       
         <div class="col-md-4 mb-4">
-            <div class="card" style="border-radius: 10px; border: 1px solid #e3e3e3;">
+        <div class="stat-card">
                 <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center">
+                <div class="icon" style="color: rgba(0, 0, 255, 0.8);"><i class="fa fa-bullhorn"></i></div>
                          <a href="<?= ROOT ?>/profile/<?= Auth::getUserId() ?> . #complainant"
-                        <h5 class="card-title">Complaints</h5>
-                        <div class="rounded-circle bg-light p-2">
-                            <i class="fa fa-bullhorn" style="color: #007bff; font-size: 1.5rem;"></i>
-                        </div>
-</a>
-                    </div>
-                    <hr>
-                    <div class="text-center">
-                        <h1 class="display-4 fw-bold"><?= $totalComplaints ?></h1>
-                        <p class="text-muted">Total Complaints</p>
-                    </div>
+                         <h5 class="card-title justify-content-center text-decoration-none" style="font-size: 20px; font-weight: bold; color: rgba(0, 0, 255, 0.8);">Complaints Filed</h5>
+                        <p style="color: rgba(0, 0, 255, 0.8);"><?= $totalComplaints ?></p>
+                        </a>
+                  
+                   
                     
                 </div>
             </div>
@@ -50,21 +35,14 @@
 
         <!-- Notices Card -->
         <div class="col-md-4 mb-4">
-            <div class="card" style="border-radius: 10px; border: 1px solid #e3e3e3;">
+        <div class="stat-card">
                 <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center">
+                <div class="icon" style="color: rgba(0, 0, 255, 0.8);"><i class="fa fa-bell"></i></div>
                          <a href="<?= ROOT ?>/profile/<?= Auth::getUserId() ?> . #respondent"
-                        <h5 class="card-title">Notices</h5>
-                        <div class="rounded-circle bg-light p-2">
-                            <i class="fa fa-bell" style="color: #007bff; font-size: 1.5rem;"></i>
-                        </div>
+                         <h5 class="card-title justify-content-center text-decoration-none" style="font-size: 20px; font-weight: bold; color: rgba(0, 0, 255, 0.8);">Complaints Received</h5>
+                        <p style="color: rgba(0, 0, 255, 0.8);"><?= $totalNotices ?></p>
 </a>
-                    </div>
-                    <hr>
-                    <div class="text-center">
-                        <h1 class="display-4 fw-bold"><?= $totalNotices ?></h1>
-                        <p class="text-muted">Total Notices</p>
-                    </div>
+                    
                     
                 </div>
             </div>
@@ -72,7 +50,7 @@
     </div>
 
 <?php
-// Determine current and next possible sanctions based on violation counts
+
 function getCurrentAndNextSanctions($minorViolationCount, $majorViolationCount) {
     $currentSanctions = [];
     $nextSanctions = [];
@@ -139,20 +117,15 @@ $sanctions = getCurrentAndNextSanctions($minorViolationCount, $majorViolationCou
 <!-- Summary Section -->
 <div class="profile-summary card border-0 shadow-lg rounded-4 p-4 bg-white mb-5">
     
-
-    <!-- Grid Layout for Violations, Notices, and Complaints -->
-    
-
-    <!-- Violation Levels Section with Grid -->
      <div class="row">
     <div class="violation-levels mb-5">
-        <h4 class="text-secondary mb-4">Violation Levels Committed</h4>
+        <center><h4 class="text-secondary mb-4">Violation Levels Committed</h4></center>
         <div class="row text-center">
             <div class="col-md-6 mb-4">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card border-1 shadow-sm h-100">
                     <div class="card-body">
                         <h5 class="card-title">Minor Violations</h5>
-                        <span class="badge bg-info text-white fs-4"><?php echo $minorViolationCount; ?></span>
+                        <span class="badge bg-warning text-white fs-4"><?php echo $minorViolationCount; ?></span>
                     </div>
                 </div>
             </div>
@@ -160,7 +133,7 @@ $sanctions = getCurrentAndNextSanctions($minorViolationCount, $majorViolationCou
              
             
             <div class="col-md-6 mb-4">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card border-1 shadow-sm h-100">
                     <div class="card-body">
                         <h5 class="card-title">Major Violations</h5>
                         <span class="badge bg-danger text-white fs-4"><?php echo $majorViolationCount; ?></span>
@@ -174,8 +147,9 @@ $sanctions = getCurrentAndNextSanctions($minorViolationCount, $majorViolationCou
     <div class="row">
     <div class="col-md-6">
     <!-- Sanctions Section -->
-    <div class="current-sanctions mb-5">
-        <h4 class="text-secondary mb-4">Current Sanctions</h4>
+    <div class="card current-sanction" style="height: 350px">
+        <center><h4 class="text-secondary">Possible Sanctions for Current Violations</h4></center>
+        <center><h6 class="text-secondary mb-4"><i>(These are the possible sanctions that can be applied to you, based on your current violation)</i></h6></center>
         <ul class="list-group list-group-flush">
             <?php foreach ($sanctions['current'] as $sanction): ?>
                 <li class="list-group-item bg-light rounded-3 shadow-sm mb-2"><?php echo $sanction; ?></li>
@@ -186,8 +160,9 @@ $sanctions = getCurrentAndNextSanctions($minorViolationCount, $majorViolationCou
 
     <div class="col-md-6"> 
 
-    <div class="future-sanctions">
-        <h4 class="text-secondary mb-4">Possible Sanctions for next Violation</h4>
+    <div class="card future-sanctions" style="height: 350px; overflow: scroll">
+        <center><h4 class="text-secondary">Possible Sanctions for next Violations</h4></center>
+        <center><h6 class="text-secondary mb-4"><i>(These are the possible sanctions that can be applied to you, if you commit another violation regardless of the level)</i></h6></center>
         <ul class="list-group list-group-flush">
             <?php foreach ($sanctions['next'] as $sanction): ?>
                 <li class="list-group-item bg-light rounded-3 shadow-sm mb-2"><?php echo $sanction; ?></li>

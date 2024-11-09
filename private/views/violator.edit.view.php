@@ -46,14 +46,14 @@ textarea {
                     <div class="col-md-6">
   <div class="mb-3">
     <label for="user_name" class="form-label">Violator Name:</label>
-    <input id="user_name" type="text" class="form-control" value="<?= htmlspecialchars($userName->firstname . ' ' . $userName->lastname) ?>" name="user_name" placeholder="User Name" style="background-color: white; border: white; font-size: 20px; font-weight: bold;" readonly>
+    <input id="user_name" type="text" class="form-control" value="<?= htmlspecialchars($userName->firstname . ' ' . $userName->lastname) ?>" name="user_name" placeholder="User Name" style="background-color: white; border-color: black; font-size: 20px; font-weight: bold;" readonly>
   </div>
 </div>
                     
                     <div class="col-md-6">
                     <div class="mb-3">
                         <label for="violation_id" class="form-label">Violation Committed:</label>
-                        <input id="violation_id" class="form-control" type="text" value="<?= htmlspecialchars(get_var('violation', $violationName)) ?>" name="violation" placeholder="Violation Name" style="background-color: white; border: white; font-size: 20px; font-weight: bold;" readonly>
+                        <input id="violation_id" class="form-control" type="text" value="<?= htmlspecialchars(get_var('violation', $violationName)) ?>" name="violation" placeholder="Violation Name" style="background-color: white; border-color: black; font-size: 20px; font-weight: bold;" readonly>
                 
                        
                     </div>
@@ -66,20 +66,17 @@ textarea {
                        <div class="col-md-6">
                     <div class="mb-3">
                         <label for="date" class="form-label">Date Committed:</label>
-                        <input id="date" class="form-control" type="date" value="<?= htmlspecialchars(get_var('date', $row->date)) ?>" name="date" placeholder="Date" style="background-color: white; border: white; font-size: 20px; font-weight: bold;" readonly>
+                        <input id="date" class="form-control" type="date" value="<?= htmlspecialchars(get_var('date', $row->date)) ?>" name="date" placeholder="Date" style="background-color: white; border-color: black; font-size: 20px; font-weight: bold;" readonly>
                     </div>
                         </div>
                     </div>
-
-
                     <hr>
-
                     <div class="row">
 
                     <div class="col-md-6">
     <div class="mb-3">
         <label for="status" class="form-label">Violation Status <b style="color: red;">*</b></label>
-        <select id="status" class="form-control" style="background-color: white; border: white; font-size: 22px; font-weight: bold;" name="status" <?= !$isEditable ? 'disabled' : '' ?> required>
+        <select id="status" class="form-control" style="background-color: white; border-color: black; font-size: 22px; font-weight: bold;" name="status" <?= !$isEditable ? 'disabled' : '' ?> required>
             <option value="Unresolved" <?= htmlspecialchars(get_var('status', $row->status)) == 'Unresolved' ? 'selected' : '' ?>>Unresolved</option>
             <option value="Resolved" <?= htmlspecialchars(get_var('status', $row->status)) == 'Resolved' ? 'selected' : '' ?>>Resolved</option>
         </select>
@@ -88,8 +85,8 @@ textarea {
 
 <div class="col-md-6">
 <div class="mb-3">
-    <label for="remarks" class="form-label">Remarks</label>
-    <textarea id="remarks" class="form-control" style="background-color: white; border: white; font-size: 22px; font-weight: bold;" name="remarks" placeholder="Remarks"><?= htmlspecialchars($row->remarks) ?></textarea>
+    <label for="remarks" class="form-label">Remarks (<i>if applicable</i>)</label>
+    <textarea id="remarks" class="form-control" style="background-color: white; border-color: black; font-size: 22px; font-weight: bold;" name="remarks" placeholder="Remarks"><?= htmlspecialchars($row->remarks) ?></textarea>
 </div>
     </div>
 
@@ -107,7 +104,7 @@ $office = isset($office) ? $office : ''; // Default to an empty string if not se
 <div class="col-md-6">
     <div class="mb-3">
         <label for="compensation" class="form-label" required>Sanction Imposed <b style="color: red;">*</b></label>
-        <select id="otherSanctions" class="form-select" style="background-color: white; border: black; font-size: 22px; font-weight: bold;" name="compensation" required>
+        <select id="otherSanctions" class="form-select" style="background-color: white; border-color: black; font-size: 22px; font-weight: bold;" name="compensation" required>
             <option value="">Select Sanction</option>
             <?php if ($showViolationSlip) { ?>
                 <option value="Violation Slip" <?= $selectedCompensation == 'Violation Slip' ? 'selected' : '' ?>>Violation Slip</option>

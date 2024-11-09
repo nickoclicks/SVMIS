@@ -83,12 +83,13 @@ $this->view('includes/navigation');
 
 
   <div class="chart-row">
-    <div class="chart-wrapper">
+    <div class="chart-wrapper card" style="margin-left: 3px;">
       <h6><i class="fas fa-chart-pie"></i> Violations Distribution</h6>
       <canvas id="pieChart"></canvas>
     </div>
 
   <div class="col-md-9">
+  <div class="card">
   <div class="chart-wrapper">
     <h6><i class="fas fa-chart-line"></i> Violators Trend</h6>
     <canvas id="violatorsChart"></canvas>
@@ -103,14 +104,15 @@ $this->view('includes/navigation');
     </div>
   </div>
   </div>
+  </div>
 
   <div class="chart-row">
-    <div class="chart-wrapper">
+    <div class="chart-wrapper card" style="margin-left: 3px;">
       
       <h6><i class="fas fa-chart-bar"></i> Violations by Department</h6>
       <canvas id="barChart"></canvas>
     </div>
-    <div class="chart-wrapper">
+    <div class="chart-wrapper card">
       <h6><i class="fas fa-chart-bar"></i> Violation Status Distribution</h6>
       <canvas id="statusChart"></canvas>
     </div>

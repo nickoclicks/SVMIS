@@ -263,7 +263,7 @@ table th, table td {
     <a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px">Comparative Analysis</a>
 </center>
 
-<center><h2 style="font-size: 18px;">Notice Report</h2>
+<center><h2 style="font-size: 18px;">Complaint Report</h2>
 <h3>Total: <?php echo count($recentViolators); ?></h3></center>
 
         

@@ -512,7 +512,7 @@ function setStudentName(fullname, std_id, email, phone, street, barangay, city, 
     document.getElementById('resp_address').value = street + ' ' + barangay + ' ' + city + ' ' + municipality;
     document.getElementById('resp_course_year').value = course + ' - ' + year_level;
 
-    // Perform an AJAX request to get the respondent's details (firstname and lastname)
+    document.getElementById('student-name-list').style.display = 'none';
    
 }
 

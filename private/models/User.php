@@ -58,13 +58,6 @@ class User extends Model
         $this->errors['email'] = "That email is already in use";
     }
 
-    //check for gender
-    /*$gender = ['Male','Female'];
-    if(!$update && (empty($DATA['gender']) || !in_array($DATA['gender'], $gender)))
-    {
-        $this->errors['gender'] = "Gender is not valid";
-    }*/
-
     //check for password (only during creation, not during update)
     if(!$update && (isset($DATA['password']) && strlen($DATA['password']) < 8))
     {

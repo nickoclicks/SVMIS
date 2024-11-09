@@ -265,7 +265,7 @@ $currentDate = date('jS') . ' day of ' . date('F Y');
             <a class="nav-link text-reset fw-bold" id="complainant-tab" data-bs-toggle="tab" href="#complainant" role="tab">Complaints Filed</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link text-reset fw-bold" id="respondent-tab" data-bs-toggle="tab" href="#respondent" role="tab">Notices Recieved</a>
+            <a class="nav-link text-reset fw-bold" id="respondent-tab" data-bs-toggle="tab" href="#respondent" role="tab">Complaints Recieved</a>
         </li>
     </ul>
 
