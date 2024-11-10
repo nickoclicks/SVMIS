@@ -352,6 +352,7 @@ $statusCounts = array_count_values($statuses);
     <div class="col-md-6">
 <div class="card">
         <canvas id="yr-chart" width="400" height="200"></canvas>
+        
     </div>
 </div>
     <div class="col-md-6">
@@ -407,8 +408,7 @@ const chart = new Chart(ctx, {
         datasets: [{
             label: 'Violations',
             data: [<?php echo $statusCounts['Resolved'] ?? 0; ?>, <?php echo $statusCounts['Unresolved'] ?? 0; ?>],
-            
-          
+            backgroundColor: ['#4CAF50', '#FF5733'],
             borderWidth: 2,
             borderRadius: 10, // Larger rounded corners for a smoother look
             barPercentage: 0.5, // Slimmer bars for a modern feel
@@ -458,6 +458,7 @@ const chart = new Chart(ctx, {
             }
         },
         plugins: {
+            
             tooltip: {
                 callbacks: {
                     label: function(tooltipItem) {
@@ -476,9 +477,11 @@ const chart = new Chart(ctx, {
                     color: '#444',
                     padding: 20, // Adds space between legend items
                 },
-                position: 'top', // Legend at the top for a modern look
+                position: 'top',
+                display: true, // Legend at the top for a modern look
             },
         },
+        
         layout: {
             padding: {
                 left: 30,
@@ -855,7 +858,6 @@ const yrLevelChart = new Chart(yearLevelCtx2, {
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
-
 function printContent() {
     // Hide no-print elements
     document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
@@ -863,7 +865,42 @@ function printContent() {
     // Get the charts to print
     var charts = document.querySelectorAll('.chart canvas');
     
+    var totalViolations = <?php echo count($recentViolators); ?>; 
 
+    var lineChartCount = <?php echo array_sum($dayCountsValues); ?>;
+
+    var resolvedCount = <?php echo isset($statusCounts['Resolved']) ? $statusCounts['Resolved'] : 0; ?>; 
+    var unresolvedCount = <?php echo isset($statusCounts['Unresolved']) ? $statusCounts['Unresolved'] : 0; ?>; 
+    
+
+    // Capture filter values
+    var studentId = document.getElementById('student_id').value;
+    var yearLevel = document.getElementById('year_level_id').value;
+    var course = document.getElementById('course').value;
+    var startDate = document.getElementById('start_date').value;
+    var endDate = document.getElementById('end_date').value;
+
+     // Prepare to capture counts for each course
+     var courseCounts = <?php echo json_encode($courseCounts); ?>; 
+    var courseLabels = <?php echo json_encode($courseLabels); ?>; 
+
+    var yrLables = <?php echo json_encode($yrLabels); ?>; 
+    var yrCounts = <?php echo json_encode($yrCounts); ?>; 
+
+
+    var courseCountsString = "Violations per Course:\n";
+    for (var i = 0; i < courseLabels.length; i++) {
+        courseCountsString += courseLabels[i] + ": " + courseCounts[i] + "\n";
+    }
+   // Create a new div for displaying the counts
+    var countsDiv = document.createElement('div');
+    countsDiv.style.textAlign = 'center'; // Center the text
+    countsDiv.innerHTML = `
+        <h4>Resolved Violations: ${resolvedCount}</h4>
+        <h4>Unresolved Violations: ${unresolvedCount}</h4>
+    `;
+
+    // Create a header with filter values
     var header = `
         <div style="text-align: center; margin-bottom: 0;">
             <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: left;">
@@ -873,8 +910,43 @@ function printContent() {
             <h4 style="margin-bottom: -20px;"><i>(Formerly Northern Bukidnon Community College)</i> R.A.11284</h4>
             <h4 style="margin-bottom: -5px;"><i>Creando futura, Transformationis vitae, Ductae a Deo</i></h4> 
             <hr>
-        </div>
+
+            <p>Total Violations: ${totalViolations}</p>
+            <p>Total Violations by Course:</p>
+<ul>
+    <?php 
+    // Assuming $courseLabels and $courseCounts are arrays with the same length
+    for ($i = 0; $i < count($courseLabels); $i++) {
+        echo "<li>${courseLabels[$i]}: ${courseCounts[$i]}</li>";
+    }
+    ?>
+</ul>
+            <p>Resolved: ${resolvedCount} | Unresolved: ${unresolvedCount}</p>
+            <h5>Selected Reports For:</h5>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
     `;
+
+    
+
+    // Add filters only if they have values
+    if (studentId) {
+        header += `<p style="margin: 0 10px;"><strong>Student ID:</strong> ${studentId}</p>`;
+    }
+    if (yearLevel) {
+        header += `<p style="margin: 0 10px;"><strong>Year Level:</strong> ${yearLevel}</p>`;
+    }
+    if (course) {
+        header += `<p style="margin: 0 10px;"><strong>Course:</strong> ${course}</p>`;
+    }
+    if (startDate) {
+        header += `<p style="margin: 0 10px;"><strong>Start Date:</strong> ${startDate}</p>`;
+    }
+    if (endDate) {
+        header += `<p style="margin: 0 10px;"><strong>End Date:</strong> ${endDate}</p>`;
+    }
+
+    // Close the filter section
+    header += '</div><hr></div>';
 
     var chartsHtml = '<div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin: 20px 0;">'; // Flex container for charts
     var chartsPromises = [];
@@ -882,15 +954,16 @@ function printContent() {
     charts.forEach(chart => {
         chartsPromises.push(
             html2canvas(chart).then(canvas => {
-                chartsHtml += `<img src="${canvas.toDataURL()}" style="width: 45%; height: auto; margin: 10px;">`; // Adjust width and margin
+                chartsHtml += `<img src="${canvas.toDataURL()}" style="width: 45%; height: auto; margin: 10px;">`;
             }).catch(err => {
                 console.error('Error capturing chart:', err);
             })
         );
     });
+
     // Wait for all chart images to be generated, then proceed to print
     Promise.all(chartsPromises).then(() => {
-        var printHtml = header + chartsHtml;
+        var printHtml = header + chartsHtml + '</div>'; // Ensure to close the charts container
 
         var windowUrl = 'about:blank';
         var windowName = 'Print';

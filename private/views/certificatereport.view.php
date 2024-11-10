@@ -73,7 +73,7 @@ h4 {
     <a href="goodmoral" class="btn btn-secondary border" style="background-color: #007bff; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: white; width: 270px">Certificate Report</a>
     <a href="comparative" class="btn btn-secondary border" style="background-color: white; border: none; cursor: pointer; padding: 10px; font-size: 16px; color: black; width: 270px">Comparative Analysis</a>
 </center>
-<center><h2 style="font-size: 18px;">Certificate Report</h2></center>
+<center><h2 style="font-size: 18px;">Consolidated Number of Printed Good Moral Report</h2></center>
 
 <button class="print-button" style="background-color: white;" onclick="printGraphs()">
     <i class="fas fa-print text-dark"><h4>Print</h4></i>

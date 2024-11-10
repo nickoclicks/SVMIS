@@ -24,12 +24,17 @@ class Students extends Controller
             $data = $user->getAllStudents();
         }
 
-        foreach ($data as &$student) {
-            $student->unresolved_violations = $violator->countUnresolvedByUserId($student->user_id);
-        }
-
-        foreach ($data as &$student) {
-            $student->unresolved_notices = $form->countUnresolvedNoticesByUserId($student->std_id);
+        if (is_array($data) || is_object($data)) {
+            foreach ($data as &$student) {
+                $student->unresolved_violations = $violator->countUnresolvedByUserId($student->user_id);
+            }
+        
+            foreach ($data as &$student) {
+                $student->unresolved_notices = $form->countUnresolvedNoticesByUserId($student->std_id);
+            }
+        } else {
+            // Handle the case where $data is not valid (e.g., log an error or set $data to an empty array)
+            $data = []; // or handle the error as needed
         }
 
         $crumbs[] = ['Dashboard', ''];

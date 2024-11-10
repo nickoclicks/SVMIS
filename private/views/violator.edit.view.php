@@ -46,14 +46,14 @@ textarea {
                     <div class="col-md-6">
   <div class="mb-3">
     <label for="user_name" class="form-label">Violator Name:</label>
-    <input id="user_name" type="text" class="form-control" value="<?= htmlspecialchars($userName->firstname . ' ' . $userName->lastname) ?>" name="user_name" placeholder="User Name" style="background-color: white; border-color: black; font-size: 20px; font-weight: bold;" readonly>
+    <input id="user_name" type="text" class="form-control" value="<?= htmlspecialchars($userName->firstname . ' ' . $userName->lastname) ?>" name="user_name" placeholder="User Name" style="background-color: white; font-size: 20px; font-weight: bold;" readonly>
   </div>
 </div>
                     
                     <div class="col-md-6">
                     <div class="mb-3">
                         <label for="violation_id" class="form-label">Violation Committed:</label>
-                        <input id="violation_id" class="form-control" type="text" value="<?= htmlspecialchars(get_var('violation', $violationName)) ?>" name="violation" placeholder="Violation Name" style="background-color: white; border-color: black; font-size: 20px; font-weight: bold;" readonly>
+                        <input id="violation_id" class="form-control" type="text" value="<?= htmlspecialchars(get_var('violation', $violationName)) ?>" name="violation" placeholder="Violation Name" style="background-color: white; font-size: 20px; font-weight: bold;" readonly>
                 
                        
                     </div>
@@ -66,7 +66,7 @@ textarea {
                        <div class="col-md-6">
                     <div class="mb-3">
                         <label for="date" class="form-label">Date Committed:</label>
-                        <input id="date" class="form-control" type="date" value="<?= htmlspecialchars(get_var('date', $row->date)) ?>" name="date" placeholder="Date" style="background-color: white; border-color: black; font-size: 20px; font-weight: bold;" readonly>
+                        <input id="date" class="form-control" type="date" value="<?= htmlspecialchars(get_var('date', $row->date)) ?>" name="date" placeholder="Date" style="background-color: white; font-size: 20px; font-weight: bold;" readonly>
                     </div>
                         </div>
                     </div>
@@ -370,9 +370,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-<center><div class="d-flex" style="width: 700px; margin-top: 100px;">
+<center><div class="d-flex" style="width: 200px; margin-top: 30px;">
 <button type="submit" class="btn btn-primary flex-fill">Save</button>
-    <a href="<?= ROOT ?>/profile/<?= $row->user_id ?>" class="btn btn-warning flex-fill">Cancel</a>
+    <a href="<?= ROOT ?>/profile/<?= $row->user_id ?>" class="btn btn-warning flex-fill" style="font-weight: bold;">Cancel</a>
 </div></center>
                 </form>
 
@@ -424,7 +424,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm" style="height: 390px; overflow-y: auto;">
+    <div class="card border-1 shadow-sm" style="height: 390px; overflow-y: auto;">
   <div class="card-body">
     <h5 class="card-title text-center mb-4 fw-bold">Community Service Office Assignment Counts</h5>
     <ul class="list-group list-group-flush">

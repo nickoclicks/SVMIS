@@ -172,24 +172,27 @@
     <div class="row">
         <div class="col-8">
     <div class="card shadow p-5 rounded" style="height: 820px; overflow-y: auto;">
+
+    <center><h4>Add a Complaint</h4></center>
         <form action="<?= ROOT ?>/forms?user_id=<?= $_GET['user_id'] ?>" method="post" id="complaint-form" class="needs-validation" novalidate>
 
-            <!-- Step 1: Type of Complaints -->
-            <!-- Step 1: Type of Complaints -->
 <fieldset class="step active">
-    <legend class="font-weight-bold">Type of Complaint</legend>
-    <div class="form-group mb-4">
-        
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="complaint" value="Student against Student" id="type1" required>
-            <label class="form-check-label" for="type1">Student against another Student</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="complaint" value="Student against Faculty" id="type2">
-            <label class="form-check-label" for="type2">Student against Faculty/Staff/Administrator</label>
-        </div>
-        
-        <?php if (Auth::isStudent()): ?>
+    <legend class="font-weight-bold" style="font-size: 15px;">Type of Complaint <i style="color: red;">*</i></legend>
+    <div class="mb-4">
+    
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="complaint" value="Student against Student" id="type1" style="border-color: red;" required>
+        <label class="form-check-label" for="type1">
+            Student against another Student
+        </label>
+    </div>
+    <?php if (Auth::isStudent()): ?>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="complaint" value="Student against Faculty" id="type2" style="border-color: red;">
+        <label class="form-check-label" for="type2">
+            Student against Faculty/Staff/Administrator
+        </label>
+    </div>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="complaint" value="Faculty/Staff/Administrator against Student" id="type3">
             <label class="form-check-label" for="type3">Faculty/Staff/Administrator against Student</label>
@@ -206,7 +209,7 @@
 
 
                 <!-- Respondent Information -->
-                <legend class="font-weight-bold" style="color: #2d3436;">Respondent Information</legend>
+                
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead class="bg-dark text-white text-center">
@@ -217,13 +220,13 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <label for="resp_name">Name</label>
+                                    <label for="resp_name">Name <b style="color: red;">*</b></label>
                                     <input type="text" class="form-control" name="resp_name" id="resp_name" autocomplete="off" required>
                                     <div id="student-name-list" class="dropdown-menu"></div>
                                     <div class="invalid-feedback">Please enter the name.</div>
                                 </td>
                                 <td>
-                                    <label for="resp_id">Student ID No.</label>
+                                    <label for="resp_id">Student ID No. <b style="color: red;">*</b></label>
                                     <input type="text" class="form-control" name="resp_id" id="resp_id" autocomplete="off" required>
                                     <div id="student-id-list" class="dropdown-menu"></div>
                                     <div class="invalid-feedback">Please enter a student ID.</div>
@@ -231,28 +234,28 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label for="resp_course_year">Course/Year</label>
+                                    <label for="resp_course_year">Course/Year <b style="color: red;">*</b></label>
                                     <input type="text" class="form-control" name="resp_course_year" id="resp_course_year" autocomplete="off"  required>
                                 </td>
                                 <td>
-                                    <label for="resp_phone">Phone Number</label>
+                                    <label for="resp_phone">Phone Number <b style="color: red;">*</b></label>
                                     <input type="text" class="form-control" name="resp_phone" id="resp_phone" autocomplete="off" required>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <label for="resp_address">Home Address</label>
+                                    <label for="resp_address">Home Address <b style="color: red;">*</b></label>
                                     <input type="text" class="form-control" name="resp_address" id="resp_address" autocomplete="off">
                                 </td>
                                 <td>
-                                    <label for="resp_email">e-Mail Address</label>
+                                    <label for="resp_email">e-Mail Address <b style="color: red;">*</b></label>
                                     <input type="email" class="form-control" name="resp_email" id="resp_email" autocomplete="on" required>
                                     <div id="student-email-list" class="dropdown-menu"></div>
                                 </td>
                             </tr>
                             <tr>
                             <td> 
-                                    <label for="date" required>Date</label>
+                                    <label for="date" required>Date Filed <b style="color: red;">*</b></label>
                                     <input type="date" class="form-control" name="date" id="date">
                                 </td>
                             </tr>
@@ -261,7 +264,7 @@
                 </div>
 
                 <!-- Violations Committed -->
-                <legend class="font-weight-bold">Violations Committed</legend>
+                <legend class="font-weight-bold" style="font-size: 15px;">Violation Committed: <b style="color: red;">*</b></legend>
                 <div class="form-group mb-4">
                     <select class="form-control" name="violations" id="violations" required>
                         <option value="" disabled selected>Select Violation</option>
@@ -275,14 +278,14 @@
                 <!-- Evidence Section -->
                  <div class="row">
                     <div class="col-md-6">
-                <legend class="font-weight-bold">Do you have any evidence(s)?</legend>
+                <legend class="font-weight-bold" style="font-size: 15px;">Do you have any evidence(s)? <b style="color: red;">*</b></legend>
                 <div class="form-group mb-4">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="evidence" value="yes" id="evidence_yes">
+                        <input class="form-check-input" type="radio" name="evidence" value="yes" id="evidence_yes" style="border-color: black;">
                         <label class="form-check-label" for="evidence_yes">Yes</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="evidence" value="no" id="evidence_no">
+                        <input class="form-check-input" type="radio" name="evidence" value="no" id="evidence_no" style="border-color: black;">
                         <label class="form-check-label" for="evidence_no">No</label>
                     </div>
                     <p class="small text-muted">If yes, please present it to the Prefect of Students.</p>
@@ -291,14 +294,14 @@
 
                 <!-- Witnesses Section -->
                  <div class="col-md-6">
-                <legend class="font-weight-bold">Do you have any witness?</legend>
+                <legend class="font-weight-bold" style="font-size: 15px;">Do you have any witness? <b style="color: red;">*</b></legend>
                 <div class="form-group mb-4">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="witness" value="yes" id="witness_yes">
+                        <input class="form-check-input" type="radio" name="witness" value="yes" id="witness_yes" style="border-color: black;">
                         <label class="form-check-label" for="witness_yes">Yes</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="witness" value="no" id="witness_no">
+                        <input class="form-check-input" type="radio" name="witness" value="no" id="witness_no" style="border-color: black;">
                         <label class="form-check-label" for="witness_no">No</label>
                     </div>
                     <p class="small text-muted">If yes, please provide the following:</p>
@@ -321,8 +324,8 @@
                         </table>
                     </div>
 
-                    <div class="row"></div>
-                    <legend class="font-weight-bold">Appointment Scheduling</legend>
+                    <div class="row">
+                    <legend class="font-weight-bold" style="font-size: 15px;">Appointment Scheduling: <b style="color: red;">*</b></legend>
                     <div class="col-md-6">
                     <td>
                                     <label for="appt_date" required>Date</label>
@@ -336,6 +339,7 @@
                                 </td>
                     </div>
                                 </div>
+                 </div>
                 
 
                 <!-- Submit Button -->

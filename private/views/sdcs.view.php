@@ -323,26 +323,44 @@ $statusCounts = array_count_values($statuses);
 
 <div class="row">
     <div class="col-md-4">
-        <div class="card" style="padding: 20px; margin: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
+        <div class="card" style="border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <div class="card-body" style="text-align: center;">
                 <h5 class="card-title">Total Resolved</h5>
-                <p class="card-text"><?php echo $statusCounts['Solved'] ?? 0; ?></p>
+                <p class="card-text" style="font-size: 20px; font-weight: bold"><?php echo $statusCounts['Resolved'] ?? 0; ?></p>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card shadow" style="padding: 20px; margin: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
+        <div class="card shadow" style="border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <div class="card-body" style="text-align: center;">
                 <h5 class="card-title">Total Unresolved</h5>
-                <p class="card-text"><?php echo $statusCounts['Unresolved'] ?? 0; ?></p>
+                <p class="card-text" style="font-size: 20px; font-weight: bold"><?php echo $statusCounts['Unresolved'] ?? 0; ?></p>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card" style="padding: 20px; margin: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
+        <div class="card shadow" style="border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <div class="card-body" style="text-align: center;">
+                <h5 class="card-title">Total Settled Amicably</h5>
+                <p class="card-text" style="font-size: 20px; font-weight: bold"><?php echo $statusCounts['Settled amicably'] ?? 0; ?></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card shadow" style="border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <div class="card-body" style="text-align: center;">
+                <h5 class="card-title">Total Dismissed</h5>
+                <p class="card-text" style="font-size: 20px; font-weight: bold"><?php echo $statusCounts['Dismissed'] ?? 0; ?></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card" style="border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <div class="card-body" style="text-align: center;">
                 <h5 class="card-title">Total Referred to SDC</h5>
-                <p class="card-text"><?php echo $statusCounts['Referred to SDC'] ?? 0; ?></p>
+                <p class="card-text" style="font-size: 20px; font-weight: bold"><?php echo $statusCounts['Referred to SDC'] ?? 0; ?></p>
             </div>
         </div>
     </div>
@@ -627,6 +645,7 @@ new Chart(ctx3, {
         // Hide no-print elements
         document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
 
+        
         // Get the table to print
         var printContent = document.querySelector('.table.table-bordered.table-hovered.table-striped');
 
@@ -657,7 +676,7 @@ new Chart(ctx3, {
         var cardsHtml = '';
         var cardCount = 0;
         cards.forEach(card => {
-            if (cardCount < 3) {
+            if (cardCount < 5) {
                 cardsHtml += card.outerHTML;
                 cardCount++;
             }

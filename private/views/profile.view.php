@@ -482,7 +482,7 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr id="no-complaint-found">
-                        <td colspan="7" class="text-center">No complaint found.</td>
+                        <td colspan="9" class="text-center">No complaint found.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

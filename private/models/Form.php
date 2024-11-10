@@ -187,19 +187,18 @@ public function searchUsersByName($query)
 public function getAppointmentsThisWeek()
 {
     $now = new DateTime();
-    $now->setTime(0, 0, 0); // reset time to 00:00:00
-    $monday = clone $now;
-    $monday->modify('this week'); // set to Monday of this week
-    $sunday = clone $now;
-    $sunday->modify('next Sunday'); // set to Sunday of this week
+$now->setTime(0, 0, 0); // reset time to 00:00:00
+$today = clone $now; // set to today
+$nextWeek = clone $now;
+$nextWeek->modify('+1 week'); // set to one week from today
 
-    $query = "SELECT * FROM notice WHERE appt_date >= :monday AND appt_date <= :sunday";
-    $params = [
-        'monday' => $monday->format('Y-m-d'),
-        'sunday' => $sunday->format('Y-m-d')
-    ];
+$query = "SELECT * FROM notice WHERE appt_date >= :today AND appt_date <= :nextWeek";
+$params = [
+    'today' => $today->format('Y-m-d'),
+    'nextWeek' => $nextWeek->format('Y-m-d')
+];
 
-    return $this->query($query, $params);
+return $this->query($query, $params);
 }
 
 public function countUnresolvedNoticesByUserId($userId)
@@ -228,33 +227,34 @@ return $this->query($query, $params);
 public function getAppointmentsThisWeekForNotificationforPast()
 {
     $today = new DateTime();
-$today->setTime(23, 59, 59); // set to 23:59:59 of today
+    $today->setTime(0, 0, 0); // reset time to the start of today
 
-$query = "SELECT * FROM notice WHERE appt_date <= :endOfDay";
-$params = [
-    'endOfDay' => $today->format('Y-m-d H:i:s')
-];
+    $query = "SELECT * FROM notice WHERE appt_date < :today";
+    $params = [
+        'today' => $today->format('Y-m-d H:i:s')
+    ];
 
-return $this->query($query, $params);
+    return $this->query($query, $params);
 }
    
 public function getUpcomingAppointmentsThisWeekForNotification()
 {
     $tomorrow = new DateTime();
-$tomorrow->setTime(0, 0, 0); // reset time to the start of tomorrow
+    $tomorrow->setTime(0, 0, 0); // reset time to the start of tomorrow
 
-$nextWeek = new DateTime();
-$nextWeek->modify('+1 week');
-$nextWeek->setTime(23, 59, 59); // set to the end of the next week
+    $nextWeek = new DateTime();
+    $nextWeek->modify('+1 week');
+    $nextWeek->setTime(23, 59, 59); // set to the end of the next week
 
-$query = "SELECT * FROM notice WHERE appt_date > :tomorrow AND appt_date <= :endOfNextWeek";
-$params = [
-    'tomorrow' => $tomorrow->format('Y-m-d H:i:s'),
-    'endOfNextWeek' => $nextWeek->format('Y-m-d H:i:s')
-];
+    $query = "SELECT * FROM notice WHERE appt_date > :tomorrow AND appt_date <= :endOfNextWeek";
+    $params = [
+        'tomorrow' => $tomorrow->format('Y-m-d H:i:s'),
+        'endOfNextWeek' => $nextWeek->format('Y-m-d H:i:s')
+    ];
 
-return $this->query($query, $params);
-
-
+    $result = $this->query($query, $params);
+    
+    // Check if the result is false and return an empty array if so
+    return $result;
 }
 }

@@ -11,6 +11,7 @@ class Login extends Controller
             $user = new User();
             $row = $user->where('email', $_POST['email']);
             
+            
             // Verify user credentials
             if ($row && password_verify($_POST['password'], $row[0]->password)) {
                 Auth::authenticate($row[0]);

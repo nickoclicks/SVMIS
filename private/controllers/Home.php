@@ -60,8 +60,14 @@ class Home extends Controller
     ORDER BY FIELD(day, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 ", ['school_year_id' => $schoolYearId]);
 
+    if($chartDataDay !== false) {
     $chartLabelsDay = array_column($chartDataDay, 'day');
     $chartDataDay = array_column($chartDataDay, 'count');
+} else {
+    $chartLabelsDay = [];
+    $chartDataDay = [];
+
+}
 
 $chartDataMonth = $violator->query("
 SELECT 
@@ -97,9 +103,15 @@ SELECT
     ORDER BY MONTH(date), FLOOR((DAY(date) - 1) / 7) + 1
 ", ['school_year_id' => $schoolYearId]);
 
-$chartLabelsYear = array_map(function($row) {
-return $row->month . ' - Week ' . $row->week;
-}, $chartDataYear);
+if ($chartDataYear !== false) {
+    $chartLabelsYear = array_map(function($row) {
+        return $row->month . ' - Week ' . $row->week;
+    }, $chartDataYear);
+    $chartDataYear = array_column($chartDataYear, 'count');
+} else {
+    $chartLabelsYear = [];
+    $chartDataYear = [];
+}
 
         $chartDataYear = array_column($chartDataYear, 'count');
         $chartLabels = $chartLabelsWeek;

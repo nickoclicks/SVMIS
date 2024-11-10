@@ -110,65 +110,37 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($appointments as $appointment) { ?>
-                            <tr>
-                                <td><?= get_date($appointment->appt_date); ?></td>
-                                <td><?= date('g:i A', strtotime($appointment->appt_time)) ?></td>
-                                <td>
-                                    <?php
-                                        $compNameForLink = str_replace(' ', '.', $appointment->user_id); 
-                                    ?>
-                                    <?php if (Auth::isAdmin()): ?>
-                                        <a href="<?= ROOT ?>/profile/<?= urlencode($compNameForLink) ?> #complainant" class="text-reset">
-                                    <?php endif ?>
-                                    <?= htmlspecialchars(ucwords(str_replace('.', ' ', $appointment->user_id))); ?>
-                                    <?php if (Auth::isAdmin()): ?>
-                                        </a>
-                                    <?php endif ?>
-                                </td>
-                                <td><?= htmlspecialchars($appointment->resp_name); ?></td>
-                                <td><?= htmlspecialchars($appointment->status); ?></td>
-                            </tr>
-                        <?php } ?>
+                    <?php if (is_array($appointments) || is_object($appointments)): ?>
+    <?php foreach ($appointments as $appointment): ?>
+        <tr>
+            <td><?= get_date($appointment->appt_date); ?></td>
+            <td><?= date('g:i A', strtotime($appointment->appt_time)) ?></td>
+            <td>
+                <?php
+                $compNameForLink = str_replace(' ', '.', $appointment->user_id);
+                ?>
+                <?php if (Auth::isAdmin()): ?>
+                    <a href="<?= ROOT ?>/profile/<?= urlencode($compNameForLink) ?> #complainant" class="text-reset">
+                <?php endif ?>
+                <?= htmlspecialchars(ucwords(str_replace('.', ' ', $appointment->user_id))); ?>
+                <?php if (Auth::isAdmin()): ?>
+                    </a>
+                <?php endif ?>
+            </td>
+            <td><?= htmlspecialchars($appointment->resp_name); ?></td>
+            <td><?= htmlspecialchars($appointment->status); ?></td>
+        </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="5">No appointments available.</td>
+    </tr>
+<?php endif; ?>
                     </tbody>
                 </table>
             </div>
 
             <h1>Upcoming</h1>
-            <div class="card card-custom-height">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Appointment Date</th>
-                        <th>Appointment Time</th>
-                        <th>Complainant</th>
-                        <th>Respondent</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($upcomingappointments as $appointment) { ?>
-                        <tr>
-                            <td><?= get_date($appointment->appt_date); ?></td>
-                            <td><?= date('g:i A', strtotime($appointment->appt_time)) ?></td>
-                            <td>
-                            <?php
-                                $compNameForLink = str_replace(' ', '.', $appointment->user_id); 
-                                ?>
-                               <?php if (Auth::isAdmin()): ?>
-                                <a href="<?= ROOT ?>/profile/<?= urlencode($compNameForLink) ?> #complainant" class="text-reset text-decoration-none">
-                                <?php endif ?>
-                                <?= htmlspecialchars(ucwords(str_replace('.', ' ', $appointment->user_id))); ?>
-                                </a>
-                            <td><?= htmlspecialchars($appointment->resp_name); ?></td>
-                            <td><?= htmlspecialchars($appointment->status); ?></td>
-                        </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
-        </div>
-        
-            <h1>Past</h1>
 <div class="card card-custom-height">
     <table class="table table-striped">
         <thead>
@@ -181,26 +153,75 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($appointmentsforpast as $appointment) { ?>
+            <?php if (is_array($upcomingappointments) || is_object($upcomingappointments)): ?>
+                <?php foreach ($upcomingappointments as $appointment): ?>
+                    <tr>
+                        <td><?= get_date($appointment->appt_date); ?></td>
+                        <td><?= date('g:i A', strtotime($appointment->appt_time)); ?></td>
+                        <td>
+                            <?php
+                            $compNameForLink = str_replace(' ', '.', $appointment->user_id);
+                            ?>
+                            <?php if (Auth::isAdmin()): ?>
+                                <a href="<?= ROOT ?>/profile/<?= urlencode($compNameForLink) ?> #complainant" class="text-reset text-decoration-none">
+                            <?php endif ?>
+                            <?= htmlspecialchars(ucwords(str_replace('.', ' ', $appointment->user_id))); ?>
+                            <?php if (Auth::isAdmin()): ?>
+                                </a>
+                            <?php endif ?>
+                        </td>
+                        <td><?= htmlspecialchars($appointment->resp_name); ?></td>
+                        <td><?= htmlspecialchars($appointment->status); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <tr>
-                    <td><?= get_date($appointment->appt_date); ?></td>
-                    <td><?= date('g:i A', strtotime($appointment->appt_time)) ?></td>
-                    <td>
-                        <?php
-                            $compNameForLink = str_replace(' ', '.', $appointment->user_id); 
-                        ?>
-                        <?php if (Auth::isAdmin()): ?>
-                            <a href="<?= ROOT ?>/profile/<?= urlencode($compNameForLink) ?> #complainant" class="text-reset">
-                        <?php endif ?>
-                        <?= htmlspecialchars(ucwords(str_replace('.', ' ', $appointment->user_id))); ?>
-                        <?php if (Auth::isAdmin()): ?>
-                            </a>
-                        <?php endif ?>
-                    </td>
-                    <td><?= htmlspecialchars($appointment->resp_name); ?></td>
-                    <td><?= htmlspecialchars($appointment->status); ?></td>
+                    <td colspan="5">No upcoming appointments available.</td>
                 </tr>
-            <?php } ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+        
+<h1>Past</h1>
+<div class="card card-custom-height">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Appointment Date</th>
+                <th>Appointment Time</th>
+                <th>Complainant</th>
+                <th>Respondent</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (is_array($appointmentsforpast) || is_object($appointmentsforpast)): ?>
+                <?php foreach ($appointmentsforpast as $appointment): ?>
+                    <tr>
+                        <td><?= get_date($appointment->appt_date); ?></td>
+                        <td><?= date('g:i A', strtotime($appointment->appt_time)); ?></td>
+                        <td>
+                            <?php
+                            $compNameForLink = str_replace(' ', '.', $appointment->user_id); 
+                            ?>
+                            <?php if (Auth::isAdmin()): ?>
+                                <a href="<?= ROOT ?>/profile/<?= urlencode($compNameForLink) ?> #complainant" class="text-reset">
+                            <?php endif ?>
+                            <?= htmlspecialchars(ucwords(str_replace('.', ' ', $appointment->user_id))); ?>
+                            <?php if (Auth::isAdmin()): ?>
+                                </a>
+                            <?php endif ?>
+                        </td>
+                        <td><?= htmlspecialchars($appointment->resp_name); ?></td>
+                        <td><?= htmlspecialchars($appointment->status); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="5">No past appointments available.</td>
+                </tr>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>

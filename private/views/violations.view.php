@@ -53,9 +53,6 @@
 </style>
 <div style="margin-left: -150px;">
 <div class="dashboard-container p-4 mx-auto" style="max-width: 1700px;">
-
-
-
     <div class="row mb-4 sticky-top">
     <nav class="navbar shadow" style="background-color: white; border-radius: 10px">
     <div class="col-md-2">
@@ -68,19 +65,14 @@
 <div class="col-md-8 text-center">
 <h5>Based on Article 8 Section 10 of NBSC Students Handbook</h5>
 </div>
-
         <div class="col-md-2 text-end">
-
         <?php if (Auth::canPerformAction()): ?>
             <a href="<?= ROOT ?>/violations/add" class="btn">
                 <i class="fa fa-plus"></i> Add New Violation
-               
             </a>
             <?php endif ?>
         </div>
     </div>
-
-
 
 <div class="card p-3 bg-body-tertiary shadow" style="background-color: gray; border-radius: 10px">
     <div class="border-0 shadow-sm">
@@ -130,7 +122,6 @@
         <i class="fa fa-plus fa-lg text-success"></i>
     </a>
 <?php else: ?>
-    <!-- Optionally, display a message or hide the button -->
     <span class="text-danger">Invalid user or violation ID.</span>
 <?php endif; ?>
         <?php else: ?>
@@ -157,7 +148,6 @@
                 </tbody>
             </table>
 
-            <!-- Message to show when no search results are found -->
             <div id="noResultsMessage" class="alert alert-info text-center" style="display: none;">
                 No recorded violations match your search.
             </div>

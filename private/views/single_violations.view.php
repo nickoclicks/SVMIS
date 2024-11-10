@@ -53,7 +53,7 @@
 
     <?php if ($row): ?>
         <div class="row mb-4">
-            <div class="col-12">
+            <center><div class="col-6">
                 
 
                 <table class="table table-hover table-striped table-bordered">
@@ -86,6 +86,7 @@
                     </tbody>
                 </table>
             </div>
+            </center>
         </div>
 
         <hr class="my-4">

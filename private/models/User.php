@@ -36,7 +36,7 @@ class User extends Model
 {
     $this->errors = array();
     //check for firstname
-    if(!$update && (empty($DATA['firstname']) || !preg_match('/^[a-zA-Z]+$/', $DATA['firstname'])))
+    if(!$update && (empty($DATA['firstname']) || !preg_match('/^[a-zA-Z\s]+$/', $DATA['firstname'])))
     {
         $this->errors['firstname'] = "Only letters allowed in firstname";
     }
@@ -47,10 +47,7 @@ class User extends Model
     }
 
     //check for email
-    if(!$update && (empty($DATA['email']) || !filter_var($DATA['email'],FILTER_VALIDATE_EMAIL)))
-    {
-        $this->errors['email'] = "Email is not valid";
-    }
+
 
     //check if email exists (only during creation, not during update)
     if(!$update && $this->where('email',$DATA['email']))

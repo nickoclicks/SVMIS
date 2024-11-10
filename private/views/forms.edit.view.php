@@ -77,21 +77,10 @@
                         </div>
                     </div>
 
+                    <hr>
+
                     <div class="row">
-                        <div class=col-md-6>
-                        
-                                <label for="status" class="form-label">Status</label>
-                                <select id="status" class="form-control" name="status">
-                                <option value="Dismissed" <?= esc(get_var('status', $row->status)) == 'Dismissed' ? 'selected' : '' ?>>Dismissed</option>
-                                <option value="Settled amicably" <?= esc(get_var('status', $row->status)) == 'Settled amicably' ? 'selected' : '' ?>>Settled amicably</option>
-                                    <option value="Unresolved" <?= esc(get_var('status', $row->status)) == 'Unresolved' ? 'selected' : '' ?>>Unresolved</option>
-                                    <option value="Referred to SDC" <?= esc(get_var('status', $row->status)) == 'Referred to SDC' ? 'selected' : '' ?>>Referred to SDC</option>
-                                    <option value="Resolved" <?= esc(get_var('status', $row->status)) == 'Resolved' ? 'selected' : '' ?>>Resolved</option>
-                                </select>
-                            </div>
-                    
-                        
-                        <div class="col-md-6 mb-4">
+                    <div class="col-md-6 mb-4">
     <label for="sanction_party" class="form-label">Sanction on:</label>
     <div class="mt-4">
         <label>
@@ -112,9 +101,9 @@
         </label>
     </div>
 </div>
-                    </div>
-
-<div class="mb-4">
+                        <div class=col-md-6>
+                        
+                               
     <label for="sanction_type" class="form-label">Sanction:</label>
     <div class="mt-4">
         <label>
@@ -141,7 +130,27 @@
             <input type="radio" name="sanction_type" value="Not Applicable" 
             <?= esc(get_var('sanction_type', $row->sanction_party)) == 'Not Applicable' ? 'checked' : '' ?>> Not Applicable
         </label>
+                            </div>
+                            
+                    </div>
+
+
+<div class="row mb-4">
+    <div class="col-md-6">
+<label for="status" class="form-label">Status</label>
+                                <select id="status" class="form-control" name="status">
+                                <option value="Dismissed" <?= esc(get_var('status', $row->status)) == 'Dismissed' ? 'selected' : '' ?>>Dismissed</option>
+                                <option value="Settled amicably" <?= esc(get_var('status', $row->status)) == 'Settled amicably' ? 'selected' : '' ?>>Settled amicably</option>
+                                    <option value="Unresolved" <?= esc(get_var('status', $row->status)) == 'Unresolved' ? 'selected' : '' ?>>Unresolved</option>
+                                    <option value="Referred to SDC" <?= esc(get_var('status', $row->status)) == 'Referred to SDC' ? 'selected' : '' ?>>Referred to SDC</option>
+                                    <option value="Resolved" <?= esc(get_var('status', $row->status)) == 'Resolved' ? 'selected' : '' ?>>Resolved</option>
+                                </select>
     </div>
+    <div class="col-md-6">
+                                <label for="remarks" class="form-label">Remarks</label>
+                                <input id="remarks" class="form-control" type="text" value="<?= esc(get_var('remarks', $row->remarks)) ?>" name="remarks" placeholder="Remarks">
+                            </div>
+                        
 </div>
 
 <!-- Additional Fields for Community Service -->
@@ -192,23 +201,9 @@ function setPartyType(selectedType) {
 
 
                     </div>
-
-                    <div class="mb-4">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="remarks" class="form-label">Remarks</label>
-                                <input id="remarks" class="form-control" type="text" value="<?= esc(get_var('remarks', $row->remarks)) ?>" name="remarks" placeholder="Remarks">
-                            </div>
-                        
-                        
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                    <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Save</button>
                         <a id="cancelButton" class="btn btn-warning text-white" href="<?= ROOT ?>/profile/<?= $row->user_id ?>">Cancel</a>
-
-
                     </div>
                 </form>
             </div>

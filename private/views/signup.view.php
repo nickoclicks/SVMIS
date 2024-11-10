@@ -31,7 +31,7 @@
         <div class="col-md-4">
           <div class="form-group my-2">
             <label for="middlename" class="form-label">Middlename</label>
-            <input class="form-control" id="middlename" value="<?=get_var('middlename')?>" type="text" name="middlename" placeholder="Middlename" required>
+            <input class="form-control" id="middlename" value="<?=get_var('middlename')?>" type="text" name="middlename" placeholder="Middlename">
             <div class="invalid-feedback">Please provide a middlename.</div>
           </div>
         </div>
@@ -55,14 +55,14 @@
         <div class="col-md-4">
           <div class="form-group my-2">
             <label for="email" class="form-label">Email</label>
-            <input class="form-control" id="email" value="<?=get_var('email')?>" type="email" name="email" placeholder="Email" required>
+            <input class="form-control" id="email" value="<?=get_var('email')?>" type="email" name="email" placeholder="Email">
             <div class="invalid-feedback">Please provide a valid email address.</div>
           </div>
         </div>
         <div class="col-md-4">
             <div class="form-group my-2">
               <label for="phone" class="form-label">Phone</label>
-              <input class="form-control" id="phone" value="<?=get_var('phone')?>" type="tel" name="phone" placeholder="Phone" required>
+              <input class="form-control" id="phone" value="<?=get_var('phone')?>" type="tel" name="phone" placeholder="Phone">
               <div class="invalid-feedback">Please provide a valid phone number.</div>
             </div>
           
@@ -75,14 +75,14 @@
         <div class="col-md-6">
           <div class="form-group my-2">
             <label for="street" class="form-label">Street</label>
-            <input class="form-control" id="street" value="<?=get_var('street')?>" type="text" name="street" placeholder="Street" required>
+            <input class="form-control" id="street" value="<?=get_var('street')?>" type="text" name="street" placeholder="Street">
             <div class="invalid-feedback">Please provide a valid street address.</div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group my-2">
             <label for="barangay" class="form-label">Barangay</label>
-            <input class="form-control" id="barangay" value="<?=get_var('barangay')?>" type="text" name="barangay" placeholder="Barangay" required>
+            <input class="form-control" id="barangay" value="<?=get_var('barangay')?>" type="text" name="barangay" placeholder="Barangay">
             <div class="invalid-feedback">Please provide a valid barangay.</div>
           </div>
         </div>
@@ -92,14 +92,14 @@
         <div class="col-md-6">
           <div class="form-group my-2">
             <label for="city" class="form-label">City/Municipality</label>
-            <input class="form-control" id="city" value="<?=get_var('city')?>" type="text" name="city" placeholder="City" required>
+            <input class="form-control" id="city" value="<?=get_var('city')?>" type="text" name="city" placeholder="City">
             <div class="invalid-feedback">Please provide a valid city.</div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group my-2">
             <label for="municipality" class="form-label">Province</label>
-            <input class="form-control" id="municipality" value="<?=get_var('municipality')?>" type="text" name="municipality" placeholder="Municipality" required>
+            <input class="form-control" id="municipality" value="<?=get_var('municipality')?>" type="text" name="municipality" placeholder="Municipality">
             <div class="invalid-feedback">Please provide a valid municipality.</div>
           </div>
         </div>
@@ -126,7 +126,7 @@
           <div class="col-md-6">
         <div class="form-group my-2">
             <label for="semester_id" class="form-label">Semester</label>
-            <select name="semester_id" id="semester_id" class="form-control" required>
+            <select name="semester_id" id="semester_id" class="form-control">
                 <option value="">Select Semester</option>
                 <option value="1" <?php echo isset($_POST['semester_id']) && $_POST['semester_id'] == '1' ? 'selected' : ''; ?>>First Semester</option>
                 <option value="2" <?php echo isset($_POST['semester_id']) && $_POST['semester_id'] == '2' ? 'selected' : ''; ?>>Second Semester</option>
@@ -141,8 +141,9 @@
         <div class="col-md-6">
             <div class="form-group my-2">
                 <label for="school_year_id" class="form-label">School Year</label>
-                <select name="school_year_id" id="school_year_id" class="form-control" required>
+                <select name="school_year_id" id="school_year_id" class="form-control">
                     <option value="">Select School Year</option>
+                    <option value="3" <?php echo isset($_POST['school_year_id']) && $_POST['school_year_id'] == '3' ? 'selected' : ''; ?>>2023-2024</option>
                     <option value="1" <?php echo isset($_POST['school_year_id']) && $_POST['school_year_id'] == '1' ? 'selected' : ''; ?>>2024-2025</option>
                     <option value="2" <?php echo isset($_POST['school_year_id']) && $_POST['school_year_id'] == '2' ? 'selected' : ''; ?>>2025-2026</option>
                 </select>
@@ -153,7 +154,7 @@
           <div class="col-md-6">
             <div class="form-group my-2">
               <label for="course" class="form-label">Course</label>
-              <select name="course" id="course" class="form-control" required>
+              <select name="course" id="course" class="form-control">
               <option value="">Select Course</option>
                     <option value="BSBA" <?php echo isset($_POST['course']) && $_POST['course'] == 'BSBA' ? 'selected' : ''; ?>>BSBA</option>
                     <option value="BSIT" <?php echo isset($_POST['course']) && $_POST['course'] == 'BSIT' ? 'selected' : ''; ?>>BSIT</option>
@@ -170,7 +171,7 @@
         <div class="col-md-6">
           <div class="form-group my-2">
             <label for="gender" class="form-label">Gender</label>
-            <select class="form-control" id="gender" name="gender" required>
+            <select class="form-control" id="gender" name="gender">
               <option <?=get_select('gender', '')?> value="">Select Sex</option>
               <option <?=get_select('gender', 'male')?> value="male">Male</option>
               <option <?=get_select('gender', 'female')?> value="female">Female</option>
@@ -185,7 +186,7 @@
           <?php else: ?>
             <div class="form-group my-2">
               <label for="rank" class="form-label">Rank</label>
-              <select class="form-control" id="rank" name="rank" required>
+              <select class="form-control" id="rank" name="rank">
                 <option <?=get_select('rank', '')?> value="">Select Rank</option>
                 <?php if(Auth::getRank() == 'super_admin'): ?>
                   <option <?=get_select('rank', 'super_admin')?> value="super_admin">Super Admin</option>
@@ -207,14 +208,14 @@
        <div class="col-md-6">
       <div class="form-group mb-4">
         <label for="password" class="form-label">Password</label>
-        <input class="form-control" id="password" value="<?=get_var('password')?>" type="password" name="password" placeholder="Password" required>
+        <input class="form-control" id="password" value="<?=get_var('password')?>" type="password" name="password" placeholder="Password">
         <div class="invalid-feedback">Please provide a password.</div>
       </div>
       </div>
       <div class="col-md-6">
       <div class="form-group mb-4">
         <label for="password2" class="form-label">Retype Password</label>
-        <input class="form-control" id="password2" value="<?=get_var('password2')?>" type="password" name="password2" placeholder="Retype Password" required>
+        <input class="form-control" id="password2" value="<?=get_var('password2')?>" type="password" name="password2" placeholder="Retype Password">
         <div class="invalid-feedback">Please retype the password.</div>
       </div>
       </div>
