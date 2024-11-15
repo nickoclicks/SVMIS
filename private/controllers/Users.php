@@ -64,6 +64,7 @@ class Users extends Controller
     $row = $user->findById($id);
 
     if ($row) {
+        
         $this->view('profileinfo.edit', [
             'errors' => $errors,
             'row' => $row,

@@ -166,7 +166,12 @@
 
 </style>
 
+<?php
+$year_level_id = $_GET['year_level_id'] ?? null;
 
+// Format the year level using your function
+$formatted_year_level = formatYearLevel($year_level_id);
+?>
 <div style="margin-left: -150px">
 <div class="row dashboard-container mx-auto" style="width: 1650px;">
     <div class="row">
@@ -174,7 +179,10 @@
     <div class="card shadow p-5 rounded" style="height: 820px; overflow-y: auto;">
 
     <center><h4>Add a Complaint</h4></center>
-        <form action="<?= ROOT ?>/forms?user_id=<?= $_GET['user_id'] ?>" method="post" id="complaint-form" class="needs-validation" novalidate>
+    <form action="<?= ROOT ?>/forms?user_id=<?= $_GET['user_id'] ?>&year_level_id=<?= $_GET['year_level_id'] ?>&course=<?= $_GET['course'] ?>" method="post" id="complaint-form" class="needs-validation" novalidate>
+    <input type="hidden" id="user_id" name="user_id" value="<?= htmlspecialchars(ucwords(str_replace('.', ' ', $_GET['user_id']))) ?>">
+    <input type="hidden" id="year_level_id" name="year_level_id" value="<?= $formatted_year_level ?>">
+    <input type="hidden" id="course" name="course" value="<?= htmlspecialchars($_GET['course']) ?>">
 
 <fieldset class="step active">
     <legend class="font-weight-bold" style="font-size: 15px;">Type of Complaint <i style="color: red;">*</i></legend>
@@ -204,12 +212,7 @@
         <?php endif ?>
         <div class="invalid-feedback">Please select the type of complaint.</div>
     </div>
-</fieldset>
-
-
-
-                <!-- Respondent Information -->
-                
+</fieldset>                
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead class="bg-dark text-white text-center">
@@ -389,13 +392,118 @@ document.addEventListener('DOMContentLoaded', function() {
             violations.nextElementSibling.style.display = 'none';
         }
 
-        
-        // Prevent form submission if any field is invalid
-        if (!isValid) {
-            event.preventDefault();
-        }
+        if (isValid) {
+        printReport(); // Call the print function if the form is valid
+    }
     });
 });
+function printReport() {
+    // Gather data from the form
+    const complaintType = document.querySelector('input[name="complaint"]:checked').nextSibling.textContent;
+    const respName = document.getElementById('resp_name').value;
+    const yearLevel = document.getElementById('year_level_id').value;
+    const course = document.getElementById('course').value;
+    const userId = document.getElementById('user_id').value;
+    const respId = document.getElementById('resp_id').value;
+    const respCourseYear = document.getElementById('resp_course_year').value;
+    const respPhone = document.getElementById('resp_phone').value;
+    const respAddress = document.getElementById('resp_address').value;
+    const respEmail = document.getElementById('resp_email').value;
+    const dateFiled = document.getElementById('date').value;
+    const violation = document.getElementById('violations').value;
+    const evidence = document.querySelector('input[name="evidence"]:checked').value;
+    const witness = document.querySelector('input[name="witness"]:checked').value;
+    const apptDate = document.getElementById('appt_date').value;
+    const apptTime = document.getElementById('appt_time').value;
+    const formattedApptTime = formatTimeToAMPM(apptTime);
+    const formattedDateFiled = formatDate(dateFiled);
+    const formattedApptDate = formatDate(apptDate); // Format the appointment date
+
+    // Generate a unique control number
+    const controlNumber = generateControlNumber();
+
+    // Create a new window for printing
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.write('<html><head><title>Print Report</title>');
+    
+    // Link to Bootstrap CSS
+    printWindow.document.write('</head><body>');
+
+    // Add the header
+    printWindow.document.write(`
+         <div style="text-align: center; margin-bottom: 0;">
+                <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: left;">
+                <img src="assets/nbsc1.png" alt="University Logo" style="width: 100px; height: 95px; margin-right: 10px; float: right;">
+                <h4 style="margin-bottom: -20px;">Republic of the Philippines</h4>
+                <h4 style="margin-bottom: -20px;"><b>NORTHERN BUKIDNON STATE COLLEGE</b></h4>
+                <h4 style="margin-bottom: -20px;"><i>(Formerly Northern Bukidnon Community College)</i> R.A.11284</h4>
+                <h4 style="margin-bottom: -5px;"><i>Creando futura, Transformationis vitae, Ductae a Deo</i></h4> 
+                <hr>
+            </div>
+    `);
+
+    // Add the report content wrapped in a div
+    printWindow.document.write(`
+        <div class="container">
+        <br>
+                    <p><strong>Date Filed: ${formattedDateFiled}</strong></p>
+              <br>
+                
+                    <p><strong>Dear ${respName}</strong></p>
+                
+                
+                    <p style="text-align: center"><strong>Subject: Notice to Report for </strong> ${respName} </p>
+               
+                    <p><strong>Good day!</strong></p>
+                
+                    <p><strong>In reference to Complaint Number ${controlNumber} filed by ${userId}, a ${yearLevel} year student of ${course} program.
+                     I would like to request that your office require ${respName} to report to the Office of the Prefect of Students located at
+                      the New Student Center Building on ${formattedApptDate} at exactly ${formattedApptTime} for initial inquiry into the case.</strong></p>
+
+                      <p><strong>Should you have any questions, please do not hesitate to address it to this office.</strong></p>
+
+                      <p ><strong>Thank you very much.</strong></p>
+                      <p><strong>Respectfully.</strong></p>
+
+                      <br>
+
+                      <hr style="width: 100px; font-weight: bold; text-align: start">
+                      <p><strong>Prefect of Students</strong></p>
+                </div>
+    `);
+
+    printWindow.document.write('</body></html>');
+    
+    printWindow.document.close(); // Close the document
+
+    // Trigger the print dialog
+    printWindow.print();
+
+    // Close the print window after printing
+    printWindow.onafterprint = function () {
+        printWindow.close();
+    };
+}
+
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options); // Format the date
+}
+
+function formatTimeToAMPM(time) {
+    const [hour, minute] = time.split(':');
+    const formattedHour = hour % 12 || 12; // Convert to 12-hour format
+    const ampm = hour >= 12 ? 'PM' : 'AM'; // Determine AM or PM
+    return `${formattedHour}:${minute} ${ampm}`; // Return formatted time
+}
+
+// Function to generate a unique control number
+function generateControlNumber() {
+    const timestamp = Date.now(); // Get the current timestamp
+    const randomNum = Math.floor(Math.random() * 10000); // Generate a random number
+    return `CN-${timestamp}-${randomNum}`; // Format the control number as CN-timestamp-randomNumber
+}
 </script>
 
         <!--calendar column-->

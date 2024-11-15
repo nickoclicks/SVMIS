@@ -176,7 +176,14 @@
       <?php if (Auth::canPerformAction()): ?>
       <li class="nav-item">
         <a class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'reports') ? 'active' : '' ?>" href="<?= ROOT ?>/reports">
-          <i class="fas fa-print"></i> <span>Reports</span>
+          <i class="fas fa-chart-line"></i> <span>Reports</span>
+        </a>
+      </li>
+      <?php endif; ?>
+      <?php if (Auth::canPerformAction()): ?>
+      <li class="nav-item">
+        <a class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'Printmoral') ? 'active' : '' ?>" href="<?= ROOT ?>/Printmoral">
+          <i class="fas fa-certificate"></i> <span>Print Good Moral Certificate</span>
         </a>
       </li>
       <?php endif; ?>

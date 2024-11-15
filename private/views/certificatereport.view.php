@@ -89,7 +89,7 @@ $filters = [
 
 <div class="p-3  rounded shadow-sm" style="margin: 10px;">
     <form method="GET" action="">
-            <div class="row mb-3">
+            <div class="row mb-3" style="width: 700px; text-align: center; margin-left: 443px">
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
         <div class="col-md-6">
             <label for="start_date" class="form-label">Start Date</label>
@@ -117,11 +117,56 @@ $datepresent = array_column($recentActivity, 'date');
     }
     $DayPresentCounts = array_count_values($dayNames);
     $uniqueDayNames = array_keys($DayPresentCounts);
-    $uniqueDayCounts = array_values($DayPresentCounts);?>
+    $uniqueDayCounts = array_values($DayPresentCounts);
+    
+    $datepresent1 = array_column($recentActivity1, 'date');
+    $DatePresentCounts1 = array_count_values($datepresent1);
+    
+    $dayNames1 = [];
+    foreach ($datepresent1 as $date) {
+        $dayNames1[] = date('l', strtotime($date)); // 'l' returns full textual representation of the day
+    }
 
-<div class="card">
-    <canvas id="datepresent-chart" width="400" height="200"></canvas>
+    $DayPresentCounts1 = array_count_values($dayNames1);
+    $uniqueDayNames1 = array_keys($DayPresentCounts1);
+    $uniqueDayCounts1 = array_values($DayPresentCounts1);
+    
+    
+    ?>
+
+
+<style>
+    .row {
+        margin: 20px; /* Add margin around the row */
+    }
+    .card {
+        padding: 15px; /* Add padding inside each card */
+        margin-bottom: 20px; /* Space between rows of cards */
+        border: 1px solid #ccc; /* Optional: add a border to the card */
+        border-radius: 8px; /* Optional: rounded corners */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+    }
+    h5 {
+        margin-bottom: 15px; /* Space below the heading */
+        font-weight: bold; /* Make the heading bold */
+    }
+    canvas {
+        display: block; /* Ensure canvas takes full width */
+        margin: 0 auto; /* Center the canvas */
+    }
+</style>
+
+<div class="row">
+    <div class="card col-md-6" style="margin-right: 10px; width: 750px">
+        
+        <canvas id="datepresent-chart" width="400" height="200"></canvas>
     </div>
+
+    <div class="card col-md-6" style="margin-left: 10px; width: 750px">
+       
+        <canvas id="datepresent-charts" width="400" height="200"></canvas>
+    </div>
+</div>
     </div>
 </div>
 </div>
@@ -156,6 +201,33 @@ $datepresent = array_column($recentActivity, 'date');
         <?php endif; ?>
     </div>
 </div>
+
+<div class="col-md-6">
+        <?php if (!empty($recentActivity1)): ?>
+            <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped" id="table" hidden>
+                <thead style="background-color: black;">
+                    <tr>
+                        <th class="text-light">Activity Name</th>
+                        <th class="text-light">Date</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($recentActivity1 as $activity): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($activity->log_name); ?></td>
+                            <td><?php echo htmlspecialchars($activity->date); ?></td>
+                            
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No records found.</p>
+        <?php endif; ?>
+    </div>
+</div>
     <script>
         const ctx3 = document.getElementById('datepresent-chart').getContext('2d');
 const chart3 = new Chart(ctx3, {
@@ -163,8 +235,117 @@ const chart3 = new Chart(ctx3, {
     data: {
         labels: <?php echo json_encode($uniqueDayNames); ?>,
         datasets: [{
-            label: 'Violation Status Counts Per Day',
+            label: 'Good Moral Printed Certificate for Graduates',
             data: <?php echo json_encode($uniqueDayCounts); ?>,
+            fill: true, // Enable fill under the line for consistency
+            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Subtle fill color under the line
+            borderColor: 'rgba(75, 192, 192, 1)', // Line color
+            pointBackgroundColor: 'rgba(54, 162, 235, 1)', // Color for the data points
+            pointBorderColor: '#fff', // White border around points for contrast
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 3, // Thicker line for better visibility
+            tension: 0.4, // Smooth curves between points
+            pointRadius: 5, // Bigger points for better visibility
+            pointHoverRadius: 7 // Larger hover effect for points
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                grid: {
+                    display: true,
+                    color: 'rgba(0, 0, 0, 0.05)', // Light grid lines
+                    borderDash: [4, 4] // Dotted grid lines on x-axis
+                },
+                ticks: {
+                    font: {
+                        size: 14, // Increased font size
+                        weight: 'bold'
+                    },
+                    color: '#444',
+                    padding: 10,
+                    maxRotation: 45, // Prevent overlapping labels
+                    minRotation: 0
+                }
+            },
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.1)', // Light dashed grid lines
+                    borderDash: [5, 5],
+                },
+                ticks: {
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    color: '#444'
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                enabled: true,
+                backgroundColor: 'rgba(34, 34, 34, 0.8)', // Dark tooltip background
+                titleFont: { size: 16, weight: 'bold' }, // Enhanced tooltip font
+                bodyFont: { size: 14 },
+                bodyColor: '#fff', // White tooltip text for better contrast
+                borderColor: '#444',
+                borderWidth: 1,
+                caretPadding: 10,
+                displayColors: false
+            },
+            legend: {
+                labels: {
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    color: '#444',
+                    padding: 20 // More space between legend items
+                },
+                position: 'top'
+            }
+        },
+        animation: {
+            duration: 2000,
+            easing: 'easeOutBounce' // Bounce effect on load
+        },
+        layout: {
+            padding: {
+                left: 30,
+                right: 30,
+                top: 30,
+                bottom: 30
+            }
+        },
+        elements: {
+            line: {
+                tension: 0.4 // Smooth line curves
+            },
+            point: {
+                radius: 5, // Make points more prominent
+                hitRadius: 10,
+                hoverRadius: 7
+            }
+        }
+    }
+});
+
+    </script>
+
+<script>
+        const ctx4 = document.getElementById('datepresent-charts').getContext('2d');
+const chart4 = new Chart(ctx4, {
+    type: 'line',
+    data: {
+        labels: <?php echo json_encode($uniqueDayNames1); ?>,
+        datasets: [{
+            label: 'Good Moral Printed Certificate for Undergraduates',
+            data: <?php echo json_encode($uniqueDayCounts1); ?>,
             fill: true, // Enable fill under the line for consistency
             backgroundColor: 'rgba(75, 192, 192, 0.2)', // Subtle fill color under the line
             borderColor: 'rgba(75, 192, 192, 1)', // Line color

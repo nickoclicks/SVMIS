@@ -423,8 +423,9 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
             <input type="text" class="form-control" id="search-complaints" placeholder="Search Complaints..." oninput="searchComplaints()">
         </div>
         <?php if (Auth::canPerformAction()): ?>
-            <a href="<?= ROOT ?>/forms?user_id=<?= $row->user_id ?>" class="btn btn-sm text-black fs-sm">
-                <i class="fa fa-plus"></i> Add Complaint
+            <a href="<?= ROOT ?>/forms?user_id=<?= $row->user_id ?>&year_level_id=<?= $row->year_level_id ?>&course=<?= $row->course ?>" class="btn btn-sm text-black fs-sm">
+    <i class="fa fa-plus"></i> Add Complaint
+</a>
             </a>
         <?php endif; ?>
     </div>
@@ -554,6 +555,7 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
                     <th class="text-light">No.</th>
                     <th class="text-light">Complaint Name</th>
                     <th class="text-light">Complainant</th>
+                    <th class="text-light">Violation</th>
                     <th class="text-light">Status</th>
                 </tr>
             </thead>
@@ -571,6 +573,7 @@ if (is_array($violations_committed) || is_object($violations_committed)) {
         <?= htmlspecialchars('User  ID Withheld') ?>
     <?php endif; ?>
 </td>
+<td><?= esc($notice->violations) ?></td>
                             <td><?= esc($notice->status) ?></td>
                         </tr>
                     <?php endforeach; ?>
@@ -736,7 +739,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="text-center mt-4">
     <form action="" method="POST">
-    <input type="hidden" name="log_name" value="Printed Good Moral Certificate">
+    <input type="hidden" name="log_name" value="Printed Good Moral Certificate for under">
     <button type="submit" class="btn btn-primary" onclick="printCertificate()">Print Certificate</button>
 </form>
 </div>
